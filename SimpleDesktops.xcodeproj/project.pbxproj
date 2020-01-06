@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F223C305E6000DCF10 /* AppDelegate.swift */; };
-		19D262F523C305E6000DCF10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F423C305E6000DCF10 /* ViewController.swift */; };
 		19D262F823C305E6000DCF10 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F623C305E6000DCF10 /* SimpleDesktops.xcdatamodeld */; };
 		19D262FA23C305E7000DCF10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19D262F923C305E7000DCF10 /* Assets.xcassets */; };
 		19D262FD23C305E7000DCF10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19D262FB23C305E7000DCF10 /* Main.storyboard */; };
@@ -17,7 +16,6 @@
 /* Begin PBXFileReference section */
 		19D262EF23C305E6000DCF10 /* SimpleDesktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleDesktops.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19D262F223C305E6000DCF10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		19D262F423C305E6000DCF10 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		19D262F723C305E6000DCF10 /* SimpleDesktops.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleDesktops.xcdatamodel; sourceTree = "<group>"; };
 		19D262F923C305E7000DCF10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		19D262FC23C305E7000DCF10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -56,7 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				19D262F223C305E6000DCF10 /* AppDelegate.swift */,
-				19D262F423C305E6000DCF10 /* ViewController.swift */,
 				19D262F923C305E7000DCF10 /* Assets.xcassets */,
 				19D262FB23C305E7000DCF10 /* Main.storyboard */,
 				19D262FE23C305E7000DCF10 /* Info.plist */,
@@ -136,7 +133,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				19D262F523C305E6000DCF10 /* ViewController.swift in Sources */,
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				19D262F823C305E6000DCF10 /* SimpleDesktops.xcdatamodeld in Sources */,
 			);
@@ -274,8 +270,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SimpleDesktops/Info.plist;
@@ -283,6 +281,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -294,8 +293,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SimpleDesktops/Info.plist;
@@ -303,6 +304,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
