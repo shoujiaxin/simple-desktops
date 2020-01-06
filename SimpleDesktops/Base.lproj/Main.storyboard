@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -679,5 +680,53 @@
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>
+        <!--Popover View Controller-->
+        <scene sceneID="hEX-GO-JeT">
+            <objects>
+                <viewController storyboardIdentifier="PopoverView" id="HkY-dK-v0h" customClass="PopoverViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="bgq-1Z-PsU">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="296"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="HvT-sm-YTL">
+                                <rect key="frame" x="374" y="270" width="16" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="kqF-ni-N0b"/>
+                                    <constraint firstAttribute="height" constant="16" id="nJp-hP-DEA"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSActionTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="78w-KF-qoe">
+                                <rect key="frame" x="0.0" y="10" width="400" height="250"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="400" id="Xew-jl-2iZ"/>
+                                    <constraint firstAttribute="height" constant="250" id="wRG-om-kSb"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="hnB-0E-gdI"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="bgq-1Z-PsU" secondAttribute="leading" id="Fp0-a8-Oce"/>
+                            <constraint firstAttribute="bottom" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="ZTx-dJ-Sj4"/>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="10" id="cg7-Yf-Zio"/>
+                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="10" id="dzC-it-mvU"/>
+                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="pS6-8V-3lu"/>
+                            <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="u4c-Ta-nMH"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="78w-KF-qoe" id="Fgj-bQ-jUv"/>
+                    </connections>
+                </viewController>
+                <customObject id="ZoR-DS-ibZ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="74" y="302"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="NSActionTemplate" width="14" height="14"/>
+    </resources>
 </document>

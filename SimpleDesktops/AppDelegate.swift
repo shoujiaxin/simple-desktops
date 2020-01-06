@@ -10,13 +10,20 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    let popover = NSPopover()
+
     func applicationDidFinishLaunching(_: Notification) {
-        // Insert code here to initialize your application
+        if let button = statusItem.button {
+            button.image = NSImage(named: "MenuBarIcon")
+            button.action = #selector(togglePopover(sender:))
+        }
+
+        popover.behavior = NSPopover.Behavior.transient
+        popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverView") as PopoverViewController
     }
 
-    func applicationWillTerminate(_: Notification) {
-        // Insert code here to tear down your application
-    }
+    func applicationWillTerminate(_: Notification) {}
 
     // MARK: - Core Data stack
 
@@ -113,5 +120,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // If we got here, it is time to quit.
         return .terminateNow
+    }
+
+    @objc func togglePopover(sender: Any?) {
+        if popover.isShown {
+            popover.performClose(sender)
+        } else if let button = statusItem.button {
+            NSApp.activate(ignoringOtherApps: true)
+            popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+        }
     }
 }

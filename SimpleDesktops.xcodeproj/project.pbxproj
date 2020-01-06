@@ -11,6 +11,7 @@
 		19D262F823C305E6000DCF10 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F623C305E6000DCF10 /* SimpleDesktops.xcdatamodeld */; };
 		19D262FA23C305E7000DCF10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19D262F923C305E7000DCF10 /* Assets.xcassets */; };
 		19D262FD23C305E7000DCF10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19D262FB23C305E7000DCF10 /* Main.storyboard */; };
+		19D2630723C30C46000DCF10 /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D2630623C30C46000DCF10 /* PopoverViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		19D262FC23C305E7000DCF10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		19D262FE23C305E7000DCF10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19D262FF23C305E7000DCF10 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
+		19D2630623C30C46000DCF10 /* PopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,11 +58,20 @@
 				19D262F223C305E6000DCF10 /* AppDelegate.swift */,
 				19D262F923C305E7000DCF10 /* Assets.xcassets */,
 				19D262FB23C305E7000DCF10 /* Main.storyboard */,
+				19D2630523C30C10000DCF10 /* ViewControllers */,
 				19D262FE23C305E7000DCF10 /* Info.plist */,
 				19D262FF23C305E7000DCF10 /* SimpleDesktops.entitlements */,
 				19D262F623C305E6000DCF10 /* SimpleDesktops.xcdatamodeld */,
 			);
 			path = SimpleDesktops;
+			sourceTree = "<group>";
+		};
+		19D2630523C30C10000DCF10 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				19D2630623C30C46000DCF10 /* PopoverViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
+				19D2630723C30C46000DCF10 /* PopoverViewController.swift in Sources */,
 				19D262F823C305E6000DCF10 /* SimpleDesktops.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
