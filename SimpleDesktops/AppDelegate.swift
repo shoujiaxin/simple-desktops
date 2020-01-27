@@ -21,9 +21,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         popover.behavior = NSPopover.Behavior.transient
         popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverView") as PopoverViewController
+
+        Options.shared.loadOptions()
     }
 
-    func applicationWillTerminate(_: Notification) {}
+    func applicationWillTerminate(_: Notification) {
+        Options.shared.saveOptions()
+    }
 
     // MARK: - Core Data stack
 
