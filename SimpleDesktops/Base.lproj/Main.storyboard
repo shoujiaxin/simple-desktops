@@ -685,11 +685,11 @@
             <objects>
                 <viewController storyboardIdentifier="PopoverView" id="HkY-dK-v0h" customClass="PopoverViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="bgq-1Z-PsU">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="294"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="HvT-sm-YTL">
-                                <rect key="frame" x="374" y="268" width="18" height="18"/>
+                                <rect key="frame" x="372" y="320" width="18" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="18" id="kqF-ni-N0b"/>
                                     <constraint firstAttribute="height" constant="18" id="nJp-hP-DEA"/>
@@ -703,7 +703,7 @@
                                 </connections>
                             </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="WIb-lR-xHN">
-                                <rect key="frame" x="348" y="268" width="18" height="18"/>
+                                <rect key="frame" x="344" y="320" width="18" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="18" id="I5K-zw-ZLH"/>
                                     <constraint firstAttribute="width" constant="18" id="Jmo-zr-dTC"/>
@@ -717,7 +717,7 @@
                                 </connections>
                             </button>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="78w-KF-qoe">
-                                <rect key="frame" x="0.0" y="10" width="400" height="250"/>
+                                <rect key="frame" x="0.0" y="60" width="400" height="250"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="Xew-jl-2iZ"/>
                                     <constraint firstAttribute="height" constant="250" id="wRG-om-kSb"/>
@@ -725,7 +725,7 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="hnB-0E-gdI"/>
                             </imageView>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="Q35-5Y-5Wa" customClass="RefreshButton" customModule="SimpleDesktops" customModuleProvider="target">
-                                <rect key="frame" x="176" y="111" width="48" height="48"/>
+                                <rect key="frame" x="176" y="161" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Ycg-af-htg"/>
                                     <constraint firstAttribute="width" constant="48" id="j6J-D6-szA"/>
@@ -739,12 +739,26 @@
                                 </connections>
                             </button>
                             <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="2j1-4o-ab5">
-                                <rect key="frame" x="184" y="119" width="32" height="32"/>
+                                <rect key="frame" x="184" y="169" width="32" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="32" id="LlG-3i-m3i"/>
                                     <constraint firstAttribute="height" constant="32" id="xaM-UV-sa1"/>
                                 </constraints>
                             </progressIndicator>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="dG0-4U-o0X">
+                                <rect key="frame" x="80" y="10" width="240" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="6Ns-VP-7aC"/>
+                                    <constraint firstAttribute="height" constant="40" id="r1j-Mm-JYK"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="yA9-Jj-a4I">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="setWallpaperButtonClicked:" target="HkY-dK-v0h" id="Jwb-at-yf5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="2j1-4o-ab5" secondAttribute="centerX" id="0YF-m5-OyN"/>
@@ -752,24 +766,27 @@
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="78w-KF-qoe" secondAttribute="centerY" id="AYv-96-SE1"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="bgq-1Z-PsU" secondAttribute="leading" id="Fp0-a8-Oce"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="78w-KF-qoe" secondAttribute="centerX" id="MWT-Fr-Yfe"/>
+                            <constraint firstItem="dG0-4U-o0X" firstAttribute="centerX" secondItem="bgq-1Z-PsU" secondAttribute="centerX" id="QQ3-N8-lQv"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="2j1-4o-ab5" secondAttribute="centerY" id="Ych-vh-F0h"/>
-                            <constraint firstAttribute="bottom" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="ZTx-dJ-Sj4"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="8" id="cg7-Yf-Zio"/>
-                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="8" id="dzC-it-mvU"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="8" id="nEq-4x-Dz1"/>
-                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="8" id="pS6-8V-3lu"/>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="10" id="cg7-Yf-Zio"/>
+                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="10" id="dzC-it-mvU"/>
+                            <constraint firstAttribute="bottom" secondItem="dG0-4U-o0X" secondAttribute="bottom" constant="10" id="gSf-8i-PCK"/>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="10" id="nEq-4x-Dz1"/>
+                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="pS6-8V-3lu"/>
                             <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="u4c-Ta-nMH"/>
+                            <constraint firstItem="dG0-4U-o0X" firstAttribute="top" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="zm3-NL-bG2"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="78w-KF-qoe" id="Fgj-bQ-jUv"/>
                         <outlet property="progressIndicator" destination="2j1-4o-ab5" id="mIv-QX-XQp"/>
                         <outlet property="refreshButton" destination="Q35-5Y-5Wa" id="iuL-Ua-iFy"/>
+                        <outlet property="setWallpaperButton" destination="dG0-4U-o0X" id="C7L-IH-jIt"/>
                     </connections>
                 </viewController>
                 <customObject id="ZoR-DS-ibZ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74" y="302"/>
+            <point key="canvasLocation" x="74" y="369.5"/>
         </scene>
     </scenes>
     <resources>

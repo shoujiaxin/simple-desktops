@@ -49,14 +49,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		19C845AB23E06172006F45D8 /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				1985967223E011640062A1A1 /* RefreshButton.swift */,
-			);
-			path = Buttons;
-			sourceTree = "<group>";
-		};
 		19D262E623C305E6000DCF10 = {
 			isa = PBXGroup;
 			children = (
@@ -84,7 +76,7 @@
 				19C8EC6C23DED15A006EFD9B /* Utils.swift */,
 				192A03C123DEA9A200CF0517 /* Options.swift */,
 				19C8EC6E23DEDB0B006EFD9B /* ImageManager.swift */,
-				19C845AB23E06172006F45D8 /* Buttons */,
+				1985967223E011640062A1A1 /* RefreshButton.swift */,
 				19D2630523C30C10000DCF10 /* ViewControllers */,
 				19D262FE23C305E7000DCF10 /* Info.plist */,
 				19D262FF23C305E7000DCF10 /* SimpleDesktops.entitlements */,
