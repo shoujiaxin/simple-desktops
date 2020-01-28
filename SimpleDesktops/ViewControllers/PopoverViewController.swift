@@ -16,4 +16,10 @@ class PopoverViewController: NSViewController {
 
         imageView.imageScaling = .scaleAxesIndependently
     }
+
+    @IBAction func refreshButtonClicked(_: RefreshButton) {}
+
+    @IBAction func historyButtonClicked(_: Any) {}
+
+    @IBAction func settingsButtonClicked(_: Any) {}
 }
