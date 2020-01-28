@@ -11,13 +11,38 @@ import Cocoa
 class PopoverViewController: NSViewController {
     @IBOutlet var imageView: NSImageView!
 
+    private var imageManager: ImageManager!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         imageView.imageScaling = .scaleAxesIndependently
+
+        imageManager = ImageManager()
+        imageManager.getLastPreviewImage { image, error in
+            DispatchQueue.main.sync {
+                if let error = error {
+                    Utils.showCriticalAlert(withInformation: String(describing: error))
+                    return
+                }
+
+                self.imageView.image = image
+            }
+        }
     }
 
-    @IBAction func refreshButtonClicked(_: RefreshButton) {}
+    @IBAction func refreshButtonClicked(_: RefreshButton) {
+        imageManager.getNewPreviewImage { image, error in
+            DispatchQueue.main.sync {
+                if let error = error {
+                    Utils.showCriticalAlert(withInformation: String(describing: error))
+                    return
+                }
+
+                self.imageView.image = image
+            }
+        }
+    }
 
     @IBAction func historyButtonClicked(_: Any) {}
 

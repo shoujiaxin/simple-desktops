@@ -6,11 +6,12 @@
 //  Copyright © 2020 Jiaxin Shou. All rights reserved.
 //
 
+import CoreData
 import Foundation
 import SwiftSoup
 
 class ImageManager {
-    private struct Image {
+    private struct ImageInfo {
         var previewLink: String?
         var fullLink: String? {
             guard let previewLink = previewLink else {
@@ -22,72 +23,70 @@ class ImageManager {
         }
     }
 
-    private var currentImage: Image!
-
-    public var isPreviewImageLoading: Bool = false
-    public var isFullImageDownloading: Bool = false
+    private var imageInfo: ImageInfo!
+    private static var managedObjectContext: NSManagedObjectContext!
 
     init() {
-        currentImage = Image()
-    }
+        imageInfo = ImageInfo()
 
-    public func getPreviewImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        let queue = DispatchQueue(label: "ImageManager.getPreviewImage")
-        queue.async {
-            self.isPreviewImageLoading = true
-
-            var imageLink = self.getRandomImageLink()
-            while self.isImageLoaded(from: imageLink) {
-                imageLink = self.getRandomImageLink()
-            }
-
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: URL(string: imageLink)!) { data, _, error in
-                self.isPreviewImageLoading = false
-
-                if let error = error {
-                    handler(nil, error)
-                    return
-                }
-
-                self.currentImage.previewLink = imageLink
-                handler(NSImage(data: data!), nil)
-            }
-
-            task.resume()
-        }
+        let appDelegate = NSApp.delegate as! AppDelegate
+        ImageManager.managedObjectContext = appDelegate.persistentContainer.viewContext
     }
 
     public func downloadFullImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        let queue = DispatchQueue(label: "ImageManager.downloadFullImage")
-        queue.async {
-            guard let fullImageLink = self.currentImage.fullLink else {
-                return
-            }
-
-            self.isFullImageDownloading = true
-
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: URL(string: fullImageLink)!) { _, _, error in
-                self.isFullImageDownloading = false
-
-                if let error = error {
-                    handler(nil, error)
-                    return
-                }
-
-                handler(nil, nil)
-            }
-
-            task.resume()
+        if let fullImageLink = imageInfo.fullLink {
+            getImage(form: fullImageLink, completionHandler: handler)
         }
     }
 
-    private func getImageLinks(onPage page: Int) -> [String] {
+    public func getLastPreviewImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+        let queue = DispatchQueue(label: "ImageManager.getLastPreviewImage")
+        queue.async {
+            // Get the latest record
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
+            fetchRequest.fetchLimit = 1
+
+            if let results = try? (ImageManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
+                if results.count > 0 {
+                    self.imageInfo.previewLink = (results[0].value(forKey: "previewLink") as! String)
+                    self.getImage(form: self.imageInfo.previewLink!, completionHandler: handler)
+                }
+            }
+        }
+    }
+
+    public func getNewPreviewImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+        let queue = DispatchQueue(label: "ImageManager.getNewPreviewImage")
+        queue.async {
+            self.newRandowImage()
+
+            if let previewImageLink = self.imageInfo.previewLink {
+                self.getImage(form: previewImageLink, completionHandler: handler)
+            }
+        }
+    }
+
+    private func getImage(form link: String, completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: URL(string: link)!) { data, _, error in
+            if let error = error {
+                handler(nil, error)
+                return
+            }
+
+            handler(NSImage(data: data!), nil)
+        }
+
+        task.resume()
+    }
+
+    private func newRandowImage() {
         let semaphore = DispatchSemaphore(value: 0)
 
         var linkList: [String] = []
 
+        let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
         let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, _, error in
@@ -113,16 +112,13 @@ class ImageManager {
 
         task.resume()
         _ = semaphore.wait(timeout: .distantFuture)
-        return linkList
-    }
 
-    private func getRandomImageLink() -> String {
-        let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
-        let linkList = getImageLinks(onPage: page)
-        return linkList[Int.random(in: 1 ..< linkList.count)]
-    }
+        imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
 
-    private func isImageLoaded(from _: String) -> Bool {
-        return false
+        // Add to database
+        let obj = NSEntityDescription.insertNewObject(forEntityName: "SDImage", into: ImageManager.managedObjectContext)
+        obj.setValue(Date(), forKey: "timeStamp")
+        obj.setValue(imageInfo.previewLink, forKey: "previewLink")
+        try? ImageManager.managedObjectContext.save()
     }
 }

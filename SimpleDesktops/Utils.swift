@@ -10,6 +10,17 @@ import Foundation
 import SwiftSoup
 
 class Utils {
+    static func showCriticalAlert(withInformation information: String) {
+        NSApp.activate(ignoringOtherApps: true)
+
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+        alert.alertStyle = NSAlert.Style.critical
+        alert.informativeText = information
+        alert.messageText = NSLocalizedString("Error", comment: "")
+        alert.runModal()
+    }
+
     static func updateSimpleDesktopsMaxPage() {
         let queue = DispatchQueue(label: "Utils.updateSimpleDesktopsMaxPage")
         queue.async {
