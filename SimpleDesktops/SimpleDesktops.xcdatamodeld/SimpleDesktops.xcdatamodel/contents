@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="SDImage" representedClassName="SDImage" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="previewLink" optional="YES" attributeType="String"/>
         <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="SDImage" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="SDImage" positionX="-63" positionY="-18" width="128" height="88"/>
     </elements>
 </model>

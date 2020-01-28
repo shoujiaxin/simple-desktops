@@ -11,8 +11,7 @@ import Foundation
 import SwiftSoup
 
 class ImageManager {
-    private struct ImageInfo {
-        var previewLink: String?
+    struct ImageInfo {
         var fullLink: String? {
             guard let previewLink = previewLink else {
                 return nil
@@ -21,9 +20,20 @@ class ImageManager {
             let range = previewLink.range(of: ".295x184_q100.png")
             return String(previewLink[..<(range?.lowerBound)!])
         }
+
+        var name: String? {
+            guard let fullLink = fullLink else {
+                return nil
+            }
+
+            let range = fullLink.range(of: "desktops/")
+            return String(fullLink[(range?.upperBound...)!]).replacingOccurrences(of: "/", with: "-")
+        }
+
+        var previewLink: String?
     }
 
-    private var imageInfo: ImageInfo!
+    var imageInfo: ImageInfo!
     private static var managedObjectContext: NSManagedObjectContext!
 
     init() {
@@ -33,9 +43,37 @@ class ImageManager {
         ImageManager.managedObjectContext = appDelegate.persistentContainer.viewContext
     }
 
-    public func downloadFullImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+    public func downloadFullImage(completionHandler handler: @escaping (_ url: URL?, _ error: Error?) -> Void) {
         if let fullImageLink = imageInfo.fullLink {
-            getImage(form: fullImageLink, completionHandler: handler)
+            getImage(form: fullImageLink) { image, error in
+                if let error = error {
+                    handler(nil, error)
+                    return
+                }
+
+                let wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpaper/"
+
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: wallpaperDirectory) {
+                    // Clear all old wallpapers
+                    if let files = try? fileManager.contentsOfDirectory(atPath: wallpaperDirectory) {
+                        for file in files {
+                            try? fileManager.trashItem(at: URL(fileURLWithPath: wallpaperDirectory + "/\(file)"), resultingItemURL: nil)
+                        }
+                    }
+                } else {
+                    // Create the directory to store image
+                    do {
+                        try fileManager.createDirectory(atPath: wallpaperDirectory, withIntermediateDirectories: true, attributes: nil)
+                    } catch {
+                        handler(nil, error)
+                        return
+                    }
+                }
+
+                let url = image?.writePng(to: URL(fileURLWithPath: "\(wallpaperDirectory)/\((self.imageInfo.name)!)"))
+                handler(url, nil)
+            }
         }
     }
 
@@ -117,8 +155,26 @@ class ImageManager {
 
         // Add to database
         let obj = NSEntityDescription.insertNewObject(forEntityName: "SDImage", into: ImageManager.managedObjectContext)
-        obj.setValue(Date(), forKey: "timeStamp")
+        obj.setValue(imageInfo.name, forKey: "name")
         obj.setValue(imageInfo.previewLink, forKey: "previewLink")
+        obj.setValue(Date(), forKey: "timeStamp")
         try? ImageManager.managedObjectContext.save()
+    }
+}
+
+private extension NSImage {
+    func writePng(to url: URL, options: Data.WritingOptions = .atomic) -> URL? {
+        guard let tiffRepresentation = tiffRepresentation,
+            let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation),
+            let data = bitmapImageRep.representation(using: .png, properties: [:]) else {
+            return nil
+        }
+
+        do {
+            try data.write(to: url, options: options)
+            return url
+        } catch {
+            return nil
+        }
     }
 }

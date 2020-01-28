@@ -37,13 +37,14 @@ class PopoverViewController: NSViewController {
         set(refreshing: true)
         imageManager.getLastPreviewImage { image, error in
             DispatchQueue.main.sync {
+                self.set(refreshing: false)
+
                 if let error = error {
-                    Utils.showCriticalAlert(withInformation: String(describing: error))
+                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
                     return
                 }
 
                 self.imageView.image = image
-                self.set(refreshing: false)
             }
         }
     }
@@ -52,13 +53,14 @@ class PopoverViewController: NSViewController {
         set(refreshing: true)
         imageManager.getNewPreviewImage { image, error in
             DispatchQueue.main.sync {
+                self.set(refreshing: false)
+
                 if let error = error {
-                    Utils.showCriticalAlert(withInformation: String(describing: error))
+                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
                     return
                 }
 
                 self.imageView.image = image
-                self.set(refreshing: false)
             }
         }
     }
@@ -67,17 +69,40 @@ class PopoverViewController: NSViewController {
 
     @IBAction func settingsButtonClicked(_: Any) {}
 
-    @IBAction func setWallpaperButtonClicked(_: Any) {}
+    @IBAction func setWallpaperButtonClicked(_: Any) {
+        set(refreshing: true)
+        imageManager.downloadFullImage { url, error in
+            DispatchQueue.main.sync {
+                self.set(refreshing: false)
+
+                if let error = error {
+                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                    return
+                }
+
+                let screens = NSScreen.screens
+                for screen in screens {
+                    do {
+                        try NSWorkspace.shared.setDesktopImageURL(url!, for: screen, options: [:])
+                    } catch {
+                        Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                    }
+                }
+            }
+        }
+    }
 
     private func set(refreshing: Bool) {
         if refreshing {
             refreshButton.isHidden = true
             progressIndicator.isHidden = false
             progressIndicator.startAnimation(nil)
+            setWallpaperButton.isEnabled = false
         } else {
             refreshButton.isHidden = false
             progressIndicator.isHidden = true
             progressIndicator.stopAnimation(nil)
+            setWallpaperButton.isEnabled = true
         }
     }
 }
