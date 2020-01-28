@@ -738,12 +738,21 @@
                                     <action selector="refreshButtonClicked:" target="HkY-dK-v0h" id="8ue-Ri-MZC"/>
                                 </connections>
                             </button>
+                            <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="2j1-4o-ab5">
+                                <rect key="frame" x="184" y="119" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="LlG-3i-m3i"/>
+                                    <constraint firstAttribute="height" constant="32" id="xaM-UV-sa1"/>
+                                </constraints>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="2j1-4o-ab5" secondAttribute="centerX" id="0YF-m5-OyN"/>
                             <constraint firstItem="HvT-sm-YTL" firstAttribute="centerY" secondItem="WIb-lR-xHN" secondAttribute="centerY" id="2pj-Xp-xPW"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="78w-KF-qoe" secondAttribute="centerY" id="AYv-96-SE1"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="bgq-1Z-PsU" secondAttribute="leading" id="Fp0-a8-Oce"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="78w-KF-qoe" secondAttribute="centerX" id="MWT-Fr-Yfe"/>
+                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="2j1-4o-ab5" secondAttribute="centerY" id="Ych-vh-F0h"/>
                             <constraint firstAttribute="bottom" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="ZTx-dJ-Sj4"/>
                             <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="8" id="cg7-Yf-Zio"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="8" id="dzC-it-mvU"/>
@@ -754,6 +763,8 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="78w-KF-qoe" id="Fgj-bQ-jUv"/>
+                        <outlet property="progressIndicator" destination="2j1-4o-ab5" id="mIv-QX-XQp"/>
+                        <outlet property="refreshButton" destination="Q35-5Y-5Wa" id="iuL-Ua-iFy"/>
                     </connections>
                 </viewController>
                 <customObject id="ZoR-DS-ibZ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

@@ -12,6 +12,8 @@ class RefreshButton: NSButton {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
+        appearance = NSAppearance(named: .aqua)
+
         layer?.borderWidth = 0
         layer?.cornerRadius = 6
         layer?.backgroundColor = CGColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.1)
