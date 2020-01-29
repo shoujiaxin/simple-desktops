@@ -759,6 +759,20 @@
                                     <action selector="setWallpaperButtonClicked:" target="HkY-dK-v0h" id="Jwb-at-yf5"/>
                                 </connections>
                             </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="ey8-ub-JbC">
+                                <rect key="frame" x="336" y="18" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="Jcd-kS-bEg"/>
+                                    <constraint firstAttribute="width" constant="24" id="rzi-1P-vKR"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="DownloadButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Ccr-X4-tXY">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="downloadButtonClicked:" target="HkY-dK-v0h" id="EgU-NJ-rX5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="2j1-4o-ab5" secondAttribute="centerX" id="0YF-m5-OyN"/>
@@ -770,7 +784,9 @@
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="2j1-4o-ab5" secondAttribute="centerY" id="Ych-vh-F0h"/>
                             <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="10" id="cg7-Yf-Zio"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="10" id="dzC-it-mvU"/>
+                            <constraint firstItem="ey8-ub-JbC" firstAttribute="centerY" secondItem="dG0-4U-o0X" secondAttribute="centerY" id="eFg-Z8-HaW"/>
                             <constraint firstAttribute="bottom" secondItem="dG0-4U-o0X" secondAttribute="bottom" constant="10" id="gSf-8i-PCK"/>
+                            <constraint firstItem="ey8-ub-JbC" firstAttribute="leading" secondItem="dG0-4U-o0X" secondAttribute="trailing" constant="16" id="ltt-Je-8Tv"/>
                             <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="10" id="nEq-4x-Dz1"/>
                             <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="pS6-8V-3lu"/>
                             <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="u4c-Ta-nMH"/>
@@ -778,6 +794,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="downloadButton" destination="ey8-ub-JbC" id="5gf-ay-3Ff"/>
                         <outlet property="imageView" destination="78w-KF-qoe" id="Fgj-bQ-jUv"/>
                         <outlet property="progressIndicator" destination="2j1-4o-ab5" id="mIv-QX-XQp"/>
                         <outlet property="refreshButton" destination="Q35-5Y-5Wa" id="iuL-Ua-iFy"/>
@@ -790,6 +807,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="DownloadButtonIcon" width="24" height="24"/>
         <image name="HistoryButtonIcon" width="18" height="18"/>
         <image name="RefreshButtonIcon" width="32" height="32"/>
         <image name="SettingsButtonIcon" width="18" height="18"/>

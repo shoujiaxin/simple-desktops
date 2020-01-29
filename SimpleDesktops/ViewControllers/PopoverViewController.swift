@@ -13,6 +13,7 @@ class PopoverViewController: NSViewController {
     @IBOutlet var refreshButton: RefreshButton!
     @IBOutlet var progressIndicator: NSProgressIndicator!
     @IBOutlet var setWallpaperButton: NSButton!
+    @IBOutlet var downloadButton: NSButton!
 
     private var imageManager: ImageManager!
 
@@ -48,6 +49,8 @@ class PopoverViewController: NSViewController {
             }
         }
     }
+
+    @IBAction func downloadButtonClicked(_: Any) {}
 
     @IBAction func refreshButtonClicked(_: Any) {
         set(refreshing: true)
@@ -95,11 +98,13 @@ class PopoverViewController: NSViewController {
             progressIndicator.isHidden = false
             progressIndicator.startAnimation(nil)
             setWallpaperButton.isEnabled = false
+            downloadButton.isEnabled = false
         } else {
             refreshButton.isHidden = false
             progressIndicator.isHidden = true
             progressIndicator.stopAnimation(nil)
             setWallpaperButton.isEnabled = true
+            downloadButton.isEnabled = true
         }
     }
 
