@@ -89,6 +89,9 @@ class ImageManager {
                 if results.count > 0 {
                     self.imageInfo.previewLink = (results[0].value(forKey: "previewLink") as! String)
                     self.getImage(form: self.imageInfo.previewLink!, completionHandler: handler)
+                } else {
+                    // Run the app for the first time
+                    self.getNewPreviewImage(completionHandler: handler)
                 }
             }
         }

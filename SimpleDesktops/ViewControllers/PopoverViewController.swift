@@ -80,13 +80,10 @@ class PopoverViewController: NSViewController {
                     return
                 }
 
-                let screens = NSScreen.screens
-                for screen in screens {
-                    do {
-                        try NSWorkspace.shared.setDesktopImageURL(url!, for: screen, options: [:])
-                    } catch {
-                        Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    }
+                // Set wallpaper for all workspaces (desktops) on all screens
+                self.setWallpaper(with: url)
+                NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
+                    self.setWallpaper(with: url)
                 }
             }
         }
@@ -103,6 +100,23 @@ class PopoverViewController: NSViewController {
             progressIndicator.isHidden = true
             progressIndicator.stopAnimation(nil)
             setWallpaperButton.isEnabled = true
+        }
+    }
+
+    private func setWallpaper(with url: URL?) {
+        guard let url = url else {
+            return
+        }
+
+        let screens = NSScreen.screens
+
+        for screen in screens {
+            do {
+                try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+            } catch {
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
+            }
         }
     }
 }
