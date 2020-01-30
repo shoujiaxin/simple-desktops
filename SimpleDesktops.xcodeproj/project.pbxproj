@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		192A03C223DEA9A200CF0517 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192A03C123DEA9A200CF0517 /* Options.swift */; };
 		1985967323E011640062A1A1 /* RefreshButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* RefreshButton.swift */; };
+		19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */; };
 		19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C8EC6C23DED15A006EFD9B /* Utils.swift */; };
 		19C8EC6F23DEDB0B006EFD9B /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C8EC6E23DEDB0B006EFD9B /* ImageManager.swift */; };
 		19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F223C305E6000DCF10 /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		192A03C123DEA9A200CF0517 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1985967223E011640062A1A1 /* RefreshButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshButton.swift; sourceTree = "<group>"; };
+		19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsSource.swift; sourceTree = "<group>"; };
 		19C8EC6C23DED15A006EFD9B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		19C8EC6E23DEDB0B006EFD9B /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		19D262EF23C305E6000DCF10 /* SimpleDesktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleDesktops.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +77,7 @@
 				19D262FB23C305E7000DCF10 /* Main.storyboard */,
 				19C8EC6C23DED15A006EFD9B /* Utils.swift */,
 				192A03C123DEA9A200CF0517 /* Options.swift */,
+				19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */,
 				19C8EC6E23DEDB0B006EFD9B /* ImageManager.swift */,
 				1985967223E011640062A1A1 /* RefreshButton.swift */,
 				19D2630523C30C10000DCF10 /* ViewControllers */,
@@ -229,6 +232,7 @@
 				192A03C223DEA9A200CF0517 /* Options.swift in Sources */,
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				19C8EC6F23DEDB0B006EFD9B /* ImageManager.swift in Sources */,
+				19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */,
 				19D2630723C30C46000DCF10 /* PopoverViewController.swift in Sources */,
 				19D262F823C305E6000DCF10 /* SimpleDesktops.xcdatamodeld in Sources */,
 			);

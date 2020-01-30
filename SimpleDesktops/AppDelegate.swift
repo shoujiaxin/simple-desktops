@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverView") as PopoverViewController
 
         Options.shared.loadOptions()
-        Utils.updateSimpleDesktopsMaxPage()
+        SimpleDesktopsSource.updateSimpleDesktopsMaxPage()
     }
 
     func applicationWillTerminate(_: Notification) {
