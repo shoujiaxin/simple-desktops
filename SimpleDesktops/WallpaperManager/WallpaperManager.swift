@@ -10,6 +10,10 @@ import Cocoa
 import CoreData
 
 class WallpaperManager {
+    public var wallpaperName: String? {
+        return source.imageInfo.name
+    }
+
     private var source = SimpleDesktopsSource()
     private static var managedObjectContext: NSManagedObjectContext!
 

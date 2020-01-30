@@ -49,7 +49,25 @@ class PopoverViewController: NSViewController {
         }
     }
 
-    @IBAction func downloadButtonClicked(_: Any) {}
+    @IBAction func downloadButtonClicked(_: Any) {
+        guard let wallpaperName = wallpaperManager.wallpaperName else {
+            return
+        }
+
+        set(refreshing: true)
+        var url = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
+        url.appendPathComponent(wallpaperName)
+        wallpaperManager.downloadWallpaper(to: url) { error in
+            DispatchQueue.main.sync {
+                self.set(refreshing: false)
+
+                if let error = error {
+                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                    return
+                }
+            }
+        }
+    }
 
     @IBAction func refreshButtonClicked(_: Any) {
         set(refreshing: true)
