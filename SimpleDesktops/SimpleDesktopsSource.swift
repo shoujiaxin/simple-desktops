@@ -33,15 +33,7 @@ class SimpleDesktopsSource {
         var previewLink: String?
     }
 
-    public var imageInfo: ImageInfo!
-    private static var managedObjectContext: NSManagedObjectContext!
-
-    init() {
-        imageInfo = ImageInfo()
-
-        let appDelegate = NSApp.delegate as! AppDelegate
-        SimpleDesktopsSource.managedObjectContext = appDelegate.persistentContainer.viewContext
-    }
+    public var imageInfo = ImageInfo()
 
     public func getFullImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
         if let fullImageLink = imageInfo.fullLink {
@@ -53,6 +45,42 @@ class SimpleDesktopsSource {
         if let previewImageLink = imageInfo.previewLink {
             getImage(form: previewImageLink, completionHandler: handler)
         }
+    }
+
+    /// Get an image randomly from Simple Desktops
+    public func randomImage() {
+        let semaphore = DispatchSemaphore(value: 0)
+
+        var linkList: [String] = []
+
+        let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
+        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: url) { data, _, error in
+            if error != nil {
+                semaphore.signal()
+                return
+            }
+
+            do {
+                let doc: Document = try SwiftSoup.parse(String(data: data!, encoding: .utf8)!)
+                let imgTags: Elements = try doc.select("img")
+
+                for tag in imgTags {
+                    try linkList.append(tag.attr("src"))
+                }
+
+                semaphore.signal()
+            } catch {
+                semaphore.signal()
+                return
+            }
+        }
+
+        task.resume()
+        _ = semaphore.wait(timeout: .distantFuture)
+
+        imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
     }
 
     public static func updateSimpleDesktopsMaxPage() {
@@ -116,48 +144,5 @@ class SimpleDesktopsSource {
         _ = semaphore.wait(timeout: .distantFuture)
 
         return isAvailable
-    }
-
-    /// Get an image randomly from Simple Desktops
-    private func randomImage() {
-        let semaphore = DispatchSemaphore(value: 0)
-
-        var linkList: [String] = []
-
-        let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
-        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
-        let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: url) { data, _, error in
-            if error != nil {
-                semaphore.signal()
-                return
-            }
-
-            do {
-                let doc: Document = try SwiftSoup.parse(String(data: data!, encoding: .utf8)!)
-                let imgTags: Elements = try doc.select("img")
-
-                for tag in imgTags {
-                    try linkList.append(tag.attr("src"))
-                }
-
-                semaphore.signal()
-            } catch {
-                semaphore.signal()
-                return
-            }
-        }
-
-        task.resume()
-        _ = semaphore.wait(timeout: .distantFuture)
-
-        imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
-
-        // Add to database
-        let obj = NSEntityDescription.insertNewObject(forEntityName: "SDImage", into: SimpleDesktopsSource.managedObjectContext)
-        obj.setValue(imageInfo.name, forKey: "name")
-        obj.setValue(imageInfo.previewLink, forKey: "previewLink")
-        obj.setValue(Date(), forKey: "timeStamp")
-        try? SimpleDesktopsSource.managedObjectContext.save()
     }
 }
