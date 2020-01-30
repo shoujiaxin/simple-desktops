@@ -15,7 +15,7 @@ class PopoverViewController: NSViewController {
     @IBOutlet var setWallpaperButton: NSButton!
     @IBOutlet var downloadButton: NSButton!
 
-    private var imageManager: ImageManager!
+    private var wallpaperManager = WallpaperManager()
 
     override func viewWillLayout() {
         setWallpaperButton.layer?.borderColor = CGColor(gray: 0.5, alpha: 0.4)
@@ -34,9 +34,8 @@ class PopoverViewController: NSViewController {
 
         setWallpaperButton.attributedTitle = NSMutableAttributedString(string: "Set as Wallpaper", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
 
-        imageManager = ImageManager()
         set(refreshing: true)
-        imageManager.getLastPreviewImage { image, error in
+        wallpaperManager.getLastWallpaper { image, error in
             DispatchQueue.main.sync {
                 self.set(refreshing: false)
 
@@ -54,7 +53,7 @@ class PopoverViewController: NSViewController {
 
     @IBAction func refreshButtonClicked(_: Any) {
         set(refreshing: true)
-        imageManager.getNewPreviewImage { image, error in
+        wallpaperManager.updatePreview { image, error in
             DispatchQueue.main.sync {
                 self.set(refreshing: false)
 
@@ -74,19 +73,13 @@ class PopoverViewController: NSViewController {
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
         set(refreshing: true)
-        imageManager.downloadFullImage { url, error in
+        wallpaperManager.setWallpaper { error in
             DispatchQueue.main.sync {
                 self.set(refreshing: false)
 
                 if let error = error {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
                     return
-                }
-
-                // Set wallpaper for all workspaces (desktops) on all screens
-                self.setWallpaper(with: url)
-                NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
-                    self.setWallpaper(with: url)
                 }
             }
         }
@@ -105,23 +98,6 @@ class PopoverViewController: NSViewController {
             progressIndicator.stopAnimation(nil)
             setWallpaperButton.isEnabled = true
             downloadButton.isEnabled = true
-        }
-    }
-
-    private func setWallpaper(with url: URL?) {
-        guard let url = url else {
-            return
-        }
-
-        let screens = NSScreen.screens
-
-        for screen in screens {
-            do {
-                try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
-            } catch {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                return
-            }
         }
     }
 }
