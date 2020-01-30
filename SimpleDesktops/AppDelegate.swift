@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         popover.behavior = NSPopover.Behavior.transient
-        popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverView") as PopoverViewController
+        popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverViewController") as PopoverViewController
 
         Options.shared.loadOptions()
         SimpleDesktopsSource.updateSimpleDesktopsMaxPage()

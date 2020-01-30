@@ -683,25 +683,11 @@
         <!--Popover View Controller-->
         <scene sceneID="hEX-GO-JeT">
             <objects>
-                <viewController storyboardIdentifier="PopoverView" id="HkY-dK-v0h" customClass="PopoverViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PopoverViewController" id="HkY-dK-v0h" customClass="PopoverViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="bgq-1Z-PsU">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="HvT-sm-YTL">
-                                <rect key="frame" x="372" y="320" width="18" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="18" id="kqF-ni-N0b"/>
-                                    <constraint firstAttribute="height" constant="18" id="nJp-hP-DEA"/>
-                                </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="SettingsButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="settingsButtonClicked:" target="HkY-dK-v0h" id="E3f-cL-AiV"/>
-                                </connections>
-                            </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="WIb-lR-xHN">
                                 <rect key="frame" x="344" y="320" width="18" height="18"/>
                                 <constraints>
@@ -716,6 +702,51 @@
                                     <action selector="historyButtonClicked:" target="HkY-dK-v0h" id="F0Y-oy-VYw"/>
                                 </connections>
                             </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="HvT-sm-YTL">
+                                <rect key="frame" x="372" y="320" width="18" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="18" id="kqF-ni-N0b"/>
+                                    <constraint firstAttribute="height" constant="18" id="nJp-hP-DEA"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="SettingsButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="settingsButtonClicked:" target="HkY-dK-v0h" id="E3f-cL-AiV"/>
+                                </connections>
+                            </button>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="1sO-Ng-jwp">
+                                <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="centerY" secondItem="WIb-lR-xHN" secondAttribute="centerY" id="2pj-Xp-xPW"/>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="10" id="cg7-Yf-Zio"/>
+                            <constraint firstItem="1sO-Ng-jwp" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="10" id="foX-Wt-Mlq"/>
+                            <constraint firstAttribute="bottom" secondItem="1sO-Ng-jwp" secondAttribute="bottom" id="grI-pi-iEl"/>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="10" id="nEq-4x-Dz1"/>
+                            <constraint firstItem="1sO-Ng-jwp" firstAttribute="leading" secondItem="bgq-1Z-PsU" secondAttribute="leading" id="o3m-wE-QeF"/>
+                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="pS6-8V-3lu"/>
+                            <constraint firstAttribute="trailing" secondItem="1sO-Ng-jwp" secondAttribute="trailing" id="uxa-vn-O5B"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="1sO-Ng-jwp" id="eiF-oV-Ari"/>
+                    </connections>
+                </viewController>
+                <customObject id="ZoR-DS-ibZ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="74" y="335"/>
+        </scene>
+        <!--Preview View Controller-->
+        <scene sceneID="WSg-fI-o46">
+            <objects>
+                <viewController storyboardIdentifier="PreviewViewController" id="Miv-G2-hpW" customClass="PreviewViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="WeH-DP-Lqg">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="78w-KF-qoe">
                                 <rect key="frame" x="0.0" y="60" width="400" height="250"/>
                                 <constraints>
@@ -735,7 +766,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="refreshButtonClicked:" target="HkY-dK-v0h" id="8ue-Ri-MZC"/>
+                                    <action selector="refreshButtonClicked:" target="Miv-G2-hpW" id="u3h-Oj-YiE"/>
                                 </connections>
                             </button>
                             <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="2j1-4o-ab5">
@@ -756,11 +787,11 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="setWallpaperButtonClicked:" target="HkY-dK-v0h" id="Jwb-at-yf5"/>
+                                    <action selector="setWallpaperButtonClicked:" target="Miv-G2-hpW" id="uMq-HK-BbX"/>
                                 </connections>
                             </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="ey8-ub-JbC">
-                                <rect key="frame" x="336" y="18" width="24" height="24"/>
+                                <rect key="frame" x="344" y="18" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="Jcd-kS-bEg"/>
                                     <constraint firstAttribute="width" constant="24" id="rzi-1P-vKR"/>
@@ -770,40 +801,62 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="downloadButtonClicked:" target="HkY-dK-v0h" id="EgU-NJ-rX5"/>
+                                    <action selector="downloadButtonClicked:" target="Miv-G2-hpW" id="P8t-W4-HRr"/>
                                 </connections>
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="2j1-4o-ab5" secondAttribute="centerX" id="0YF-m5-OyN"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="centerY" secondItem="WIb-lR-xHN" secondAttribute="centerY" id="2pj-Xp-xPW"/>
-                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="78w-KF-qoe" secondAttribute="centerY" id="AYv-96-SE1"/>
-                            <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="bgq-1Z-PsU" secondAttribute="leading" id="Fp0-a8-Oce"/>
-                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="78w-KF-qoe" secondAttribute="centerX" id="MWT-Fr-Yfe"/>
-                            <constraint firstItem="dG0-4U-o0X" firstAttribute="centerX" secondItem="bgq-1Z-PsU" secondAttribute="centerX" id="QQ3-N8-lQv"/>
-                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="2j1-4o-ab5" secondAttribute="centerY" id="Ych-vh-F0h"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="10" id="cg7-Yf-Zio"/>
-                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="10" id="dzC-it-mvU"/>
-                            <constraint firstItem="ey8-ub-JbC" firstAttribute="centerY" secondItem="dG0-4U-o0X" secondAttribute="centerY" id="eFg-Z8-HaW"/>
-                            <constraint firstAttribute="bottom" secondItem="dG0-4U-o0X" secondAttribute="bottom" constant="10" id="gSf-8i-PCK"/>
-                            <constraint firstItem="ey8-ub-JbC" firstAttribute="leading" secondItem="dG0-4U-o0X" secondAttribute="trailing" constant="16" id="ltt-Je-8Tv"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="10" id="nEq-4x-Dz1"/>
-                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="pS6-8V-3lu"/>
-                            <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="u4c-Ta-nMH"/>
-                            <constraint firstItem="dG0-4U-o0X" firstAttribute="top" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="zm3-NL-bG2"/>
+                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="78w-KF-qoe" secondAttribute="centerY" id="7YA-T5-WjA"/>
+                            <constraint firstItem="ey8-ub-JbC" firstAttribute="leading" secondItem="dG0-4U-o0X" secondAttribute="trailing" constant="24" id="CLM-fD-lO1"/>
+                            <constraint firstItem="dG0-4U-o0X" firstAttribute="top" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="GjG-s8-SkL"/>
+                            <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="WeH-DP-Lqg" secondAttribute="leading" id="H3d-Wg-gIb"/>
+                            <constraint firstItem="2j1-4o-ab5" firstAttribute="centerX" secondItem="Q35-5Y-5Wa" secondAttribute="centerX" id="IiY-1b-qPJ"/>
+                            <constraint firstAttribute="bottom" secondItem="dG0-4U-o0X" secondAttribute="bottom" constant="10" id="U7i-Wt-g6I"/>
+                            <constraint firstItem="dG0-4U-o0X" firstAttribute="centerY" secondItem="ey8-ub-JbC" secondAttribute="centerY" id="akC-i1-VuJ"/>
+                            <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="bmw-cP-kbY"/>
+                            <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="78w-KF-qoe" secondAttribute="centerX" id="d9B-lF-Hzm"/>
+                            <constraint firstItem="2j1-4o-ab5" firstAttribute="centerY" secondItem="Q35-5Y-5Wa" secondAttribute="centerY" id="oMX-TZ-Xps"/>
+                            <constraint firstItem="dG0-4U-o0X" firstAttribute="centerX" secondItem="WeH-DP-Lqg" secondAttribute="centerX" id="tOf-3z-3ba"/>
+                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="WeH-DP-Lqg" secondAttribute="top" id="uj4-vE-QjW"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="downloadButton" destination="ey8-ub-JbC" id="5gf-ay-3Ff"/>
-                        <outlet property="imageView" destination="78w-KF-qoe" id="Fgj-bQ-jUv"/>
-                        <outlet property="progressIndicator" destination="2j1-4o-ab5" id="mIv-QX-XQp"/>
-                        <outlet property="refreshButton" destination="Q35-5Y-5Wa" id="iuL-Ua-iFy"/>
-                        <outlet property="setWallpaperButton" destination="dG0-4U-o0X" id="C7L-IH-jIt"/>
+                        <outlet property="downloadButton" destination="ey8-ub-JbC" id="Pay-Rb-0c4"/>
+                        <outlet property="imageView" destination="78w-KF-qoe" id="aK4-ky-L2r"/>
+                        <outlet property="progressIndicator" destination="2j1-4o-ab5" id="8lY-SP-m0F"/>
+                        <outlet property="refreshButton" destination="Q35-5Y-5Wa" id="dTU-kk-Y8L"/>
+                        <outlet property="setWallpaperButton" destination="dG0-4U-o0X" id="TQN-9i-893"/>
                     </connections>
                 </viewController>
-                <customObject id="ZoR-DS-ibZ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="oHg-lh-98S" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74" y="369.5"/>
+            <point key="canvasLocation" x="74" y="805"/>
+        </scene>
+        <!--History View Controller-->
+        <scene sceneID="mzH-rx-zdE">
+            <objects>
+                <viewController storyboardIdentifier="HistoryViewController" id="YW7-ZQ-u4X" customClass="HistoryViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Rm1-Jc-tST">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="lcW-mv-vrz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="536" y="805"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="NXH-b6-hbm">
+            <objects>
+                <viewController storyboardIdentifier="SettingsViewController" id="ZXl-eC-gjQ" customClass="SettingsViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="4MK-1E-GFn">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="U7a-9o-wJW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="74" y="1210"/>
         </scene>
     </scenes>
     <resources>
