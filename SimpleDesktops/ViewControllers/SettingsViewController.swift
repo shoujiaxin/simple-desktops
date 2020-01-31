@@ -9,7 +9,26 @@
 import Cocoa
 
 class SettingsViewController: NSViewController {
+    @IBOutlet var changePictureButton: NSButton!
+    @IBOutlet var intervalPopUpButton: NSPopUpButton!
+    @IBOutlet var doneButton: PillButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        doneButton.attributedTitle = NSMutableAttributedString(string: "Done", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
+    }
+
+    @IBAction func changePictureButtonClicked(_ sender: NSButton) {
+        intervalPopUpButton.isEnabled = (sender.state == NSControl.StateValue.on) ? true : false
+    }
+
+    @IBAction func doneButtonClicked(_: Any) {
+        let viewController = parent as! PopoverViewController
+        viewController.settingsButtonClicked(self)
+    }
+
+    @IBAction func quitButtonClicked(_: Any) {
+        NSApp.terminate(self)
     }
 }

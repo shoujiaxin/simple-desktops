@@ -35,22 +35,36 @@ class PopoverViewController: NSViewController {
 
     @IBAction func historyButtonClicked(_: Any) {
         switch currentVCState {
+        case .preview:
+            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.history.rawValue], options: .slideLeft, completionHandler: nil)
+
+            currentVCState = .history
         case .history:
             transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .slideRight, completionHandler: nil)
+
             currentVCState = .preview
-        default:
+        case .settings:
             transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.history.rawValue], options: .slideLeft, completionHandler: nil)
+            let appDelegate = NSApp.delegate as! AppDelegate
+            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
+
             currentVCState = .history
         }
     }
 
     @IBAction func settingsButtonClicked(_: Any) {
+        let appDelegate = NSApp.delegate as! AppDelegate
+
         switch currentVCState {
         case .settings:
             transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .slideDown, completionHandler: nil)
+            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
+
             currentVCState = .preview
         default:
             transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.settings.rawValue], options: .slideUp, completionHandler: nil)
+            appDelegate.popover.contentSize = NSSize(width: 400, height: 126)
+
             currentVCState = .settings
         }
     }
