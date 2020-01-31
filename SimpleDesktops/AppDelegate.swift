@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.action = #selector(togglePopover(sender:))
         }
 
+        popover.animates = true // Enable animations when resizing
         popover.behavior = NSPopover.Behavior.transient
         popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverViewController") as PopoverViewController
 

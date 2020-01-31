@@ -776,7 +776,7 @@
                                     <constraint firstAttribute="height" constant="32" id="xaM-UV-sa1"/>
                                 </constraints>
                             </progressIndicator>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="dG0-4U-o0X">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="dG0-4U-o0X" customClass="PillButton" customModule="SimpleDesktops" customModuleProvider="target">
                                 <rect key="frame" x="80" y="10" width="240" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="6Ns-VP-7aC"/>

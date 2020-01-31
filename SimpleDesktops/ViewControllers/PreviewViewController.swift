@@ -12,19 +12,10 @@ class PreviewViewController: NSViewController {
     @IBOutlet var imageView: NSImageView!
     @IBOutlet var refreshButton: RefreshButton!
     @IBOutlet var progressIndicator: NSProgressIndicator!
-    @IBOutlet var setWallpaperButton: NSButton!
+    @IBOutlet var setWallpaperButton: PillButton!
     @IBOutlet var downloadButton: NSButton!
 
     private var wallpaperManager = WallpaperManager()
-
-    override func viewWillLayout() {
-        super.viewWillLayout()
-
-        setWallpaperButton.layer?.borderColor = CGColor(gray: 0.5, alpha: 0.4)
-        setWallpaperButton.layer?.borderWidth = 1
-        setWallpaperButton.layer?.cornerRadius = 4
-        setWallpaperButton.layer?.backgroundColor = CGColor(gray: 0.6, alpha: 0.2)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

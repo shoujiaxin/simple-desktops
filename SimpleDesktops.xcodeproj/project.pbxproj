@@ -20,6 +20,7 @@
 		19FC120423E342170094AC66 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120323E342170094AC66 /* PreviewViewController.swift */; };
 		19FC120623E344210094AC66 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120523E344210094AC66 /* SettingsViewController.swift */; };
 		19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120723E345DE0094AC66 /* HistoryViewController.swift */; };
+		19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120D23E4086E0094AC66 /* PillButton.swift */; };
 		C1BA6D3B12C88AF46D1ADEA0 /* Pods_SimpleDesktops.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71A5EC2662D90F9933A5D955 /* Pods_SimpleDesktops.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		19FC120323E342170094AC66 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		19FC120523E344210094AC66 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		19FC120723E345DE0094AC66 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		19FC120D23E4086E0094AC66 /* PillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillButton.swift; sourceTree = "<group>"; };
 		2CFB4EF3F541CF969ABB49C8 /* Pods-SimpleDesktops.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleDesktops.release.xcconfig"; path = "Target Support Files/Pods-SimpleDesktops/Pods-SimpleDesktops.release.xcconfig"; sourceTree = "<group>"; };
 		5E1D821B72C6647084D71290 /* Pods-SimpleDesktops.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleDesktops.debug.xcconfig"; path = "Target Support Files/Pods-SimpleDesktops/Pods-SimpleDesktops.debug.xcconfig"; sourceTree = "<group>"; };
 		71A5EC2662D90F9933A5D955 /* Pods_SimpleDesktops.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleDesktops.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,7 +85,7 @@
 				19D262FB23C305E7000DCF10 /* Main.storyboard */,
 				19C8EC6C23DED15A006EFD9B /* Utils.swift */,
 				192A03C123DEA9A200CF0517 /* Options.swift */,
-				1985967223E011640062A1A1 /* RefreshButton.swift */,
+				19FC120C23E407CF0094AC66 /* Buttons */,
 				19E124E923E2D76E00CE8D42 /* WallpaperManager */,
 				19D2630523C30C10000DCF10 /* ViewControllers */,
 				19D262FE23C305E7000DCF10 /* Info.plist */,
@@ -111,6 +113,15 @@
 				19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */,
 			);
 			path = WallpaperManager;
+			sourceTree = "<group>";
+		};
+		19FC120C23E407CF0094AC66 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				1985967223E011640062A1A1 /* RefreshButton.swift */,
+				19FC120D23E4086E0094AC66 /* PillButton.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		414997077A0E516B4D95A9A8 /* Frameworks */ = {
@@ -244,6 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */,
 				19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */,
 				1985967323E011640062A1A1 /* RefreshButton.swift in Sources */,
 				192A03C223DEA9A200CF0517 /* Options.swift in Sources */,
