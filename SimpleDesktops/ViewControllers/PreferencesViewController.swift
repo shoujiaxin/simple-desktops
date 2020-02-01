@@ -17,6 +17,10 @@ class PreferencesViewController: NSViewController {
         super.viewDidLoad()
 
         doneButton.attributedTitle = NSMutableAttributedString(string: "Done", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
+    }
+
+    override func viewWillAppear() {
+        super.viewWillAppear()
 
         updatePreferences()
     }
