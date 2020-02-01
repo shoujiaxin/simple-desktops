@@ -9,14 +9,16 @@
 import Cocoa
 
 class UpdateButton: NSButton {
+    private var rectColor = NSColor.windowBackgroundColor.cgColor
+
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
-        appearance = NSAppearance(named: .aqua)
+        rectColor = NSColor.windowBackgroundColor.cgColor
 
         layer?.borderWidth = 0
         layer?.cornerRadius = 6
-        layer?.backgroundColor = CGColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.1)
+        layer?.backgroundColor = CGColor(red: rectColor.components![0], green: rectColor.components![1], blue: rectColor.components![2], alpha: 0.2)
 
         let rect = NSRect(x: bounds.origin.x - bounds.width, y: bounds.origin.y - bounds.height, width: bounds.width * 3, height: bounds.height * 3)
         let trackingArea = NSTrackingArea(rect: rect, options: [.mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil)
@@ -27,19 +29,18 @@ class UpdateButton: NSButton {
         super.layout()
 
         imageScaling = NSImageScaling.scaleNone
-
         if let image = self.image {
             image.size = NSSize(width: 32, height: 32)
-            image.tint(withColor: NSColor.white)
+            image.tint(withColor: NSColor.textColor)
         }
     }
 
     override func mouseEntered(with _: NSEvent) {
-        layer?.backgroundColor = CGColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.8)
+        layer?.backgroundColor = CGColor(red: rectColor.components![0], green: rectColor.components![1], blue: rectColor.components![2], alpha: 0.8)
     }
 
     override func mouseExited(with _: NSEvent) {
-        layer?.backgroundColor = CGColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.1)
+        layer?.backgroundColor = CGColor(red: rectColor.components![0], green: rectColor.components![1], blue: rectColor.components![2], alpha: 0.2)
     }
 }
 

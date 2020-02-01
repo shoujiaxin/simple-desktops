@@ -20,8 +20,6 @@ class PreviewViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        imageView.imageScaling = .scaleAxesIndependently
-
         progressIndicator.appearance = NSAppearance(named: .aqua)
         progressIndicator.isHidden = true
 
