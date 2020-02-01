@@ -18,6 +18,16 @@ class Options {
         case everyHour
         case everyDay
 
+        var seconds: Double {
+            switch self {
+            case .everyMinute: return 60
+            case .everyFiveMinutes: return 300
+            case .everyFifteenMinutes: return 900
+            case .everyHour: return 3600
+            case .everyDay: return 86400
+            }
+        }
+
         static func from(rawValue: Int) -> ChangeInterval {
             switch rawValue {
             case 0: return everyMinute

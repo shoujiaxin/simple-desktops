@@ -11,6 +11,7 @@ import CoreData
 
 class WallpaperManager {
     private var source = SimpleDesktopsSource()
+    private var timer: Timer?
     private static var managedObjectContext: NSManagedObjectContext!
 
     enum WallpaperError: Error {
@@ -68,7 +69,9 @@ class WallpaperManager {
         }
     }
 
-    public func changeWallpaper(every _: TimeInterval, completionHandler _: @escaping (_ error: Error?) -> Void) {}
+    public func changeWallpaper(every timeInterval: TimeInterval) {
+        timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeWallpaperBackground(sender:)), userInfo: nil, repeats: true)
+    }
 
     /// Download image to hard disk
     /// - Parameters:
@@ -145,6 +148,23 @@ class WallpaperManager {
             }
 
             self.source.getPreviewImage(completionHandler: handler)
+        }
+    }
+
+    @objc private func changeWallpaperBackground(sender _: Timer) {
+        if !Options.shared.changePicture {
+            timer?.invalidate() // Stop the timer
+        }
+
+        let queue = DispatchQueue(label: "WallpaperManager.changeWallpaperBackground")
+        queue.async {
+            self.updateImageFromSource()
+
+            let semaphore = DispatchSemaphore(value: 0)
+            self.changeWallpaper { _ in
+                semaphore.signal()
+            }
+            _ = semaphore.wait(timeout: .distantFuture)
         }
     }
 

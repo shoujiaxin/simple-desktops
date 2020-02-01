@@ -15,7 +15,8 @@ class PreviewViewController: NSViewController {
     @IBOutlet var setWallpaperButton: PillButton!
     @IBOutlet var downloadButton: NSButton!
 
-    private var wallpaperManager = WallpaperManager()
+    var wallpaperManager = WallpaperManager()
+
     private var isUpdating: Bool = false {
         willSet {
             if newValue {
