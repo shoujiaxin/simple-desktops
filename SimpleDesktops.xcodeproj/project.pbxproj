@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		192A03C223DEA9A200CF0517 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192A03C123DEA9A200CF0517 /* Options.swift */; };
-		1985967323E011640062A1A1 /* RefreshButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* RefreshButton.swift */; };
+		1985967323E011640062A1A1 /* UpdateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* UpdateButton.swift */; };
 		19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */; };
 		19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C8EC6C23DED15A006EFD9B /* Utils.swift */; };
 		19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F223C305E6000DCF10 /* AppDelegate.swift */; };
@@ -18,7 +18,7 @@
 		19D2630723C30C46000DCF10 /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D2630623C30C46000DCF10 /* PopoverViewController.swift */; };
 		19E124E823E2C45E00CE8D42 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E124E723E2C45E00CE8D42 /* WallpaperManager.swift */; };
 		19FC120423E342170094AC66 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120323E342170094AC66 /* PreviewViewController.swift */; };
-		19FC120623E344210094AC66 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120523E344210094AC66 /* SettingsViewController.swift */; };
+		19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120523E344210094AC66 /* PreferencesViewController.swift */; };
 		19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120723E345DE0094AC66 /* HistoryViewController.swift */; };
 		19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120D23E4086E0094AC66 /* PillButton.swift */; };
 		C1BA6D3B12C88AF46D1ADEA0 /* Pods_SimpleDesktops.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71A5EC2662D90F9933A5D955 /* Pods_SimpleDesktops.framework */; };
@@ -26,7 +26,7 @@
 
 /* Begin PBXFileReference section */
 		192A03C123DEA9A200CF0517 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
-		1985967223E011640062A1A1 /* RefreshButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshButton.swift; sourceTree = "<group>"; };
+		1985967223E011640062A1A1 /* UpdateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateButton.swift; sourceTree = "<group>"; };
 		19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsSource.swift; sourceTree = "<group>"; };
 		19C8EC6C23DED15A006EFD9B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		19D262EF23C305E6000DCF10 /* SimpleDesktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleDesktops.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -39,7 +39,7 @@
 		19D2630623C30C46000DCF10 /* PopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
 		19E124E723E2C45E00CE8D42 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		19FC120323E342170094AC66 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
-		19FC120523E344210094AC66 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		19FC120523E344210094AC66 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		19FC120723E345DE0094AC66 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		19FC120D23E4086E0094AC66 /* PillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillButton.swift; sourceTree = "<group>"; };
 		2CFB4EF3F541CF969ABB49C8 /* Pods-SimpleDesktops.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleDesktops.release.xcconfig"; path = "Target Support Files/Pods-SimpleDesktops/Pods-SimpleDesktops.release.xcconfig"; sourceTree = "<group>"; };
@@ -101,7 +101,7 @@
 				19D2630623C30C46000DCF10 /* PopoverViewController.swift */,
 				19FC120323E342170094AC66 /* PreviewViewController.swift */,
 				19FC120723E345DE0094AC66 /* HistoryViewController.swift */,
-				19FC120523E344210094AC66 /* SettingsViewController.swift */,
+				19FC120523E344210094AC66 /* PreferencesViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -118,7 +118,7 @@
 		19FC120C23E407CF0094AC66 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				1985967223E011640062A1A1 /* RefreshButton.swift */,
+				1985967223E011640062A1A1 /* UpdateButton.swift */,
 				19FC120D23E4086E0094AC66 /* PillButton.swift */,
 			);
 			path = Buttons;
@@ -257,9 +257,9 @@
 			files = (
 				19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */,
 				19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */,
-				1985967323E011640062A1A1 /* RefreshButton.swift in Sources */,
+				1985967323E011640062A1A1 /* UpdateButton.swift in Sources */,
 				192A03C223DEA9A200CF0517 /* Options.swift in Sources */,
-				19FC120623E344210094AC66 /* SettingsViewController.swift in Sources */,
+				19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */,
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */,
 				19E124E823E2C45E00CE8D42 /* WallpaperManager.swift in Sources */,

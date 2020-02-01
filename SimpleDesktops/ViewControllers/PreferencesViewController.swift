@@ -1,5 +1,5 @@
 //
-//  SettingsViewController.swift
+//  PreferencesViewController.swift
 //  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2020/1/31.
@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class SettingsViewController: NSViewController {
+class PreferencesViewController: NSViewController {
     @IBOutlet var changePictureButton: NSButton!
     @IBOutlet var intervalPopUpButton: NSPopUpButton!
     @IBOutlet var doneButton: PillButton!
@@ -25,7 +25,7 @@ class SettingsViewController: NSViewController {
 
     @IBAction func doneButtonClicked(_: Any) {
         let viewController = parent as! PopoverViewController
-        viewController.settingsButtonClicked(self)
+        viewController.preferencesButtonClicked(self)
     }
 
     @IBAction func quitButtonClicked(_: Any) {

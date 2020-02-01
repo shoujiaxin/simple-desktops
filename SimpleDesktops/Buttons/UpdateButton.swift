@@ -1,5 +1,5 @@
 //
-//  RefreshButton.swift
+//  UpdateButton.swift
 //  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2020/1/28.
@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class RefreshButton: NSButton {
+class UpdateButton: NSButton {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 

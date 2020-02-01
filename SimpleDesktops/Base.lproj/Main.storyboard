@@ -708,12 +708,12 @@
                                     <constraint firstAttribute="width" constant="18" id="kqF-ni-N0b"/>
                                     <constraint firstAttribute="height" constant="18" id="nJp-hP-DEA"/>
                                 </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="SettingsButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="PreferencesButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="settingsButtonClicked:" target="HkY-dK-v0h" id="E3f-cL-AiV"/>
+                                    <action selector="preferencesButtonClicked:" target="HkY-dK-v0h" id="5N2-lJ-gp6"/>
                                 </connections>
                             </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="1sO-Ng-jwp">
@@ -755,18 +755,18 @@
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="hnB-0E-gdI"/>
                             </imageView>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Q35-5Y-5Wa" customClass="RefreshButton" customModule="SimpleDesktops" customModuleProvider="target">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Q35-5Y-5Wa" customClass="UpdateButton" customModule="SimpleDesktops" customModuleProvider="target">
                                 <rect key="frame" x="176" y="161" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Ycg-af-htg"/>
                                     <constraint firstAttribute="width" constant="48" id="j6J-D6-szA"/>
                                 </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="RefreshButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="npv-BI-8Oc">
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="UpdateButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="npv-BI-8Oc">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="refreshButtonClicked:" target="Miv-G2-hpW" id="u3h-Oj-YiE"/>
+                                    <action selector="updateButtonClicked:" target="Miv-G2-hpW" id="u3h-Oj-YiE"/>
                                 </connections>
                             </button>
                             <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="2j1-4o-ab5">
@@ -824,8 +824,8 @@
                         <outlet property="downloadButton" destination="ey8-ub-JbC" id="Pay-Rb-0c4"/>
                         <outlet property="imageView" destination="78w-KF-qoe" id="aK4-ky-L2r"/>
                         <outlet property="progressIndicator" destination="2j1-4o-ab5" id="8lY-SP-m0F"/>
-                        <outlet property="refreshButton" destination="Q35-5Y-5Wa" id="dTU-kk-Y8L"/>
                         <outlet property="setWallpaperButton" destination="dG0-4U-o0X" id="TQN-9i-893"/>
+                        <outlet property="updateButton" destination="Q35-5Y-5Wa" id="dTU-kk-Y8L"/>
                     </connections>
                 </viewController>
                 <customObject id="oHg-lh-98S" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -845,10 +845,10 @@
             </objects>
             <point key="canvasLocation" x="536" y="805"/>
         </scene>
-        <!--Settings View Controller-->
+        <!--Preferences View Controller-->
         <scene sceneID="NXH-b6-hbm">
             <objects>
-                <viewController storyboardIdentifier="SettingsViewController" id="ZXl-eC-gjQ" customClass="SettingsViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PreferencesViewController" id="ZXl-eC-gjQ" customClass="PreferencesViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="4MK-1E-GFn">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="88"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -945,8 +945,8 @@
     <resources>
         <image name="DownloadButtonIcon" width="24" height="24"/>
         <image name="HistoryButtonIcon" width="18" height="18"/>
+        <image name="PreferencesButtonIcon" width="18" height="18"/>
         <image name="QuitButtonIcon" width="24" height="24"/>
-        <image name="RefreshButtonIcon" width="32" height="32"/>
-        <image name="SettingsButtonIcon" width="18" height="18"/>
+        <image name="UpdateButtonIcon" width="32" height="32"/>
     </resources>
 </document>

@@ -10,7 +10,7 @@ import Cocoa
 
 class PreviewViewController: NSViewController {
     @IBOutlet var imageView: NSImageView!
-    @IBOutlet var refreshButton: RefreshButton!
+    @IBOutlet var updateButton: UpdateButton!
     @IBOutlet var progressIndicator: NSProgressIndicator!
     @IBOutlet var setWallpaperButton: PillButton!
     @IBOutlet var downloadButton: NSButton!
@@ -27,10 +27,10 @@ class PreviewViewController: NSViewController {
 
         setWallpaperButton.attributedTitle = NSMutableAttributedString(string: "Set as Wallpaper", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
 
-        set(refreshing: true)
+        set(updating: true)
         wallpaperManager.getLastWallpaper { image, error in
             DispatchQueue.main.sync {
-                self.set(refreshing: false)
+                self.set(updating: false)
 
                 if let error = error {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
@@ -47,12 +47,12 @@ class PreviewViewController: NSViewController {
             return
         }
 
-        set(refreshing: true)
+        set(updating: true)
         var url = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
         url.appendPathComponent(wallpaperName)
         wallpaperManager.downloadWallpaper(to: url) { error in
             DispatchQueue.main.sync {
-                self.set(refreshing: false)
+                self.set(updating: false)
 
                 if let error = error {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
@@ -62,11 +62,11 @@ class PreviewViewController: NSViewController {
         }
     }
 
-    @IBAction func refreshButtonClicked(_: Any) {
-        set(refreshing: true)
+    @IBAction func updateButtonClicked(_: Any) {
+        set(updating: true)
         wallpaperManager.updatePreview { image, error in
             DispatchQueue.main.sync {
-                self.set(refreshing: false)
+                self.set(updating: false)
 
                 if let error = error {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
@@ -79,10 +79,10 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
-        set(refreshing: true)
+        set(updating: true)
         wallpaperManager.setWallpaper { error in
             DispatchQueue.main.sync {
-                self.set(refreshing: false)
+                self.set(updating: false)
 
                 if let error = error {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
@@ -92,15 +92,15 @@ class PreviewViewController: NSViewController {
         }
     }
 
-    private func set(refreshing: Bool) {
-        if refreshing {
-            refreshButton.isHidden = true
+    private func set(updating: Bool) {
+        if updating {
+            updateButton.isHidden = true
             progressIndicator.isHidden = false
             progressIndicator.startAnimation(nil)
             setWallpaperButton.isEnabled = false
             downloadButton.isEnabled = false
         } else {
-            refreshButton.isHidden = false
+            updateButton.isHidden = false
             progressIndicator.isHidden = true
             progressIndicator.stopAnimation(nil)
             setWallpaperButton.isEnabled = true

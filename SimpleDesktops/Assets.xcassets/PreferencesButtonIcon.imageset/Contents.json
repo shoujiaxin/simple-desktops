@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "RefreshButtonIcon_32x32@1x.png",
+      "filename" : "PreferencesButtonIcon_18x18@1x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "RefreshButtonIcon_32x32@2x.png",
+      "filename" : "PreferencesButtonIcon_18x18@2x.png",
       "scale" : "2x"
     },
     {
@@ -18,5 +18,8 @@
   "info" : {
     "version" : 1,
     "author" : "xcode"
+  },
+  "properties" : {
+    "template-rendering-intent" : "template"
   }
 }
