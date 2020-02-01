@@ -864,7 +864,10 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vVq-Cd-KZm">
-                                <rect key="frame" x="149" y="57" width="141" height="25"/>
+                                <rect key="frame" x="149" y="57" width="145" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="1J6-cB-v91"/>
+                                </constraints>
                                 <popUpButtonCell key="cell" type="push" title="Every minute" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="u1b-aa-VD7" id="QY1-eZ-Tpu">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -888,6 +891,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="intervalChanged:" target="ZXl-eC-gjQ" id="FVX-MO-h7K"/>
+                                </connections>
                             </popUpButton>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="RnH-0r-9lP" customClass="PillButton" customModule="SimpleDesktops" customModuleProvider="target">
                                 <rect key="frame" x="80" y="10" width="240" height="40"/>
@@ -922,13 +928,13 @@
                             <constraint firstItem="RnH-0r-9lP" firstAttribute="top" secondItem="vVq-Cd-KZm" secondAttribute="bottom" constant="10" id="13g-g2-suB"/>
                             <constraint firstAttribute="bottom" secondItem="RnH-0r-9lP" secondAttribute="bottom" constant="10" id="3KN-md-WkO"/>
                             <constraint firstItem="jmU-Oo-7qv" firstAttribute="top" secondItem="4MK-1E-GFn" secondAttribute="top" constant="10" id="DgZ-pp-qvq"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vVq-Cd-KZm" secondAttribute="trailing" constant="109" id="NLx-u1-DxJ"/>
                             <constraint firstItem="jmU-Oo-7qv" firstAttribute="leading" secondItem="4MK-1E-GFn" secondAttribute="leading" constant="24" id="Njl-qK-KF9"/>
                             <constraint firstItem="vVq-Cd-KZm" firstAttribute="centerY" secondItem="jmU-Oo-7qv" secondAttribute="centerY" id="Tak-gD-2eE"/>
                             <constraint firstItem="RnH-0r-9lP" firstAttribute="centerX" secondItem="4MK-1E-GFn" secondAttribute="centerX" id="ZOn-JH-ZH2"/>
                             <constraint firstItem="vVq-Cd-KZm" firstAttribute="leading" secondItem="jmU-Oo-7qv" secondAttribute="trailing" constant="12" id="jk8-Bk-8Bx"/>
                             <constraint firstItem="3jZ-br-vQr" firstAttribute="centerY" secondItem="RnH-0r-9lP" secondAttribute="centerY" id="oiX-Ql-DEe"/>
                             <constraint firstItem="3jZ-br-vQr" firstAttribute="leading" secondItem="RnH-0r-9lP" secondAttribute="trailing" constant="24" id="vxi-le-zUc"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vVq-Cd-KZm" secondAttribute="trailing" constant="20" symbolic="YES" id="xC4-ME-W8Q"/>
                         </constraints>
                     </view>
                     <connections>
@@ -939,7 +945,7 @@
                 </viewController>
                 <customObject id="U7a-9o-wJW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74" y="1127"/>
+            <point key="canvasLocation" x="74" y="1129"/>
         </scene>
     </scenes>
     <resources>
