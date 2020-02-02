@@ -42,6 +42,10 @@ class PreviewViewController: NSViewController {
         progressIndicator.isHidden = true
 
         setWallpaperButton.attributedTitle = NSMutableAttributedString(string: "Set as Wallpaper", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
+
+        if Options.shared.changePicture {
+            wallpaperManager.changeWallpaper(every: Options.shared.changeInterval.seconds)
+        }
     }
 
     override func viewDidAppear() {

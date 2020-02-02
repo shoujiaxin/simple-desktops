@@ -12,6 +12,7 @@ import CoreData
 class WallpaperManager {
     private var source = SimpleDesktopsSource()
     private var timer: Timer?
+    private static var observer: NSObjectProtocol?
     private static var managedObjectContext: NSManagedObjectContext!
 
     enum WallpaperError: Error {
@@ -61,9 +62,15 @@ class WallpaperManager {
                 return
             }
 
+            // Change wallpaper for current workspaces
             let url = URL(fileURLWithPath: self.source.imageInfo.name!, relativeTo: directory)
             self.setWallpaper(with: url)
-            NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
+
+            // Change wallpaper for other workspaces when changed to
+            if let observer = WallpaperManager.observer {
+                NSWorkspace.shared.notificationCenter.removeObserver(observer, name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
+            }
+            WallpaperManager.observer = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
                 self.setWallpaper(with: url)
             }
             handler(nil)
@@ -155,6 +162,7 @@ class WallpaperManager {
     @objc private func changeWallpaperBackground(sender _: Timer) {
         if !Options.shared.changePicture {
             timer?.invalidate() // Stop the timer
+            return
         }
 
         let queue = DispatchQueue(label: "WallpaperManager.changeWallpaperBackground")
