@@ -28,22 +28,10 @@ class WallpaperManager {
     /// - Parameter handler: Callback of completion
     public func changeWallpaper(completionHandler handler: @escaping (_ error: Error?) -> Void) {
         // Save the image to ~/Library/Containers/me.jiaxin.SimpleDesktops/Data/Library/Application Support/SimpleDesktops/Wallpaper/
-        let wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpaper/"
+        let wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers/"
 
         let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: wallpaperDirectory) {
-            // Clear old wallpapers
-            if let files = try? fileManager.contentsOfDirectory(atPath: wallpaperDirectory) {
-                for file in files {
-                    do {
-                        try fileManager.trashItem(at: URL(fileURLWithPath: wallpaperDirectory + "/\(file)"), resultingItemURL: nil)
-                    } catch {
-                        handler(error)
-                        return
-                    }
-                }
-            }
-        } else {
+        if !fileManager.fileExists(atPath: wallpaperDirectory) {
             // Create the folder if it not exists
             do {
                 try fileManager.createDirectory(atPath: wallpaperDirectory, withIntermediateDirectories: true, attributes: nil)
@@ -52,6 +40,19 @@ class WallpaperManager {
                 return
             }
         }
+//        else {
+//            // Clear old wallpapers
+//            if let files = try? fileManager.contentsOfDirectory(atPath: wallpaperDirectory) {
+//                for file in files {
+//                    do {
+//                        try fileManager.trashItem(at: URL(fileURLWithPath: wallpaperDirectory + "/\(file)"), resultingItemURL: nil)
+//                    } catch {
+//                        handler(error)
+//                        return
+//                    }
+//                }
+//            }
+//        }
 
         let directory = URL(fileURLWithPath: wallpaperDirectory)
         downloadWallpaper(to: directory) { error in
