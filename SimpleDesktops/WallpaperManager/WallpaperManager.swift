@@ -20,6 +20,7 @@ class WallpaperManager {
     enum WallpaperError: Error {
         case noImage
         case fileNotExists
+        case unknownImageFormat
     }
 
     init() {
@@ -110,11 +111,22 @@ class WallpaperManager {
                 return
             }
 
-            do {
-                try image?.writePng(to: url)
-                handler(nil)
-            } catch {
-                handler(error)
+            guard let imageFormat = self.source.imageInfo.format else {
+                handler(WallpaperError.unknownImageFormat)
+                return
+            }
+
+            switch self.source.imageInfo.format {
+            case .png, .jpeg, .gif:
+                do {
+                    try image?.write(using: imageFormat, to: url)
+                    handler(nil)
+                } catch {
+                    handler(error)
+                    return
+                }
+            default:
+                handler(WallpaperError.unknownImageFormat)
                 return
             }
         }
@@ -256,10 +268,10 @@ class WallpaperManager {
 }
 
 private extension NSImage {
-    func writePng(to url: URL, options: Data.WritingOptions = .atomic) throws {
+    func write(using format: NSBitmapImageRep.FileType, to url: URL, options: Data.WritingOptions = .atomic) throws {
         guard let tiffRepresentation = tiffRepresentation,
             let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation),
-            let data = bitmapImageRep.representation(using: .png, properties: [:]) else {
+            let data = bitmapImageRep.representation(using: format, properties: [:]) else {
             return
         }
 

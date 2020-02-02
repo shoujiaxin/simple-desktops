@@ -18,6 +18,17 @@ class SimpleDesktopsSource {
             previewLink = link
         }
 
+        var format: NSBitmapImageRep.FileType? {
+            guard let name = name else {
+                return nil
+            }
+
+            if name.hasSuffix("png") { return .png }
+            else if name.hasSuffix("jpg") { return .jpeg }
+            else if name.hasSuffix("gif") { return .gif }
+            else { return nil }
+        }
+
         var fullLink: String? {
             guard let previewLink = previewLink else {
                 return nil
