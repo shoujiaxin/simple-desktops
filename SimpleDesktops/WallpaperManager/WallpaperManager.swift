@@ -168,10 +168,8 @@ class WallpaperManager {
     }
 
     public func removeFromHistory(at index: Int) {
-        let imageInfo = historyWallpapers[index]
-
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
-        fetchRequest.predicate = NSPredicate(format: "name = %@", imageInfo.name!)
+        fetchRequest.predicate = NSPredicate(format: "name = %@", historyWallpapers[index].name!)
         fetchRequest.fetchLimit = 1
 
         if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
@@ -186,6 +184,17 @@ class WallpaperManager {
 
     public func selectFromHistory(at index: Int) {
         source.imageInfo = historyWallpapers[index]
+
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
+        fetchRequest.predicate = NSPredicate(format: "name = %@", historyWallpapers[index].name!)
+        fetchRequest.fetchLimit = 1
+
+        if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
+            if results.count > 0 {
+                results[0].setValue(Date(), forKey: "timeStamp")
+                try? WallpaperManager.managedObjectContext.save()
+            }
+        }
     }
 
     /// Update preview image randomly
