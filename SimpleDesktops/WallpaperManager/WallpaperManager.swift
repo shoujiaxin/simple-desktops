@@ -119,7 +119,7 @@ class WallpaperManager {
             switch self.source.imageInfo.format {
             case .png, .jpeg, .gif:
                 do {
-                    try image?.write(using: imageFormat, to: url)
+                    try image?.write(to: url, using: imageFormat)
                     handler(nil)
                 } catch {
                     handler(error)
@@ -268,7 +268,7 @@ class WallpaperManager {
 }
 
 private extension NSImage {
-    func write(using format: NSBitmapImageRep.FileType, to url: URL, options: Data.WritingOptions = .atomic) throws {
+    func write(to url: URL, using format: NSBitmapImageRep.FileType, options: Data.WritingOptions = .atomic) throws {
         guard let tiffRepresentation = tiffRepresentation,
             let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation),
             let data = bitmapImageRep.representation(using: format, properties: [:]) else {

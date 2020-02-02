@@ -26,8 +26,14 @@ class HistoryViewController: NSViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
 
-        wallpaperManager?.getHistoryWallpapers()
-        collectionView.reloadData()
+        let queue = DispatchQueue(label: "UpdateHistoryView")
+        queue.async {
+            self.wallpaperManager?.getHistoryWallpapers()
+
+            DispatchQueue.main.sync {
+                self.collectionView.reloadData()
+            }
+        }
     }
 }
 

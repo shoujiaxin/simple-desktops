@@ -52,6 +52,10 @@ class SimpleDesktopsSource {
 
     public var imageInfo = ImageInfo()
 
+    init() {
+        SimpleDesktopsSource.updateMaxPage()
+    }
+
     public func getFullImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
         if let fullImageLink = imageInfo.fullLink {
             getImage(form: fullImageLink, completionHandler: handler)
@@ -118,8 +122,8 @@ class SimpleDesktopsSource {
         imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
     }
 
-    public static func updateSimpleDesktopsMaxPage() {
-        let queue = DispatchQueue(label: "Utils.updateSimpleDesktopsMaxPage")
+    private static func updateMaxPage() {
+        let queue = DispatchQueue(label: "SimpleDesktopsSource.updateMaxPage")
         queue.async {
             while isSimpleDesktopsPageAvailable(page: Options.shared.simpleDesktopsMaxPage + 1) {
                 Options.shared.simpleDesktopsMaxPage += 1
