@@ -17,7 +17,7 @@ class PreviewViewController: NSViewController {
 
     var wallpaperManager = WallpaperManager()
 
-    private var isUpdating: Bool = false {
+    var isUpdating: Bool = false {
         willSet {
             if newValue {
                 updateButton.isHidden = true
