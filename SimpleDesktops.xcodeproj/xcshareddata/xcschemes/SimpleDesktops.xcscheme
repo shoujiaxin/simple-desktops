@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "19D262EE23C305E6000DCF10"
-               BuildableName = "SimpleDesktops.app"
-               BlueprintName = "SimpleDesktops"
+               BuildableName = "Simple Desktops.app"
+               BlueprintName = "Simple Desktops"
                ReferencedContainer = "container:SimpleDesktops.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "19D262EE23C305E6000DCF10"
-            BuildableName = "SimpleDesktops.app"
-            BlueprintName = "SimpleDesktops"
+            BuildableName = "Simple Desktops.app"
+            BlueprintName = "Simple Desktops"
             ReferencedContainer = "container:SimpleDesktops.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "19D262EE23C305E6000DCF10"
-            BuildableName = "SimpleDesktops.app"
-            BlueprintName = "SimpleDesktops"
+            BuildableName = "Simple Desktops.app"
+            BlueprintName = "Simple Desktops"
             ReferencedContainer = "container:SimpleDesktops.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -84,8 +84,8 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "19D262EE23C305E6000DCF10"
-                     BuildableName = "SimpleDesktops.app"
-                     BlueprintName = "SimpleDesktops"
+                     BuildableName = "Simple Desktops.app"
+                     BlueprintName = "Simple Desktops"
                      ReferencedContainer = "container:SimpleDesktops.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
