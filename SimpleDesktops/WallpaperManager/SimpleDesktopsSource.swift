@@ -12,6 +12,12 @@ import SwiftSoup
 
 class SimpleDesktopsSource {
     public struct ImageInfo {
+        init() {}
+
+        init(withPreviewLink link: String) {
+            previewLink = link
+        }
+
         var fullLink: String? {
             guard let previewLink = previewLink else {
                 return nil
@@ -39,6 +45,24 @@ class SimpleDesktopsSource {
         if let fullImageLink = imageInfo.fullLink {
             getImage(form: fullImageLink, completionHandler: handler)
         }
+    }
+
+    /// Get image frome URL
+    /// - Parameters:
+    ///   - link: Source link of the image
+    ///   - handler: Callback of completion
+    public func getImage(form link: String, completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: URL(string: link)!) { data, _, error in
+            if let error = error {
+                handler(nil, error)
+                return
+            }
+
+            handler(NSImage(data: data!), nil)
+        }
+
+        task.resume()
     }
 
     public func getPreviewImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
@@ -92,24 +116,6 @@ class SimpleDesktopsSource {
 
             Options.shared.saveOptions()
         }
-    }
-
-    /// Get image frome URL
-    /// - Parameters:
-    ///   - link: Source link of the image
-    ///   - handler: Callback of completion
-    private func getImage(form link: String, completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: URL(string: link)!) { data, _, error in
-            if let error = error {
-                handler(nil, error)
-                return
-            }
-
-            handler(NSImage(data: data!), nil)
-        }
-
-        task.resume()
     }
 
     /// Return true if the page contains images

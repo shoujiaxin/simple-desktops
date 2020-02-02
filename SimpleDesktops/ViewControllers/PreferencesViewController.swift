@@ -31,8 +31,8 @@ class PreferencesViewController: NSViewController {
             Options.shared.changePicture = true
             intervalPopUpButton.isEnabled = true
 
-            let viewController = parent as! PopoverViewController
-            viewController.previewViewController.wallpaperManager.changeWallpaper(every: Options.shared.changeInterval.seconds)
+            let parentViewController = parent as! PopoverViewController
+            parentViewController.previewViewController.wallpaperManager.changeWallpaper(every: Options.shared.changeInterval.seconds)
         case NSControl.StateValue.off:
             Options.shared.changePicture = false
             intervalPopUpButton.isEnabled = false
@@ -42,8 +42,8 @@ class PreferencesViewController: NSViewController {
     }
 
     @IBAction func doneButtonClicked(_: Any) {
-        let viewController = parent as! PopoverViewController
-        viewController.preferencesButtonClicked(self)
+        let parentViewController = parent as! PopoverViewController
+        parentViewController.preferencesButtonClicked(self)
     }
 
     @IBAction func intervalChanged(_ sender: NSPopUpButton) {

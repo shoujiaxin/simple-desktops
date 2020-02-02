@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		192A03C223DEA9A200CF0517 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192A03C123DEA9A200CF0517 /* Options.swift */; };
 		1985967323E011640062A1A1 /* UpdateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* UpdateButton.swift */; };
+		198C8E1923E6B0E100CB7CEE /* HistoryImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198C8E1823E6B0E100CB7CEE /* HistoryImageView.swift */; };
+		198C8E1D23E6B39200CB7CEE /* HistoryCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */; };
 		19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */; };
 		19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C8EC6C23DED15A006EFD9B /* Utils.swift */; };
 		19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D262F223C305E6000DCF10 /* AppDelegate.swift */; };
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		192A03C123DEA9A200CF0517 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1985967223E011640062A1A1 /* UpdateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateButton.swift; sourceTree = "<group>"; };
+		198C8E1823E6B0E100CB7CEE /* HistoryImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryImageView.swift; sourceTree = "<group>"; };
+		198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryCollectionViewItem.xib; sourceTree = "<group>"; };
 		19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsSource.swift; sourceTree = "<group>"; };
 		19C8EC6C23DED15A006EFD9B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		19D262EF23C305E6000DCF10 /* SimpleDesktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleDesktops.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,7 +89,7 @@
 				19D262FB23C305E7000DCF10 /* Main.storyboard */,
 				19C8EC6C23DED15A006EFD9B /* Utils.swift */,
 				192A03C123DEA9A200CF0517 /* Options.swift */,
-				19FC120C23E407CF0094AC66 /* Buttons */,
+				19FC120C23E407CF0094AC66 /* Views */,
 				19E124E923E2D76E00CE8D42 /* WallpaperManager */,
 				19D2630523C30C10000DCF10 /* ViewControllers */,
 				19D262FE23C305E7000DCF10 /* Info.plist */,
@@ -115,13 +119,15 @@
 			path = WallpaperManager;
 			sourceTree = "<group>";
 		};
-		19FC120C23E407CF0094AC66 /* Buttons */ = {
+		19FC120C23E407CF0094AC66 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				1985967223E011640062A1A1 /* UpdateButton.swift */,
 				19FC120D23E4086E0094AC66 /* PillButton.swift */,
+				198C8E1823E6B0E100CB7CEE /* HistoryImageView.swift */,
+				198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */,
 			);
-			path = Buttons;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		414997077A0E516B4D95A9A8 /* Frameworks */ = {
@@ -203,6 +209,7 @@
 			files = (
 				19D262FA23C305E7000DCF10 /* Assets.xcassets in Resources */,
 				19D262FD23C305E7000DCF10 /* Main.storyboard in Resources */,
+				198C8E1D23E6B39200CB7CEE /* HistoryCollectionViewItem.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +270,7 @@
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */,
 				19E124E823E2C45E00CE8D42 /* WallpaperManager.swift in Sources */,
+				198C8E1923E6B0E100CB7CEE /* HistoryImageView.swift in Sources */,
 				19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */,
 				19D2630723C30C46000DCF10 /* PopoverViewController.swift in Sources */,
 				19D262F823C305E6000DCF10 /* SimpleDesktops.xcdatamodeld in Sources */,

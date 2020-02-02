@@ -839,7 +839,46 @@
                     <view key="view" id="Rm1-Jc-tST">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGf-ra-rPd">
+                                <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                                <clipView key="contentView" id="zIY-3y-fE4">
+                                    <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView id="Wbe-Ps-cig">
+                                            <rect key="frame" x="0.0" y="0.0" width="400" height="158"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="cPd-lY-uNa">
+                                                <size key="itemSize" width="192" height="120"/>
+                                            </collectionViewFlowLayout>
+                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <outlet property="dataSource" destination="YW7-ZQ-u4X" id="Db6-UY-ldj"/>
+                                            </connections>
+                                        </collectionView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="pNz-DP-oEs">
+                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Mky-Lb-tpJ">
+                                    <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="TGf-ra-rPd" secondAttribute="trailing" id="A0T-ZZ-6Ic"/>
+                            <constraint firstItem="TGf-ra-rPd" firstAttribute="leading" secondItem="Rm1-Jc-tST" secondAttribute="leading" id="hfK-3R-sAb"/>
+                            <constraint firstAttribute="bottom" secondItem="TGf-ra-rPd" secondAttribute="bottom" id="whU-kd-ev0"/>
+                            <constraint firstItem="TGf-ra-rPd" firstAttribute="top" secondItem="Rm1-Jc-tST" secondAttribute="top" id="xvh-Ru-BcV"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="Wbe-Ps-cig" id="z9P-Pb-xEt"/>
+                    </connections>
                 </viewController>
                 <customObject id="lcW-mv-vrz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

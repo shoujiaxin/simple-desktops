@@ -10,6 +10,8 @@ import Cocoa
 import CoreData
 
 class WallpaperManager {
+    var historyWallpapers: [SimpleDesktopsSource.ImageInfo] = []
+
     private var source = SimpleDesktopsSource()
     private var timer: Timer?
     private static var observer: NSObjectProtocol?
@@ -114,6 +116,26 @@ class WallpaperManager {
         }
     }
 
+    public func getHistoryPreview(at index: Int, completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+        if let previewLink = historyWallpapers[index].previewLink {
+            source.getImage(form: previewLink, completionHandler: handler)
+        }
+    }
+
+    public func getHistoryWallpapers() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
+
+        if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
+            if results.count > 0 {
+                historyWallpapers.removeAll()
+                for result in results {
+                    historyWallpapers.append(SimpleDesktopsSource.ImageInfo(withPreviewLink: result.value(forKey: "previewLink") as! String))
+                }
+            }
+        }
+    }
+
     public func getLatestPreview(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
         guard source.imageInfo.previewLink == nil else {
             // The app is already running, get the latest image from memory
@@ -146,10 +168,8 @@ class WallpaperManager {
     public func updatePreview(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
         let queue = DispatchQueue(label: "WallpaperManager.updatePreview")
         queue.async {
-            self.updateImageFromSource()
-
             do {
-                try WallpaperManager.managedObjectContext.save()
+                try self.updateImageFromSource()
             } catch {
                 handler(nil, error)
                 return
@@ -167,7 +187,7 @@ class WallpaperManager {
 
         let queue = DispatchQueue(label: "WallpaperManager.changeWallpaperBackground")
         queue.async {
-            self.updateImageFromSource()
+            try? self.updateImageFromSource()
 
             let semaphore = DispatchSemaphore(value: 0)
             self.changeWallpaper { _ in
@@ -184,7 +204,7 @@ class WallpaperManager {
         }
     }
 
-    private func updateImageFromSource() {
+    private func updateImageFromSource() throws {
         source.randomImage()
 
         // Add to database
@@ -192,6 +212,12 @@ class WallpaperManager {
         obj.setValue(source.imageInfo.name, forKey: "name")
         obj.setValue(source.imageInfo.previewLink, forKey: "previewLink")
         obj.setValue(Date(), forKey: "timeStamp")
+
+        do {
+            try WallpaperManager.managedObjectContext.save()
+        } catch {
+            throw error
+        }
     }
 }
 
