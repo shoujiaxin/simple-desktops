@@ -11,7 +11,7 @@ import Foundation
 import SwiftSoup
 
 class SimpleDesktopsSource: ImageSource {
-    public class SDImageInfo: ImageInfo {
+    public struct SDImageInfo: ImageInfo {
         var format: NSBitmapImageRep.FileType? {
             get {
                 guard let name = name else {
@@ -63,15 +63,16 @@ class SimpleDesktopsSource: ImageSource {
     }
 
     public override func getImageInfo(from object: NSManagedObject) -> ImageInfo {
-        let image = SDImageInfo()
+        var image = SDImageInfo()
         image.previewLink = (object.value(forKey: entity.property.previewLink) as! String)
         return image
     }
 
-    public override func randomImage() {
+    public override func randomImage() -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
 
         var linkList: [String] = []
+        var success = false
 
         let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
         let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
@@ -92,6 +93,7 @@ class SimpleDesktopsSource: ImageSource {
 
                 if !linkList.isEmpty {
                     self.imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
+                    success = true
                 }
 
                 semaphore.signal()
@@ -103,6 +105,7 @@ class SimpleDesktopsSource: ImageSource {
 
         task.resume()
         _ = semaphore.wait(timeout: .distantFuture)
+        return success
     }
 
     /// Return true if the page contains images

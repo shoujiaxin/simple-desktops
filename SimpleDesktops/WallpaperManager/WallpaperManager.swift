@@ -19,6 +19,7 @@ class WallpaperManager {
     private var timer: Timer?
 
     public enum WallpaperError: Error {
+        case failedToLoadImage
         case failedToSaveImage
         case fileNotExists
         case noImage
@@ -28,6 +29,18 @@ class WallpaperManager {
     init() {
         let appDelegate = NSApp.delegate as! AppDelegate
         WallpaperManager.managedObjectContext = appDelegate.persistentContainer.viewContext
+
+        // Get history wallpapers from database
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: dataSource.entity.property.timeStamp, ascending: false)]
+        if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
+            if results.count > 0 {
+                historyWallpapers.removeAll(keepingCapacity: true)
+                for result in results {
+                    historyWallpapers.append(dataSource.getImageInfo(from: result))
+                }
+            }
+        }
     }
 
     /// Set wallpaper for all workspaces (desktops) on all screens
@@ -127,20 +140,6 @@ class WallpaperManager {
         }
     }
 
-    public func getHistoryWallpapers() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: dataSource.entity.property.timeStamp, ascending: false)]
-
-        if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
-            if results.count > 0 {
-                historyWallpapers.removeAll(keepingCapacity: true)
-                for result in results {
-                    historyWallpapers.append(dataSource.getImageInfo(from: result))
-                }
-            }
-        }
-    }
-
     public func getLatestPreview(completionHandler handler: @escaping (NSImage?, Error?) -> Void) {
         guard dataSource.imageInfo.name == nil else {
             // The app is already running, get the latest image from memory
@@ -148,23 +147,14 @@ class WallpaperManager {
             return
         }
 
-        let queue = DispatchQueue(label: "WallpaperManager.getLatestPreview")
-        queue.async {
-            // Just start the app, get the latest image from database
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: self.dataSource.entity.name)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: self.dataSource.entity.property.timeStamp, ascending: false)]
-            fetchRequest.fetchLimit = 1
-
-            if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
-                if results.count > 0 {
-                    // Found history from database
-                    self.dataSource.imageInfo = self.dataSource.getImageInfo(from: results[0])
-                    self.dataSource.getPreviewImage(completionHandler: handler)
-                } else {
-                    // Run the app for the first time, get a new image
-                    self.updatePreview(completionHandler: handler)
-                }
-            }
+        // Just start the app, get the latest image from database
+        if historyWallpapers.isEmpty {
+            // Run the app for the first time, get a new image
+            updatePreview(completionHandler: handler)
+        } else {
+            // Found history from database
+            dataSource.imageInfo = historyWallpapers.first!
+            dataSource.getPreviewImage(completionHandler: handler)
         }
     }
 
@@ -173,7 +163,6 @@ class WallpaperManager {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(dataSource.entity.property.name) = %@", historyWallpapers[index].name!)
         fetchRequest.fetchLimit = 1
-
         if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
             if results.count > 0 {
                 WallpaperManager.managedObjectContext.delete(results[0])
@@ -194,10 +183,10 @@ class WallpaperManager {
     public func selectFromHistory(at index: Int) {
         dataSource.imageInfo = historyWallpapers[index]
 
+        // Move the wallpaper to the first
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(dataSource.entity.property.name) = %@", historyWallpapers[index].name!)
         fetchRequest.fetchLimit = 1
-
         if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
             if results.count > 0 {
                 results[0].setValue(Date(), forKey: dataSource.entity.property.timeStamp)
@@ -257,7 +246,9 @@ class WallpaperManager {
     }
 
     private func updateImageFromSource() throws {
-        dataSource.randomImage()
+        guard dataSource.randomImage() else {
+            throw WallpaperError.failedToLoadImage
+        }
 
         historyWallpapers.insert(dataSource.imageInfo, at: 0)
 
@@ -267,7 +258,6 @@ class WallpaperManager {
         obj.setValue(dataSource.imageInfo.name, forKey: dataSource.entity.property.name)
         obj.setValue(dataSource.imageInfo.previewLink, forKey: dataSource.entity.property.previewLink)
         obj.setValue(Date(), forKey: dataSource.entity.property.timeStamp)
-
         do {
             try WallpaperManager.managedObjectContext.save()
         } catch {

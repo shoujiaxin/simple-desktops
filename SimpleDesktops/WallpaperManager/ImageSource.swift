@@ -72,7 +72,7 @@ class ImageSource {
     }
 
     /// Get an image from source randomly, must override
-    public func randomImage() {
+    public func randomImage() -> Bool {
         fatalError("ImageSource.randomImage must override")
     }
 }

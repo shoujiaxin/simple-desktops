@@ -11,7 +11,7 @@ import Cocoa
 class HistoryViewController: NSViewController {
     @IBOutlet var collectionView: NSCollectionView!
 
-    var wallpaperManager: WallpaperManager?
+    var wallpaperManager: WallpaperManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,6 @@ class HistoryViewController: NSViewController {
 
         let parentViewController = parent as! PopoverViewController
         wallpaperManager = parentViewController.previewViewController.wallpaperManager
-        wallpaperManager?.getHistoryWallpapers()
     }
 
     override func viewWillAppear() {
@@ -32,16 +31,16 @@ class HistoryViewController: NSViewController {
 
 extension HistoryViewController: NSCollectionViewDataSource {
     func collectionView(_: NSCollectionView, numberOfItemsInSection _: Int) -> Int {
-        return wallpaperManager!.historyWallpapers.count
+        return wallpaperManager.historyWallpapers.count
     }
 
     func collectionView(_: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: .init("HistoryCollectionViewItem"), for: indexPath)
 
-        wallpaperManager?.getHistoryPreview(at: indexPath.item, completionHandler: { image, _ in
+        wallpaperManager.getHistoryPreview(at: indexPath.item, completionHandler: { image, _ in
             DispatchQueue.main.sync {
                 item.imageView?.image = image
-                item.imageView?.toolTip = self.wallpaperManager?.historyWallpapers[indexPath.item].name
+                item.imageView?.toolTip = self.wallpaperManager.historyWallpapers[indexPath.item].name
             }
        })
 
