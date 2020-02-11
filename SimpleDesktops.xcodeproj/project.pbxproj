@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19092F3723F2DE4700A2B52A /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19092F3623F2DE4700A2B52A /* ImageSource.swift */; };
 		192A03C223DEA9A200CF0517 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192A03C123DEA9A200CF0517 /* Options.swift */; };
 		1985967323E011640062A1A1 /* UpdateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* UpdateButton.swift */; };
 		198C8E1D23E6B39200CB7CEE /* HistoryCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		19092F3623F2DE4700A2B52A /* ImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		192A03C123DEA9A200CF0517 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1985967223E011640062A1A1 /* UpdateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateButton.swift; sourceTree = "<group>"; };
 		198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryCollectionViewItem.xib; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				19E124E723E2C45E00CE8D42 /* WallpaperManager.swift */,
+				19092F3623F2DE4700A2B52A /* ImageSource.swift */,
 				19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */,
 			);
 			path = WallpaperManager;
@@ -266,6 +269,7 @@
 				19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */,
 				1985967323E011640062A1A1 /* UpdateButton.swift in Sources */,
 				192A03C223DEA9A200CF0517 /* Options.swift in Sources */,
+				19092F3723F2DE4700A2B52A /* ImageSource.swift in Sources */,
 				19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */,
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */,
