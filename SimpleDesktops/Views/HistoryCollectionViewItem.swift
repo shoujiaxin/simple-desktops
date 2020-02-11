@@ -40,9 +40,12 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let menu = NSMenu()
         menu.addItem(withTitle: "Set as wallpaper", action: #selector(setWallpaperMenuItemClicked(sender:)), keyEquivalent: "")
-        menu.item(at: 0)?.target = self
+        menu.addItem(withTitle: "Show in Finder", action: #selector(showInFinderMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(.separator())
         menu.addItem(withTitle: "Delete", action: #selector(deleteHistoryMenuItemClicked(sender:)), keyEquivalent: "")
-        menu.item(at: 1)?.target = self
+        for item in menu.items {
+            item.target = self
+        }
 
         menu.popUp(positioning: menu.items[0], at: NSEvent.mouseLocation, in: nil)
     }
@@ -74,6 +77,19 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         }
     }
 
+    @objc func showInFinderMenuItemClicked(sender _: Any) {
+        guard let index = collectionView?.indexPath(for: self)?.item else {
+            return
+        }
+
+        let appDelegate = NSApp.delegate as! AppDelegate
+        let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
+        let wallpaperManager = popoverViewController.previewViewController.wallpaperManager
+
+        let wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers/"
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: wallpaperDirectory + wallpaperManager.historyWallpapers[index].name!)])
+    }
+
     @objc func deleteHistoryMenuItemClicked(sender _: Any) {
         guard let indexPath = collectionView?.indexPath(for: self) else {
             return
@@ -81,8 +97,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let previewViewController = popoverViewController.previewViewController
-        let wallpaperManager = previewViewController.wallpaperManager
+        let wallpaperManager = popoverViewController.previewViewController.wallpaperManager
 
         wallpaperManager.removeFromHistory(at: indexPath.item)
         collectionView?.deleteItems(at: [indexPath])

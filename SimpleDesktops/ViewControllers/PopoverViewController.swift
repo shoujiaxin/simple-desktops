@@ -48,6 +48,8 @@ class PopoverViewController: NSViewController {
             let appDelegate = NSApp.delegate as! AppDelegate
             appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
 
+            Options.shared.saveOptions()
+
             currentVCState = .history
         }
     }
@@ -59,6 +61,8 @@ class PopoverViewController: NSViewController {
         case .preferences:
             transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .slideDown, completionHandler: nil)
             appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
+
+            Options.shared.saveOptions()
 
             currentVCState = .preview
         default:
