@@ -10,16 +10,18 @@ import Cocoa
 import CoreData
 
 class WallpaperManager {
-    var historyWallpapers: [SimpleDesktopsSource.ImageInfo] = []
+    public var dataSource = SimpleDesktopsSource()
+    public var historyWallpapers: [ImageInfo] = []
+    public var wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers"
 
-    private var source = SimpleDesktopsSource()
-    private var timer: Timer?
-    private static var observer: NSObjectProtocol?
     private static var managedObjectContext: NSManagedObjectContext!
+    private static var observer: NSObjectProtocol?
+    private var timer: Timer?
 
-    enum WallpaperError: Error {
-        case noImage
+    public enum WallpaperError: Error {
+        case failedToSaveImage
         case fileNotExists
+        case noImage
         case unknownImageFormat
     }
 
@@ -30,10 +32,8 @@ class WallpaperManager {
 
     /// Set wallpaper for all workspaces (desktops) on all screens
     /// - Parameter handler: Callback of completion
-    public func changeWallpaper(completionHandler handler: @escaping (_ error: Error?) -> Void) {
+    public func changeWallpaper(completionHandler handler: @escaping (Error?) -> Void) {
         // Save the image to ~/Library/Containers/me.jiaxin.SimpleDesktops/Data/Library/Application Support/SimpleDesktops/Wallpaper/
-        let wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers/"
-
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: wallpaperDirectory) {
             // Create the folder if it not exists
@@ -44,19 +44,6 @@ class WallpaperManager {
                 return
             }
         }
-//        else {
-//            // Clear old wallpapers
-//            if let files = try? fileManager.contentsOfDirectory(atPath: wallpaperDirectory) {
-//                for file in files {
-//                    do {
-//                        try fileManager.trashItem(at: URL(fileURLWithPath: wallpaperDirectory + "/\(file)"), resultingItemURL: nil)
-//                    } catch {
-//                        handler(error)
-//                        return
-//                    }
-//                }
-//            }
-//        }
 
         let directory = URL(fileURLWithPath: wallpaperDirectory)
         downloadWallpaper(to: directory) { error in
@@ -66,20 +53,28 @@ class WallpaperManager {
             }
 
             // Change wallpaper for current workspaces
-            let url = URL(fileURLWithPath: self.source.imageInfo.name!, relativeTo: directory)
-            self.setWallpaper(with: url)
+            let url = URL(fileURLWithPath: self.dataSource.imageInfo.name!, relativeTo: directory)
+            do {
+                try self.setWallpaper(with: url)
+            } catch {
+                handler(error)
+                return
+            }
 
             // Change wallpaper for other workspaces when changed to
             if let observer = WallpaperManager.observer {
                 NSWorkspace.shared.notificationCenter.removeObserver(observer, name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
             }
             WallpaperManager.observer = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
-                self.setWallpaper(with: url)
+                // Assume the image will NOT be removed manually
+                try? self.setWallpaper(with: url)
             }
             handler(nil)
         }
     }
 
+    /// Set wallpaper for all workspaces (desktops) on all screens automatically
+    /// - Parameter timeInterval: Time interval to change wallpapers
     public func changeWallpaper(every timeInterval: TimeInterval) {
         if let timer = timer {
             timer.invalidate()
@@ -92,85 +87,79 @@ class WallpaperManager {
     /// - Parameters:
     ///   - url: URL of the directory to store the image
     ///   - handler: Callback of completion
-    public func downloadWallpaper(to directory: URL, completionHandler handler: @escaping (_ error: Error?) -> Void) {
-        guard let wallpaperName = source.imageInfo.name else {
+    public func downloadWallpaper(to directory: URL, completionHandler handler: @escaping (Error?) -> Void) {
+        guard let wallpaperName = dataSource.imageInfo.name else {
             handler(WallpaperError.noImage)
             return
         }
 
         if !directory.hasDirectoryPath {
-            handler(WallpaperError.fileNotExists)
+            handler(WallpaperError.failedToSaveImage)
             return
         }
 
         let url = URL(fileURLWithPath: wallpaperName, relativeTo: directory)
 
-        source.getFullImage { image, error in
+        dataSource.getFullImage { image, error in
             if let error = error {
                 handler(error)
                 return
             }
 
-            guard let imageFormat = self.source.imageInfo.format else {
+            guard let imageFormat = self.dataSource.imageInfo.format else {
                 handler(WallpaperError.unknownImageFormat)
                 return
             }
 
-            switch self.source.imageInfo.format {
-            case .png, .jpeg, .gif:
-                do {
-                    try image?.write(to: url, using: imageFormat)
-                    handler(nil)
-                } catch {
-                    handler(error)
-                    return
-                }
-            default:
-                handler(WallpaperError.unknownImageFormat)
+            do {
+                try image?.write(to: url, using: imageFormat)
+                handler(nil)
+            } catch {
+                handler(error)
                 return
             }
         }
     }
 
-    public func getHistoryPreview(at index: Int, completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        if let previewLink = historyWallpapers[index].previewLink {
-            source.getImage(form: previewLink, completionHandler: handler)
+    public func getHistoryPreview(at index: Int, completionHandler handler: @escaping (NSImage?, Error?) -> Void) {
+        if let previewImageLink = historyWallpapers[index].previewLink {
+            dataSource.getImage(form: previewImageLink, completionHandler: handler)
         }
     }
 
     public func getHistoryWallpapers() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: dataSource.entity.property.timeStamp, ascending: false)]
 
         if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
             if results.count > 0 {
-                historyWallpapers.removeAll()
+                historyWallpapers.removeAll(keepingCapacity: true)
                 for result in results {
-                    historyWallpapers.append(SimpleDesktopsSource.ImageInfo(withPreviewLink: result.value(forKey: "previewLink") as! String))
+                    historyWallpapers.append(dataSource.getImageInfo(from: result))
                 }
             }
         }
     }
 
-    public func getLatestPreview(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        guard source.imageInfo.previewLink == nil else {
+    public func getLatestPreview(completionHandler handler: @escaping (NSImage?, Error?) -> Void) {
+        guard dataSource.imageInfo.name == nil else {
             // The app is already running, get the latest image from memory
-            source.getPreviewImage(completionHandler: handler)
+            dataSource.getPreviewImage(completionHandler: handler)
             return
         }
 
-        let queue = DispatchQueue(label: "WallpaperManager.getLastestPreview")
+        let queue = DispatchQueue(label: "WallpaperManager.getLatestPreview")
         queue.async {
             // Just start the app, get the latest image from database
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: self.dataSource.entity.name)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: self.dataSource.entity.property.timeStamp, ascending: false)]
             fetchRequest.fetchLimit = 1
 
             if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
                 if results.count > 0 {
                     // Found history from database
-                    self.source.imageInfo.previewLink = (results[0].value(forKey: "previewLink") as! String)
-                    self.source.getPreviewImage(completionHandler: handler)
+                    self.dataSource.imageInfo = self.dataSource.getImageInfo(from: results[0])
+                    self.dataSource.getPreviewImage(completionHandler: handler)
                 } else {
                     // Run the app for the first time, get a new image
                     self.updatePreview(completionHandler: handler)
@@ -180,8 +169,9 @@ class WallpaperManager {
     }
 
     public func removeFromHistory(at index: Int) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
-        fetchRequest.predicate = NSPredicate(format: "name = %@", historyWallpapers[index].name!)
+        // Remove the record from database
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
+        fetchRequest.predicate = NSPredicate(format: "\(dataSource.entity.property.name) = %@", historyWallpapers[index].name!)
         fetchRequest.fetchLimit = 1
 
         if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
@@ -191,19 +181,26 @@ class WallpaperManager {
             }
         }
 
+        // Move the file to trash
+        let imagePath = "\(wallpaperDirectory)/\(historyWallpapers[index].name!)"
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: imagePath) {
+            try? fileManager.trashItem(at: URL(fileURLWithPath: imagePath), resultingItemURL: nil)
+        }
+
         historyWallpapers.remove(at: index)
     }
 
     public func selectFromHistory(at index: Int) {
-        source.imageInfo = historyWallpapers[index]
+        dataSource.imageInfo = historyWallpapers[index]
 
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SDImage")
-        fetchRequest.predicate = NSPredicate(format: "name = %@", historyWallpapers[index].name!)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: dataSource.entity.name)
+        fetchRequest.predicate = NSPredicate(format: "\(dataSource.entity.property.name) = %@", historyWallpapers[index].name!)
         fetchRequest.fetchLimit = 1
 
         if let results = try? (WallpaperManager.managedObjectContext.fetch(fetchRequest) as! [NSManagedObject]) {
             if results.count > 0 {
-                results[0].setValue(Date(), forKey: "timeStamp")
+                results[0].setValue(Date(), forKey: dataSource.entity.property.timeStamp)
                 try? WallpaperManager.managedObjectContext.save()
             }
         }
@@ -211,7 +208,7 @@ class WallpaperManager {
 
     /// Update preview image randomly
     /// - Parameter handler: Callback of completion
-    public func updatePreview(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
+    public func updatePreview(completionHandler handler: @escaping (NSImage?, Error?) -> Void) {
         let queue = DispatchQueue(label: "WallpaperManager.updatePreview")
         queue.async {
             do {
@@ -221,9 +218,11 @@ class WallpaperManager {
                 return
             }
 
-            self.source.getPreviewImage(completionHandler: handler)
+            self.dataSource.getPreviewImage(completionHandler: handler)
         }
     }
+
+    // MARK: Private Methods
 
     @objc private func changeWallpaperBackground(sender _: Timer) {
         if !Options.shared.changePicture {
@@ -243,7 +242,12 @@ class WallpaperManager {
         }
     }
 
-    private func setWallpaper(with url: URL) {
+    private func setWallpaper(with url: URL) throws {
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: url.path) else {
+            throw WallpaperError.fileNotExists
+        }
+
         let screens = NSScreen.screens
         for screen in screens {
             try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
@@ -251,13 +255,16 @@ class WallpaperManager {
     }
 
     private func updateImageFromSource() throws {
-        source.randomImage()
+        dataSource.randomImage()
+
+        historyWallpapers.insert(dataSource.imageInfo, at: 0)
 
         // Add to database
-        let obj = NSEntityDescription.insertNewObject(forEntityName: "SDImage", into: WallpaperManager.managedObjectContext)
-        obj.setValue(source.imageInfo.name, forKey: "name")
-        obj.setValue(source.imageInfo.previewLink, forKey: "previewLink")
-        obj.setValue(Date(), forKey: "timeStamp")
+        let obj = NSEntityDescription.insertNewObject(forEntityName: dataSource.entity.name, into: WallpaperManager.managedObjectContext)
+        obj.setValue(dataSource.imageInfo.fullLink, forKey: dataSource.entity.property.fullLink)
+        obj.setValue(dataSource.imageInfo.name, forKey: dataSource.entity.property.name)
+        obj.setValue(dataSource.imageInfo.previewLink, forKey: dataSource.entity.property.previewLink)
+        obj.setValue(Date(), forKey: dataSource.entity.property.timeStamp)
 
         do {
             try WallpaperManager.managedObjectContext.save()

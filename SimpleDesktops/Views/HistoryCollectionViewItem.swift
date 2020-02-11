@@ -86,8 +86,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.previewViewController.wallpaperManager
 
-        let wallpaperDirectory = "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers/"
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: wallpaperDirectory + wallpaperManager.historyWallpapers[index].name!)])
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: "\(wallpaperManager.wallpaperDirectory)/\(wallpaperManager.historyWallpapers[index].name!)")])
     }
 
     @objc func deleteHistoryMenuItemClicked(sender _: Any) {
