@@ -10,84 +10,65 @@ import CoreData
 import Foundation
 import SwiftSoup
 
-class SimpleDesktopsSource {
-    public struct ImageInfo {
-        init() {}
-
-        init(withPreviewLink link: String) {
-            previewLink = link
-        }
-
+class SimpleDesktopsSource: ImageSource {
+    public class SDImageInfo: ImageInfo {
         var format: NSBitmapImageRep.FileType? {
-            guard let name = name else {
-                return nil
-            }
+            get {
+                guard let name = name else {
+                    return nil
+                }
 
-            if name.hasSuffix("png") { return .png }
-            else if name.hasSuffix("jpg") { return .jpeg }
-            else if name.hasSuffix("gif") { return .gif }
-            else { return nil }
+                if name.hasSuffix("png") { return .png }
+                else if name.hasSuffix("jpg") { return .jpeg }
+                else if name.hasSuffix("gif") { return .gif }
+                else { return nil }
+            }
+            set {}
         }
 
         var fullLink: String? {
-            guard let previewLink = previewLink else {
-                return nil
-            }
+            get {
+                guard let previewLink = previewLink else {
+                    return nil
+                }
 
-            let range = previewLink.range(of: ".295x184_q100.png")
-            return String(previewLink[..<(range?.lowerBound)!])
+                let range = previewLink.range(of: ".295x184_q100.png")
+                return String(previewLink[..<(range?.lowerBound)!])
+            }
+            set {}
         }
 
         var name: String? {
-            guard let fullLink = fullLink else {
-                return nil
-            }
+            get {
+                guard let fullLink = fullLink else {
+                    return nil
+                }
 
-            let range = fullLink.range(of: "desktops/")
-            return String(fullLink[(range?.upperBound...)!]).replacingOccurrences(of: "/", with: "-")
+                let range = fullLink.range(of: "desktops/")
+                return String(fullLink[(range?.upperBound...)!]).replacingOccurrences(of: "/", with: "-")
+            }
+            set {}
         }
 
         var previewLink: String?
     }
 
-    public var imageInfo = ImageInfo()
+    override init() {
+        super.init()
 
-    init() {
+        entity.name = "SDImage"
+        imageInfo = SDImageInfo()
+
         SimpleDesktopsSource.updateMaxPage()
     }
 
-    public func getFullImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        if let fullImageLink = imageInfo.fullLink {
-            getImage(form: fullImageLink, completionHandler: handler)
-        }
+    public override func getImageInfo(from object: NSManagedObject) -> ImageInfo {
+        let image = SDImageInfo()
+        image.previewLink = (object.value(forKey: entity.property.previewLink) as! String)
+        return image
     }
 
-    /// Get image frome URL
-    /// - Parameters:
-    ///   - link: Source link of the image
-    ///   - handler: Callback of completion
-    public func getImage(form link: String, completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: URL(string: link)!) { data, _, error in
-            if let error = error {
-                handler(nil, error)
-                return
-            }
-
-            handler(NSImage(data: data!), nil)
-        }
-
-        task.resume()
-    }
-
-    public func getPreviewImage(completionHandler handler: @escaping (_ image: NSImage?, _ error: Error?) -> Void) {
-        if let previewImageLink = imageInfo.previewLink {
-            getImage(form: previewImageLink, completionHandler: handler)
-        }
-    }
-
-    /// Get an image randomly from Simple Desktops
-    public func randomImage() {
+    public override func randomImage() {
         let semaphore = DispatchSemaphore(value: 0)
 
         var linkList: [String] = []
@@ -122,17 +103,6 @@ class SimpleDesktopsSource {
         imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
     }
 
-    private static func updateMaxPage() {
-        let queue = DispatchQueue(label: "SimpleDesktopsSource.updateMaxPage")
-        queue.async {
-            while isSimpleDesktopsPageAvailable(page: Options.shared.simpleDesktopsMaxPage + 1) {
-                Options.shared.simpleDesktopsMaxPage += 1
-            }
-
-            Options.shared.saveOptions()
-        }
-    }
-
     /// Return true if the page contains images
     /// - Parameter page: Number of the page to be checked
     private static func isSimpleDesktopsPageAvailable(page: Int) -> Bool {
@@ -165,5 +135,17 @@ class SimpleDesktopsSource {
         _ = semaphore.wait(timeout: .distantFuture)
 
         return isAvailable
+    }
+
+    /// Update max page number for Simple Desktops
+    private static func updateMaxPage() {
+        let queue = DispatchQueue(label: "SimpleDesktopsSource.updateMaxPage")
+        queue.async {
+            while isSimpleDesktopsPageAvailable(page: Options.shared.simpleDesktopsMaxPage + 1) {
+                Options.shared.simpleDesktopsMaxPage += 1
+            }
+
+            Options.shared.saveOptions()
+        }
     }
 }
