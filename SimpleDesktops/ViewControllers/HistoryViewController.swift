@@ -41,6 +41,7 @@ extension HistoryViewController: NSCollectionViewDataSource {
         wallpaperManager?.getHistoryPreview(at: indexPath.item, completionHandler: { image, _ in
             DispatchQueue.main.sync {
                 item.imageView?.image = image
+                item.imageView?.toolTip = self.wallpaperManager?.historyWallpapers[indexPath.item].name
             }
        })
 
