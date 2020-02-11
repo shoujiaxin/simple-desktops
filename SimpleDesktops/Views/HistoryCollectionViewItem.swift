@@ -40,9 +40,9 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let menu = NSMenu()
         menu.addItem(withTitle: "Set as wallpaper", action: #selector(setWallpaperMenuItemClicked(sender:)), keyEquivalent: "")
-        menu.addItem(withTitle: "Show in Finder", action: #selector(showInFinderMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(withTitle: "Reveal in Finder", action: #selector(revealInFinderMenuItemClicked(sender:)), keyEquivalent: "")
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Delete", action: #selector(deleteHistoryMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(withTitle: "Move to Trash", action: #selector(moveToTrashMenuItemClicked(sender:)), keyEquivalent: "")
         for item in menu.items {
             item.target = self
         }
@@ -77,7 +77,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         }
     }
 
-    @objc func showInFinderMenuItemClicked(sender _: Any) {
+    @objc func revealInFinderMenuItemClicked(sender _: Any) {
         guard let index = collectionView?.indexPath(for: self)?.item else {
             return
         }
@@ -89,7 +89,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: "\(wallpaperManager.wallpaperDirectory)/\(wallpaperManager.historyWallpapers[index].name!)")])
     }
 
-    @objc func deleteHistoryMenuItemClicked(sender _: Any) {
+    @objc func moveToTrashMenuItemClicked(sender _: Any) {
         guard let indexPath = collectionView?.indexPath(for: self) else {
             return
         }
