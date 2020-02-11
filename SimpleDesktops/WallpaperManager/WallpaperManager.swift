@@ -204,6 +204,8 @@ class WallpaperManager {
                 try? WallpaperManager.managedObjectContext.save()
             }
         }
+
+        historyWallpapers.swapAt(0, index)
     }
 
     /// Update preview image randomly

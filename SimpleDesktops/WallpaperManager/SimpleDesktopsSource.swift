@@ -90,6 +90,10 @@ class SimpleDesktopsSource: ImageSource {
                     try linkList.append(tag.attr("src"))
                 }
 
+                if !linkList.isEmpty {
+                    self.imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
+                }
+
                 semaphore.signal()
             } catch {
                 semaphore.signal()
@@ -99,8 +103,6 @@ class SimpleDesktopsSource: ImageSource {
 
         task.resume()
         _ = semaphore.wait(timeout: .distantFuture)
-
-        imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
     }
 
     /// Return true if the page contains images
