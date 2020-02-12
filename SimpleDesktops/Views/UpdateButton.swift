@@ -29,6 +29,7 @@ class UpdateButton: NSButton {
         super.layout()
 
         imageScaling = NSImageScaling.scaleNone
+
         if let image = self.image {
             image.size = NSSize(width: 32, height: 32)
             image.tint(withColor: NSColor.textColor)

@@ -37,6 +37,8 @@ extension HistoryViewController: NSCollectionViewDataSource {
     func collectionView(_: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: .init("HistoryCollectionViewItem"), for: indexPath)
 
+        item.imageView?.image = nil
+        item.imageView?.toolTip = "Loading"
         wallpaperManager.getHistoryPreview(at: indexPath.item, completionHandler: { image, _ in
             DispatchQueue.main.sync {
                 item.imageView?.image = image

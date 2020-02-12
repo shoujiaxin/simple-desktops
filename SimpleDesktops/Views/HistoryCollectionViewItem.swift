@@ -11,6 +11,9 @@ import Cocoa
 class HistoryCollectionViewItem: NSCollectionViewItem {
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let trackingArea = NSTrackingArea(rect: view.bounds, options: [.mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil)
+        view.addTrackingArea(trackingArea)
     }
 
     override func viewWillLayout() {
@@ -18,9 +21,6 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         view.layer?.borderColor = NSColor.controlAccentColor.cgColor
         view.layer?.borderWidth = 0
-
-        let trackingArea = NSTrackingArea(rect: view.bounds, options: [.mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil)
-        view.addTrackingArea(trackingArea)
     }
 
     override func mouseEntered(with event: NSEvent) {

@@ -674,7 +674,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SimpleDesktops" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Simple_Desktops" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -683,7 +683,7 @@
         <!--Popover View Controller-->
         <scene sceneID="hEX-GO-JeT">
             <objects>
-                <viewController storyboardIdentifier="PopoverViewController" id="HkY-dK-v0h" customClass="PopoverViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PopoverViewController" id="HkY-dK-v0h" customClass="PopoverViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="bgq-1Z-PsU">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -742,7 +742,7 @@
         <!--Preview View Controller-->
         <scene sceneID="WSg-fI-o46">
             <objects>
-                <viewController storyboardIdentifier="PreviewViewController" id="Miv-G2-hpW" customClass="PreviewViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PreviewViewController" id="Miv-G2-hpW" customClass="PreviewViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="WeH-DP-Lqg">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -755,7 +755,7 @@
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" id="hnB-0E-gdI"/>
                             </imageView>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Q35-5Y-5Wa" customClass="UpdateButton" customModule="SimpleDesktops" customModuleProvider="target">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Q35-5Y-5Wa" customClass="UpdateButton" customModule="Simple_Desktops" customModuleProvider="target">
                                 <rect key="frame" x="176" y="161" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Ycg-af-htg"/>
@@ -776,7 +776,7 @@
                                     <constraint firstAttribute="height" constant="32" id="xaM-UV-sa1"/>
                                 </constraints>
                             </progressIndicator>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="dG0-4U-o0X" customClass="PillButton" customModule="SimpleDesktops" customModuleProvider="target">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="dG0-4U-o0X" customClass="PillButton" customModule="Simple_Desktops" customModuleProvider="target">
                                 <rect key="frame" x="80" y="10" width="240" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="6Ns-VP-7aC"/>
@@ -835,7 +835,7 @@
         <!--History View Controller-->
         <scene sceneID="mzH-rx-zdE">
             <objects>
-                <viewController storyboardIdentifier="HistoryViewController" id="YW7-ZQ-u4X" customClass="HistoryViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HistoryViewController" id="YW7-ZQ-u4X" customClass="HistoryViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Rm1-Jc-tST">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -888,7 +888,7 @@
         <!--Preferences View Controller-->
         <scene sceneID="NXH-b6-hbm">
             <objects>
-                <viewController storyboardIdentifier="PreferencesViewController" id="ZXl-eC-gjQ" customClass="PreferencesViewController" customModule="SimpleDesktops" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PreferencesViewController" id="ZXl-eC-gjQ" customClass="PreferencesViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="4MK-1E-GFn">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="88"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -935,7 +935,7 @@
                                     <action selector="intervalChanged:" target="ZXl-eC-gjQ" id="FVX-MO-h7K"/>
                                 </connections>
                             </popUpButton>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="RnH-0r-9lP" customClass="PillButton" customModule="SimpleDesktops" customModuleProvider="target">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="RnH-0r-9lP" customClass="PillButton" customModule="Simple_Desktops" customModuleProvider="target">
                                 <rect key="frame" x="80" y="10" width="240" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="K65-3q-ZSC"/>
