@@ -46,14 +46,17 @@ class WallpaperManager {
     /// Set wallpaper for all workspaces (desktops) on all screens
     /// - Parameter handler: Callback of completion
     public func changeWallpaper(completionHandler handler: @escaping (Error?) -> Void) {
-        // Save the image to ~/Library/Containers/me.jiaxin.SimpleDesktops/Data/Library/Application Support/SimpleDesktops/Wallpaper/
+        // Save the image to ~/Library/Containers/me.jiaxin.SimpleDesktops/Data/Library/Application Support/SimpleDesktops/Wallpapers/
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: wallpaperDirectory) {
             // Create the folder if it not exists
             do {
                 try fileManager.createDirectory(atPath: wallpaperDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                handler(error)
+                let queue = DispatchQueue(label: "WallpaperManager.changeWallpaper")
+                queue.async {
+                    handler(error)
+                }
                 return
             }
         }
@@ -102,16 +105,32 @@ class WallpaperManager {
     ///   - handler: Callback of completion
     public func downloadWallpaper(to directory: URL, completionHandler handler: @escaping (Error?) -> Void) {
         guard let wallpaperName = dataSource.imageInfo.name else {
-            handler(WallpaperError.noImage)
+            let queue = DispatchQueue(label: "WallpaperManager.downloadWallpaper")
+            queue.async {
+                handler(WallpaperError.noImage)
+            }
             return
         }
 
         if !directory.hasDirectoryPath {
-            handler(WallpaperError.failedToSaveImage)
+            let queue = DispatchQueue(label: "WallpaperManager.downloadWallpaper")
+            queue.async {
+                handler(WallpaperError.failedToSaveImage)
+            }
             return
         }
 
         let url = URL(fileURLWithPath: wallpaperName, relativeTo: directory)
+
+        // Already downloaded
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: url.path) {
+            let queue = DispatchQueue(label: "WallpaperManager.downloadWallpaper")
+            queue.async {
+                handler(nil)
+            }
+            return
+        }
 
         dataSource.getFullImage { image, error in
             if let error = error {
@@ -225,11 +244,10 @@ class WallpaperManager {
         queue.async {
             try? self.updateImageFromSource()
 
-            let semaphore = DispatchSemaphore(value: 0)
             self.changeWallpaper { _ in
-                semaphore.signal()
             }
-            _ = semaphore.wait(timeout: .distantFuture)
+            self.dataSource.getPreviewImage { _, _ in
+            }
         }
     }
 
