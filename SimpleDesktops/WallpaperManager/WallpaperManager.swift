@@ -8,6 +8,7 @@
 
 import Cocoa
 import CoreData
+import os.log
 
 class WallpaperManager {
     public var dataSource = SimpleDesktopsSource()
@@ -213,7 +214,10 @@ class WallpaperManager {
             }
         }
 
-        historyWallpapers.swapAt(0, index)
+        if index != 0 {
+            let item = historyWallpapers.remove(at: index)
+            historyWallpapers.insert(item, at: 0)
+        }
     }
 
     /// Update preview image randomly
@@ -244,9 +248,19 @@ class WallpaperManager {
         queue.async {
             try? self.updateImageFromSource()
 
-            self.changeWallpaper { _ in
+            self.changeWallpaper { error in
+                if let error = error {
+                    let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "changeWallpaper")
+                    os_log("Failed to change wallpaper: %{public}@", log: osLog, type: .error, error.localizedDescription)
+                }
             }
-            self.dataSource.getPreviewImage { _, _ in
+
+            // Pre-cache preview image
+            self.dataSource.getPreviewImage { _, error in
+                if let error = error {
+                    let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "getPreviewImage")
+                    os_log("Failed to get preview image: %{public}@", log: osLog, type: .error, error.localizedDescription)
+                }
             }
         }
     }
@@ -258,13 +272,21 @@ class WallpaperManager {
         }
 
         let screens = NSScreen.screens
-        for screen in screens {
-            try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+        do {
+            for screen in screens {
+                try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+            }
+        } catch {
+            let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "setWallpaper")
+            os_log("Failed to set wallpaper: %{public}@", log: osLog, type: .error, error.localizedDescription)
+            throw error
         }
     }
 
     private func updateImageFromSource() throws {
         guard dataSource.randomImage() else {
+            let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "updateImageFromSource")
+            os_log("Failed to update image from source", log: osLog, type: .error)
             throw WallpaperError.failedToLoadImage
         }
 
