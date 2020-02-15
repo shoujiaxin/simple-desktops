@@ -61,7 +61,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let wallpaperManager = previewViewController.wallpaperManager
 
         // Return to preview view
-        popoverViewController.historyButtonClicked(self)
+        popoverViewController.transition(to: .preview)
 
         previewViewController.isUpdating = true
         wallpaperManager.selectFromHistory(at: index)

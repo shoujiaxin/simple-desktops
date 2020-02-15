@@ -27,6 +27,11 @@ class HistoryViewController: NSViewController {
 
         collectionView.reloadData()
     }
+
+    @IBAction func backToPreviewButtonClicked(_: Any) {
+        let parentViewController = parent as! PopoverViewController
+        parentViewController.transition(to: .preview)
+    }
 }
 
 extension HistoryViewController: NSCollectionViewDataSource {

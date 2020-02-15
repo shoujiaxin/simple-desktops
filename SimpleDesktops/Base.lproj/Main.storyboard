@@ -688,46 +688,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button toolTip="History" translatesAutoresizingMaskIntoConstraints="NO" id="WIb-lR-xHN">
-                                <rect key="frame" x="344" y="320" width="18" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="18" id="I5K-zw-ZLH"/>
-                                    <constraint firstAttribute="width" constant="18" id="Jmo-zr-dTC"/>
-                                </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="HistoryButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="QQP-yQ-1kE">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="historyButtonClicked:" target="HkY-dK-v0h" id="F0Y-oy-VYw"/>
-                                </connections>
-                            </button>
-                            <button toolTip="Preferences" translatesAutoresizingMaskIntoConstraints="NO" id="HvT-sm-YTL">
-                                <rect key="frame" x="372" y="320" width="18" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="18" id="kqF-ni-N0b"/>
-                                    <constraint firstAttribute="height" constant="18" id="nJp-hP-DEA"/>
-                                </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="PreferencesButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="preferencesButtonClicked:" target="HkY-dK-v0h" id="5N2-lJ-gp6"/>
-                                </connections>
-                            </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="1sO-Ng-jwp">
-                                <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                                <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                             </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="centerY" secondItem="WIb-lR-xHN" secondAttribute="centerY" id="2pj-Xp-xPW"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" constant="10" id="cg7-Yf-Zio"/>
-                            <constraint firstItem="1sO-Ng-jwp" firstAttribute="top" secondItem="HvT-sm-YTL" secondAttribute="bottom" constant="10" id="foX-Wt-Mlq"/>
+                            <constraint firstItem="1sO-Ng-jwp" firstAttribute="top" secondItem="bgq-1Z-PsU" secondAttribute="top" id="IrP-Nq-fEv"/>
                             <constraint firstAttribute="bottom" secondItem="1sO-Ng-jwp" secondAttribute="bottom" id="grI-pi-iEl"/>
-                            <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="10" id="nEq-4x-Dz1"/>
                             <constraint firstItem="1sO-Ng-jwp" firstAttribute="leading" secondItem="bgq-1Z-PsU" secondAttribute="leading" id="o3m-wE-QeF"/>
-                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="pS6-8V-3lu"/>
                             <constraint firstAttribute="trailing" secondItem="1sO-Ng-jwp" secondAttribute="trailing" id="uxa-vn-O5B"/>
                         </constraints>
                     </view>
@@ -744,9 +712,37 @@
             <objects>
                 <viewController storyboardIdentifier="PreviewViewController" id="Miv-G2-hpW" customClass="PreviewViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="WeH-DP-Lqg">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <button toolTip="History" translatesAutoresizingMaskIntoConstraints="NO" id="WIb-lR-xHN">
+                                <rect key="frame" x="344" y="320" width="18" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="I5K-zw-ZLH"/>
+                                    <constraint firstAttribute="width" constant="18" id="Jmo-zr-dTC"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="HistoryButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="QQP-yQ-1kE">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="historyButtonClicked:" target="Miv-G2-hpW" id="N8I-Ra-HUM"/>
+                                </connections>
+                            </button>
+                            <button toolTip="Preferences" translatesAutoresizingMaskIntoConstraints="NO" id="HvT-sm-YTL">
+                                <rect key="frame" x="372" y="320" width="18" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="18" id="kqF-ni-N0b"/>
+                                    <constraint firstAttribute="height" constant="18" id="nJp-hP-DEA"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="PreferencesButtonIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h5u-SB-ErZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="preferencesButtonClicked:" target="Miv-G2-hpW" id="tdf-Vo-MTg"/>
+                                </connections>
+                            </button>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="78w-KF-qoe">
                                 <rect key="frame" x="0.0" y="60" width="400" height="250"/>
                                 <constraints>
@@ -806,18 +802,22 @@
                             </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="top" secondItem="WeH-DP-Lqg" secondAttribute="top" constant="10" id="4R8-ba-Tzr"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerY" secondItem="78w-KF-qoe" secondAttribute="centerY" id="7YA-T5-WjA"/>
+                            <constraint firstAttribute="trailing" secondItem="HvT-sm-YTL" secondAttribute="trailing" constant="10" id="Bpt-Yb-d2E"/>
                             <constraint firstItem="ey8-ub-JbC" firstAttribute="leading" secondItem="dG0-4U-o0X" secondAttribute="trailing" constant="24" id="CLM-fD-lO1"/>
                             <constraint firstItem="dG0-4U-o0X" firstAttribute="top" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="GjG-s8-SkL"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="WeH-DP-Lqg" secondAttribute="leading" id="H3d-Wg-gIb"/>
                             <constraint firstItem="2j1-4o-ab5" firstAttribute="centerX" secondItem="Q35-5Y-5Wa" secondAttribute="centerX" id="IiY-1b-qPJ"/>
+                            <constraint firstItem="WIb-lR-xHN" firstAttribute="top" secondItem="WeH-DP-Lqg" secondAttribute="top" constant="10" id="JGw-TO-tdL"/>
+                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="WIb-lR-xHN" secondAttribute="bottom" constant="10" id="SeR-4r-csX"/>
                             <constraint firstAttribute="bottom" secondItem="dG0-4U-o0X" secondAttribute="bottom" constant="10" id="U7i-Wt-g6I"/>
+                            <constraint firstItem="HvT-sm-YTL" firstAttribute="leading" secondItem="WIb-lR-xHN" secondAttribute="trailing" constant="10" id="Z6o-pM-sn6"/>
                             <constraint firstItem="dG0-4U-o0X" firstAttribute="centerY" secondItem="ey8-ub-JbC" secondAttribute="centerY" id="akC-i1-VuJ"/>
                             <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="bmw-cP-kbY"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="78w-KF-qoe" secondAttribute="centerX" id="d9B-lF-Hzm"/>
                             <constraint firstItem="2j1-4o-ab5" firstAttribute="centerY" secondItem="Q35-5Y-5Wa" secondAttribute="centerY" id="oMX-TZ-Xps"/>
                             <constraint firstItem="dG0-4U-o0X" firstAttribute="centerX" secondItem="WeH-DP-Lqg" secondAttribute="centerX" id="tOf-3z-3ba"/>
-                            <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="WeH-DP-Lqg" secondAttribute="top" id="uj4-vE-QjW"/>
                         </constraints>
                     </view>
                     <connections>
@@ -837,17 +837,31 @@
             <objects>
                 <viewController storyboardIdentifier="HistoryViewController" id="YW7-ZQ-u4X" customClass="HistoryViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Rm1-Jc-tST">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="348"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGf-ra-rPd">
+                            <button toolTip="Back" translatesAutoresizingMaskIntoConstraints="NO" id="K5M-b2-3z5">
+                                <rect key="frame" x="11" y="321" width="16" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="Vwf-pD-xYp"/>
+                                    <constraint firstAttribute="height" constant="16" id="xQz-wB-Ys8"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSGoBackTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="sos-dd-ARZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="backToPreviewButtonClicked:" target="YW7-ZQ-u4X" id="8Kq-Gb-J1H"/>
+                                </connections>
+                            </button>
+                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGf-ra-rPd">
                                 <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                                 <clipView key="contentView" id="zIY-3y-fE4">
                                     <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <collectionView id="Wbe-Ps-cig">
-                                            <rect key="frame" x="0.0" y="0.0" width="400" height="158"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="16" minimumLineSpacing="16" id="cPd-lY-uNa">
                                                 <size key="itemSize" width="176" height="110"/>
@@ -861,7 +875,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="pNz-DP-oEs">
-                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                    <rect key="frame" x="-100" y="-100" width="233" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Mky-Lb-tpJ">
@@ -871,10 +885,12 @@
                             </scrollView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="K5M-b2-3z5" firstAttribute="top" secondItem="Rm1-Jc-tST" secondAttribute="top" constant="11" id="7HG-4y-Wz4"/>
+                            <constraint firstItem="K5M-b2-3z5" firstAttribute="leading" secondItem="Rm1-Jc-tST" secondAttribute="leading" constant="11" id="9IB-G0-JNx"/>
                             <constraint firstAttribute="trailing" secondItem="TGf-ra-rPd" secondAttribute="trailing" id="A0T-ZZ-6Ic"/>
                             <constraint firstItem="TGf-ra-rPd" firstAttribute="leading" secondItem="Rm1-Jc-tST" secondAttribute="leading" id="hfK-3R-sAb"/>
+                            <constraint firstItem="TGf-ra-rPd" firstAttribute="top" secondItem="K5M-b2-3z5" secondAttribute="bottom" constant="11" id="lnB-jG-48m"/>
                             <constraint firstAttribute="bottom" secondItem="TGf-ra-rPd" secondAttribute="bottom" id="whU-kd-ev0"/>
-                            <constraint firstItem="TGf-ra-rPd" firstAttribute="top" secondItem="Rm1-Jc-tST" secondAttribute="top" id="xvh-Ru-BcV"/>
                         </constraints>
                     </view>
                     <connections>
@@ -883,18 +899,18 @@
                 </viewController>
                 <customObject id="lcW-mv-vrz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="536" y="805"/>
+            <point key="canvasLocation" x="539" y="805"/>
         </scene>
         <!--Preferences View Controller-->
         <scene sceneID="NXH-b6-hbm">
             <objects>
                 <viewController storyboardIdentifier="PreferencesViewController" id="ZXl-eC-gjQ" customClass="PreferencesViewController" customModule="Simple_Desktops" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="4MK-1E-GFn">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="88"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="127"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jmU-Oo-7qv">
-                                <rect key="frame" x="22" y="62" width="119" height="18"/>
+                                <rect key="frame" x="22" y="87" width="119" height="18"/>
                                 <buttonCell key="cell" type="check" title="Change picture:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zUJ-H7-HUD">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -904,7 +920,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vVq-Cd-KZm">
-                                <rect key="frame" x="149" y="57" width="145" height="25"/>
+                                <rect key="frame" x="149" y="82" width="145" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="1J6-cB-v91"/>
                                 </constraints>
@@ -935,6 +951,17 @@
                                     <action selector="intervalChanged:" target="ZXl-eC-gjQ" id="FVX-MO-h7K"/>
                                 </connections>
                             </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tIt-L1-YzE">
+                                <rect key="frame" x="183" y="54" width="35" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="15" id="vBI-3a-MQW"/>
+                                </constraints>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="goP-Kb-qBI">
+                                    <font key="font" metaFont="system" size="12"/>
+                                    <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="RnH-0r-9lP" customClass="PillButton" customModule="Simple_Desktops" customModuleProvider="target">
                                 <rect key="frame" x="80" y="10" width="240" height="40"/>
                                 <constraints>
@@ -965,9 +992,11 @@
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="RnH-0r-9lP" firstAttribute="top" secondItem="vVq-Cd-KZm" secondAttribute="bottom" constant="10" id="13g-g2-suB"/>
                             <constraint firstAttribute="bottom" secondItem="RnH-0r-9lP" secondAttribute="bottom" constant="10" id="3KN-md-WkO"/>
-                            <constraint firstItem="jmU-Oo-7qv" firstAttribute="top" secondItem="4MK-1E-GFn" secondAttribute="top" constant="10" id="DgZ-pp-qvq"/>
+                            <constraint firstItem="tIt-L1-YzE" firstAttribute="top" secondItem="vVq-Cd-KZm" secondAttribute="bottom" constant="16" id="3ND-DF-Idh"/>
+                            <constraint firstItem="tIt-L1-YzE" firstAttribute="centerX" secondItem="4MK-1E-GFn" secondAttribute="centerX" id="C2v-G6-8Yu"/>
+                            <constraint firstItem="jmU-Oo-7qv" firstAttribute="top" secondItem="4MK-1E-GFn" secondAttribute="top" constant="24" id="DgZ-pp-qvq"/>
+                            <constraint firstItem="RnH-0r-9lP" firstAttribute="top" secondItem="tIt-L1-YzE" secondAttribute="bottom" constant="4" id="HtW-eL-YjO"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vVq-Cd-KZm" secondAttribute="trailing" constant="109" id="NLx-u1-DxJ"/>
                             <constraint firstItem="jmU-Oo-7qv" firstAttribute="leading" secondItem="4MK-1E-GFn" secondAttribute="leading" constant="24" id="Njl-qK-KF9"/>
                             <constraint firstItem="vVq-Cd-KZm" firstAttribute="centerY" secondItem="jmU-Oo-7qv" secondAttribute="centerY" id="Tak-gD-2eE"/>
@@ -981,6 +1010,7 @@
                         <outlet property="changePictureButton" destination="jmU-Oo-7qv" id="VvW-ab-VDO"/>
                         <outlet property="doneButton" destination="RnH-0r-9lP" id="pJL-0b-8Mi"/>
                         <outlet property="intervalPopUpButton" destination="vVq-Cd-KZm" id="ySg-FK-sRB"/>
+                        <outlet property="versionLabel" destination="tIt-L1-YzE" id="QC1-OY-IWT"/>
                     </connections>
                 </viewController>
                 <customObject id="U7a-9o-wJW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -991,6 +1021,7 @@
     <resources>
         <image name="DownloadButtonIcon" width="24" height="24"/>
         <image name="HistoryButtonIcon" width="18" height="18"/>
+        <image name="NSGoBackTemplate" width="9" height="12"/>
         <image name="PreferencesButtonIcon" width="18" height="18"/>
         <image name="QuitButtonIcon" width="24" height="24"/>
         <image name="UpdateButtonIcon" width="32" height="32"/>

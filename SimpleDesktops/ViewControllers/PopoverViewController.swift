@@ -12,25 +12,25 @@ class PopoverViewController: NSViewController {
     @IBOutlet var contentView: NSView!
 
     enum ViewControllerState: Int {
-        case preview
         case history
         case preferences
+        case preview
     }
 
-    let previewViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreviewViewController") as PreviewViewController
     let historyViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "HistoryViewController") as HistoryViewController
     let preferencesViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreferencesViewController") as PreferencesViewController
+    let previewViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreviewViewController") as PreviewViewController
 
     var currentVCState = ViewControllerState.preview
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addChild(previewViewController)
         addChild(historyViewController)
         addChild(preferencesViewController)
+        addChild(previewViewController)
 
-        contentView.addSubview(children[0].view)
+        contentView.addSubview(children[currentVCState.rawValue].view)
     }
 
     override func viewWillAppear() {
@@ -45,43 +45,38 @@ class PopoverViewController: NSViewController {
         }
     }
 
-    @IBAction func historyButtonClicked(_: Any) {
-        switch currentVCState {
-        case .preview:
-            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.history.rawValue], options: .slideLeft, completionHandler: nil)
+    func transition(to targetVCState: ViewControllerState) {
+        if currentVCState == targetVCState {
+            return
+        }
 
-            currentVCState = .history
+        var transitionOptions: NSViewController.TransitionOptions = .allowUserInteraction
+        var viewSize: NSSize?
+
+        switch targetVCState {
         case .history:
-            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .slideRight, completionHandler: nil)
-
-            currentVCState = .preview
+            transitionOptions = .slideLeft
         case .preferences:
-            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.history.rawValue], options: .slideLeft, completionHandler: nil)
+            transitionOptions = .slideUp
+            viewSize = NSSize(width: 400, height: 127)
+        case .preview:
+            switch currentVCState {
+            case .history:
+                transitionOptions = .slideRight
+            case .preferences:
+                transitionOptions = .slideDown
+                viewSize = NSSize(width: 400, height: 348)
+            case .preview:
+                return
+            }
+        }
+
+        transition(from: children[currentVCState.rawValue], to: children[targetVCState.rawValue], options: transitionOptions, completionHandler: nil)
+        if let size = viewSize {
             let appDelegate = NSApp.delegate as! AppDelegate
-            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
-
-            Options.shared.saveOptions()
-
-            currentVCState = .history
+            appDelegate.popover.contentSize = size
         }
-    }
 
-    @IBAction func preferencesButtonClicked(_: Any) {
-        let appDelegate = NSApp.delegate as! AppDelegate
-
-        switch currentVCState {
-        case .preferences:
-            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .slideDown, completionHandler: nil)
-            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
-
-            Options.shared.saveOptions()
-
-            currentVCState = .preview
-        default:
-            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preferences.rawValue], options: .slideUp, completionHandler: nil)
-            appDelegate.popover.contentSize = NSSize(width: 400, height: 126)
-
-            currentVCState = .preferences
-        }
+        currentVCState = targetVCState
     }
 }

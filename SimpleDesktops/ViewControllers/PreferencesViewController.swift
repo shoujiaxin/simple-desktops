@@ -10,13 +10,18 @@ import Cocoa
 
 class PreferencesViewController: NSViewController {
     @IBOutlet var changePictureButton: NSButton!
-    @IBOutlet var intervalPopUpButton: NSPopUpButton!
     @IBOutlet var doneButton: PillButton!
+    @IBOutlet var intervalPopUpButton: NSPopUpButton!
+    @IBOutlet var versionLabel: NSTextField!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         doneButton.attributedTitle = NSMutableAttributedString(string: "Done", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
+
+        let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
+        let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion")
+        versionLabel.stringValue = "Version \(versionNumber!) (\(buildNumber!))"
     }
 
     override func viewWillAppear() {
@@ -43,7 +48,7 @@ class PreferencesViewController: NSViewController {
 
     @IBAction func doneButtonClicked(_: Any) {
         let parentViewController = parent as! PopoverViewController
-        parentViewController.preferencesButtonClicked(self)
+        parentViewController.transition(to: .preview)
     }
 
     @IBAction func intervalChanged(_ sender: NSPopUpButton) {

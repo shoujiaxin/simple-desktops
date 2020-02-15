@@ -9,11 +9,11 @@
 import Cocoa
 
 class PreviewViewController: NSViewController {
+    @IBOutlet var downloadButton: NSButton!
     @IBOutlet var imageView: NSImageView!
-    @IBOutlet var updateButton: UpdateButton!
     @IBOutlet var progressIndicator: NSProgressIndicator!
     @IBOutlet var setWallpaperButton: PillButton!
-    @IBOutlet var downloadButton: NSButton!
+    @IBOutlet var updateButton: UpdateButton!
 
     var wallpaperManager = WallpaperManager()
 
@@ -86,20 +86,14 @@ class PreviewViewController: NSViewController {
         }
     }
 
-    @IBAction func updateButtonClicked(_: Any) {
-        isUpdating = true
-        wallpaperManager.updatePreview { image, error in
-            DispatchQueue.main.sync {
-                self.isUpdating = false
+    @IBAction func historyButtonClicked(_: Any) {
+        let parentViewController = parent as! PopoverViewController
+        parentViewController.transition(to: .history)
+    }
 
-                if let error = error {
-                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    return
-                }
-
-                self.imageView.image = image
-            }
-        }
+    @IBAction func preferencesButtonClicked(_: Any) {
+        let parentViewController = parent as! PopoverViewController
+        parentViewController.transition(to: .preferences)
     }
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
@@ -112,6 +106,22 @@ class PreviewViewController: NSViewController {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
                     return
                 }
+            }
+        }
+    }
+
+    @IBAction func updateButtonClicked(_: Any) {
+        isUpdating = true
+        wallpaperManager.updatePreview { image, error in
+            DispatchQueue.main.sync {
+                self.isUpdating = false
+
+                if let error = error {
+                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                    return
+                }
+
+                self.imageView.image = image
             }
         }
     }
