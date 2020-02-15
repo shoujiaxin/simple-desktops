@@ -38,7 +38,7 @@ class PreviewViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        progressIndicator.appearance = NSAppearance(named: .aqua)
+        progressIndicator.appearance = Utils.currentAppearance()
         progressIndicator.isHidden = true
 
         setWallpaperButton.attributedTitle = NSMutableAttributedString(string: "Set as Wallpaper", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])

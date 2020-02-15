@@ -9,6 +9,14 @@
 import Cocoa
 
 class Utils {
+    static func currentAppearance() -> NSAppearance? {
+        if let interfaceStyle = UserDefaults.standard.value(forKey: "AppleInterfaceStyle") as? String, interfaceStyle == "Dark" {
+            return NSAppearance(named: .darkAqua)
+        }
+
+        return NSAppearance(named: .aqua)
+    }
+
     static func showCriticalAlert(withInformation information: String) {
         NSApp.activate(ignoringOtherApps: true)
 

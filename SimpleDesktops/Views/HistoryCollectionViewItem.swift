@@ -21,6 +21,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         view.layer?.borderColor = NSColor.controlAccentColor.cgColor
         view.layer?.borderWidth = 0
+        view.layer?.cornerRadius = 2
     }
 
     override func mouseEntered(with event: NSEvent) {
