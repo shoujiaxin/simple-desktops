@@ -93,10 +93,7 @@ class WallpaperManager {
     /// Set wallpaper for all workspaces (desktops) on all screens automatically
     /// - Parameter timeInterval: Time interval to change wallpapers
     public func changeWallpaper(every timeInterval: TimeInterval) {
-        if let timer = timer {
-            timer.invalidate()
-        }
-
+        timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeWallpaperBackground(sender:)), userInfo: nil, repeats: true)
     }
 

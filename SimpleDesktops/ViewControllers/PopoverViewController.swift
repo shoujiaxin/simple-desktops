@@ -33,17 +33,17 @@ class PopoverViewController: NSViewController {
         contentView.addSubview(children[currentVCState.rawValue].view)
     }
 
-    override func viewWillAppear() {
-        super.viewWillAppear()
-
-        if currentVCState != .preview {
-            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .allowUserInteraction, completionHandler: nil)
-            let appDelegate = NSApp.delegate as! AppDelegate
-            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
-
-            currentVCState = .preview
-        }
-    }
+//    override func viewWillAppear() {
+//        super.viewWillAppear()
+//
+//        if currentVCState != .preview {
+//            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .allowUserInteraction, completionHandler: nil)
+//            let appDelegate = NSApp.delegate as! AppDelegate
+//            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
+//
+//            currentVCState = .preview
+//        }
+//    }
 
     func transition(to targetVCState: ViewControllerState) {
         if currentVCState == targetVCState {

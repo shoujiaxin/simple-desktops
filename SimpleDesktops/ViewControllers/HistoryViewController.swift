@@ -40,7 +40,7 @@ extension HistoryViewController: NSCollectionViewDataSource {
     }
 
     func collectionView(_: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let item = collectionView.makeItem(withIdentifier: .init("HistoryCollectionViewItem"), for: indexPath)
+        let item = collectionView.makeItem(withIdentifier: .init("HistoryCollectionViewItem"), for: indexPath) as! HistoryCollectionViewItem
 
         item.imageView?.image = nil
         item.imageView?.toolTip = "Loading"
