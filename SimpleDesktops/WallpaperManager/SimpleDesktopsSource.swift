@@ -6,26 +6,11 @@
 //  Copyright © 2020 Jiaxin Shou. All rights reserved.
 //
 
-import CoreData
-import Foundation
+import Cocoa
 import SwiftSoup
 
-class SimpleDesktopsSource: ImageSource {
-    public struct SDImageInfo: ImageInfo {
-        var format: NSBitmapImageRep.FileType? {
-            get {
-                guard let name = name else {
-                    return nil
-                }
-
-                if name.hasSuffix("png") { return .png }
-                else if name.hasSuffix("jpg") { return .jpeg }
-                else if name.hasSuffix("gif") { return .gif }
-                else { return nil }
-            }
-            set {}
-        }
-
+class SimpleDesktopsSource: WallpaperImageSource {
+    public class SDImage: WallpaperImage {
         var fullLink: String? {
             get {
                 guard let previewLink = previewLink else {
@@ -51,27 +36,47 @@ class SimpleDesktopsSource: ImageSource {
         }
 
         var previewLink: String?
+
+        func download(to path: URL, completionHandler: @escaping (Error?) -> Void) {
+            if let link = fullLink {
+                WallpaperImageSource.downloadImage(from: link, to: path, completionHandler: completionHandler)
+            }
+        }
+
+        func fullImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
+            if let link = fullLink {
+                WallpaperImageSource.getImage(from: link, completionHandler: completionHandler)
+            }
+        }
+
+        func previewImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
+            if let link = previewLink {
+                WallpaperImageSource.getImage(from: link, completionHandler: completionHandler)
+            }
+        }
     }
 
     override init() {
         super.init()
 
         entity.name = "SDImage"
-        imageInfo = SDImageInfo()
+
+        // Load history images to array
+        for object in retriveFromDatabase(timeAscending: false) {
+            if let previewLink = object.value(forKey: entity.property.previewLink) as? String {
+                let image = SDImage()
+                image.previewLink = previewLink
+                images.append(image)
+            }
+        }
 
         SimpleDesktopsSource.updateMaxPage()
     }
 
-    public override func getImageInfo(from object: NSManagedObject) -> ImageInfo {
-        var image = SDImageInfo()
-        image.previewLink = (object.value(forKey: entity.property.previewLink) as! String)
-        return image
-    }
-
-    public override func randomImage() -> Bool {
+    override func random() -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
 
-        var linkList: [String] = []
+        var links: [String] = []
         var success = false
 
         let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
@@ -83,34 +88,43 @@ class SimpleDesktopsSource: ImageSource {
                 return
             }
 
-            do {
-                let doc: Document = try SwiftSoup.parse(String(data: data!, encoding: .utf8)!)
-                let imgTags: Elements = try doc.select("img")
-
+            if let doc = try? SwiftSoup.parse(String(data: data!, encoding: .utf8)!), let imgTags = try? doc.select("img") {
                 for tag in imgTags {
-                    try linkList.append(tag.attr("src"))
+                    try? links.append(tag.attr("src"))
                 }
-
-                if !linkList.isEmpty {
-                    self.imageInfo.previewLink = linkList[Int.random(in: 1 ..< linkList.count)]
-                    success = true
-                }
-
-                semaphore.signal()
-            } catch {
-                semaphore.signal()
-                return
             }
+
+            while !links.isEmpty {
+                let index = Int.random(in: links.startIndex ..< links.endIndex)
+                let image = SDImage()
+                image.previewLink = links[index]
+
+                // Check if duplicate
+                if self.images.contains(where: { $0.name == image.name }) {
+                    links.remove(at: index)
+                } else {
+                    self.images.insert(image, at: self.images.startIndex)
+                    self.addToDatabase(image: image)
+
+                    success = true
+                    break
+                }
+            }
+
+            semaphore.signal()
         }
 
         task.resume()
         _ = semaphore.wait(timeout: .distantFuture)
+
         return success
     }
 
+    // MARK: Private Methods
+
     /// Return true if the page contains images
     /// - Parameter page: Number of the page to be checked
-    private static func isSimpleDesktopsPageAvailable(page: Int) -> Bool {
+    private static func isPageAvailable(page: Int) -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
 
         var isAvailable = false
@@ -123,19 +137,13 @@ class SimpleDesktopsSource: ImageSource {
                 return
             }
 
-            do {
-                let doc: Document = try SwiftSoup.parse(String(data: data!, encoding: .utf8)!)
-                let imgTags: Elements = try doc.select("img")
-
-                if imgTags.count > 0 {
-                    isAvailable = true
-                }
-                semaphore.signal()
-            } catch {
-                semaphore.signal()
-                return
+            if let doc = try? SwiftSoup.parse(String(data: data!, encoding: .utf8)!), let imgTags = try? doc.select("img"), imgTags.count > 0 {
+                isAvailable = true
             }
+
+            semaphore.signal()
         }
+
         task.resume()
         _ = semaphore.wait(timeout: .distantFuture)
 
@@ -146,7 +154,7 @@ class SimpleDesktopsSource: ImageSource {
     private static func updateMaxPage() {
         let queue = DispatchQueue(label: "SimpleDesktopsSource.updateMaxPage")
         queue.async {
-            while isSimpleDesktopsPageAvailable(page: Options.shared.simpleDesktopsMaxPage + 1) {
+            while isPageAvailable(page: Options.shared.simpleDesktopsMaxPage + 1) {
                 Options.shared.simpleDesktopsMaxPage += 1
             }
 

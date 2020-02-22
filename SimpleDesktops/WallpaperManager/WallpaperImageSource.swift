@@ -38,7 +38,7 @@ class WallpaperImageSource {
     }
 
     /// Get a new image from source randomly
-    public func random() {
+    public func random() -> Bool {
         preconditionFailure("random() must be overridden")
     }
 
