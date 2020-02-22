@@ -94,22 +94,32 @@ class SimpleDesktopsSource: WallpaperImageSource {
                 }
             }
 
-            while !links.isEmpty {
-                let index = Int.random(in: links.startIndex ..< links.endIndex)
+            if !links.isEmpty {
                 let image = SDImage()
-                image.previewLink = links[index]
+                image.previewLink = links[Int.random(in: links.startIndex ..< links.endIndex)]
 
-                // Check if duplicate
-                if self.images.contains(where: { $0.name == image.name }) {
-                    links.remove(at: index)
-                } else {
-                    self.images.insert(image, at: self.images.startIndex)
-                    self.addToDatabase(image: image)
+                self.images.insert(image, at: self.images.startIndex)
+                self.addToDatabase(image: image)
 
-                    success = true
-                    break
-                }
+                success = true
             }
+
+//            while !links.isEmpty {
+//                let index = Int.random(in: links.startIndex ..< links.endIndex)
+//                let image = SDImage()
+//                image.previewLink = links[index]
+//
+//                // Check if duplicate
+//                if self.images.contains(where: { $0.name == image.name }) {
+//                    links.remove(at: index)
+//                } else {
+//                    self.images.insert(image, at: self.images.startIndex)
+//                    self.addToDatabase(image: image)
+//
+//                    success = true
+//                    break
+//                }
+//            }
 
             semaphore.signal()
         }

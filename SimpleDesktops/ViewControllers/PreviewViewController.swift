@@ -15,9 +15,7 @@ class PreviewViewController: NSViewController {
     @IBOutlet var setWallpaperButton: PillButton!
     @IBOutlet var updateButton: UpdateButton!
 
-    var wallpaperManager = WallpaperManager()
-
-    var isUpdating: Bool = false {
+    public var isUpdating: Bool = false {
         willSet {
             if newValue {
                 updateButton.isHidden = true
@@ -35,8 +33,12 @@ class PreviewViewController: NSViewController {
         }
     }
 
+    private var wallpaperManager: WallpaperManager!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        wallpaperManager = (parent as! PopoverViewController).wallpaperManager
 
         progressIndicator.appearance = Utils.currentAppearance()
         progressIndicator.isHidden = true
@@ -44,7 +46,7 @@ class PreviewViewController: NSViewController {
         setWallpaperButton.attributedTitle = NSMutableAttributedString(string: "Set as Wallpaper", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
 
         if Options.shared.changePicture {
-            wallpaperManager.changeWallpaper(every: Options.shared.changeInterval.seconds)
+            wallpaperManager.change(every: Options.shared.changeInterval.seconds)
         }
     }
 
@@ -56,7 +58,7 @@ class PreviewViewController: NSViewController {
         }
 
         isUpdating = true
-        wallpaperManager.getLatestPreview { image, error in
+        wallpaperManager.image?.previewImage { image, error in
             DispatchQueue.main.sync {
                 self.isUpdating = false
 
@@ -71,10 +73,15 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func downloadButtonClicked(_: Any) {
+        guard let imageName = wallpaperManager.image?.name else {
+            return
+        }
+
         let directory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
+        let url = URL(fileURLWithPath: imageName, relativeTo: directory)
 
         isUpdating = true
-        wallpaperManager.downloadWallpaper(to: directory) { error in
+        wallpaperManager.image?.download(to: url) { error in
             DispatchQueue.main.sync {
                 self.isUpdating = false
 
@@ -98,7 +105,7 @@ class PreviewViewController: NSViewController {
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
         isUpdating = true
-        wallpaperManager.changeWallpaper { error in
+        wallpaperManager.change { error in
             DispatchQueue.main.sync {
                 self.isUpdating = false
 
@@ -112,7 +119,7 @@ class PreviewViewController: NSViewController {
 
     @IBAction func updateButtonClicked(_: Any) {
         isUpdating = true
-        wallpaperManager.updatePreview { image, error in
+        wallpaperManager.update { image, error in
             DispatchQueue.main.sync {
                 self.isUpdating = false
 

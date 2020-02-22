@@ -11,15 +11,14 @@ import Cocoa
 class HistoryViewController: NSViewController {
     @IBOutlet var collectionView: NSCollectionView!
 
-    var wallpaperManager: WallpaperManager!
+    private var wallpaperManager: WallpaperManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collectionView.backgroundColors = [.clear]
 
-        let parentViewController = parent as! PopoverViewController
-        wallpaperManager = parentViewController.previewViewController.wallpaperManager
+        wallpaperManager = (parent as! PopoverViewController).wallpaperManager
     }
 
     override func viewWillAppear() {
@@ -36,20 +35,20 @@ class HistoryViewController: NSViewController {
 
 extension HistoryViewController: NSCollectionViewDataSource {
     func collectionView(_: NSCollectionView, numberOfItemsInSection _: Int) -> Int {
-        return wallpaperManager.historyWallpapers.count
+        return wallpaperManager.source?.images.count ?? 0
     }
 
     func collectionView(_: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: .init("HistoryCollectionViewItem"), for: indexPath) as! HistoryCollectionViewItem
 
         item.imageView?.image = nil
-        item.imageView?.toolTip = "Loading"
-        wallpaperManager.getHistoryPreview(at: indexPath.item, completionHandler: { image, _ in
+        item.imageView?.toolTip = "Loading..."
+        wallpaperManager.source?.images[indexPath.item].previewImage { image, _ in
             DispatchQueue.main.sync {
                 item.imageView?.image = image
-                item.imageView?.toolTip = self.wallpaperManager.historyWallpapers[indexPath.item].name
+                item.imageView?.toolTip = self.wallpaperManager.source?.images[indexPath.item].name
             }
-       })
+        }
 
         return item
     }

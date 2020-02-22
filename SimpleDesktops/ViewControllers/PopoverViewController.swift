@@ -17,11 +17,12 @@ class PopoverViewController: NSViewController {
         case preview
     }
 
-    let historyViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "HistoryViewController") as HistoryViewController
-    let preferencesViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreferencesViewController") as PreferencesViewController
-    let previewViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreviewViewController") as PreviewViewController
+    public let historyViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "HistoryViewController") as HistoryViewController
+    public let preferencesViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreferencesViewController") as PreferencesViewController
+    public let previewViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreviewViewController") as PreviewViewController
+    public var wallpaperManager = WallpaperManager()
 
-    var currentVCState = ViewControllerState.preview
+    private var currentVCState = ViewControllerState.preview
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,18 +33,6 @@ class PopoverViewController: NSViewController {
 
         contentView.addSubview(children[currentVCState.rawValue].view)
     }
-
-//    override func viewWillAppear() {
-//        super.viewWillAppear()
-//
-//        if currentVCState != .preview {
-//            transition(from: children[currentVCState.rawValue], to: children[ViewControllerState.preview.rawValue], options: .allowUserInteraction, completionHandler: nil)
-//            let appDelegate = NSApp.delegate as! AppDelegate
-//            appDelegate.popover.contentSize = NSSize(width: 400, height: 348)
-//
-//            currentVCState = .preview
-//        }
-//    }
 
     func transition(to targetVCState: ViewControllerState) {
         if currentVCState == targetVCState {

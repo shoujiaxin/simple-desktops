@@ -44,7 +44,7 @@ class WallpaperImageSource {
 
     /// Remove image from array and database
     /// - Parameter index: The index of the image to be removed
-    public func remove(at index: Int) {
+    public func removeImage(at index: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(entity.property.name) = %@", images[index].name!)
         fetchRequest.fetchLimit = 1
@@ -81,6 +81,14 @@ class WallpaperImageSource {
     ///   - path: Path to save the image
     ///   - completionHandler: Callback of completion
     public static func downloadImage(from link: String, to path: URL, completionHandler: @escaping (Error?) -> Void) {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: path.path) {
+            DispatchQueue(label: "WallpaperImageSource.downloadImage").async {
+                completionHandler(nil)
+            }
+            return
+        }
+
         let session = URLSession(configuration: .default)
         let task = session.downloadTask(with: URL(string: link)!) { url, _, error in
             if let error = error {
@@ -88,7 +96,6 @@ class WallpaperImageSource {
                 return
             }
 
-            let fileManager = FileManager.default
             do {
                 try fileManager.moveItem(at: url!, to: path)
             } catch {

@@ -59,14 +59,14 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let previewViewController = popoverViewController.previewViewController
-        let wallpaperManager = previewViewController.wallpaperManager
+        let wallpaperManager = popoverViewController.wallpaperManager
 
         // Return to preview view
         popoverViewController.transition(to: .preview)
 
         previewViewController.isUpdating = true
-        wallpaperManager.selectFromHistory(at: index)
-        wallpaperManager.changeWallpaper { error in
+        wallpaperManager.image = wallpaperManager.source?.images[index]
+        wallpaperManager.change { error in
             DispatchQueue.main.sync {
                 previewViewController.isUpdating = false
 
@@ -85,9 +85,10 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.previewViewController.wallpaperManager
+        let wallpaperManager = popoverViewController.wallpaperManager
 
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: "\(wallpaperManager.wallpaperDirectory)/\(wallpaperManager.historyWallpapers[index].name!)")])
+        let url = URL(fileURLWithPath: (wallpaperManager.source?.images[index].name)!, relativeTo: wallpaperManager.directory)
+        NSWorkspace.shared.activateFileViewerSelecting([url.absoluteURL])
     }
 
     @objc func moveToTrashMenuItemClicked(sender _: Any) {
@@ -97,9 +98,9 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.previewViewController.wallpaperManager
+        let wallpaperManager = popoverViewController.wallpaperManager
 
-        wallpaperManager.removeFromHistory(at: indexPath.item)
+        wallpaperManager.source?.removeImage(at: indexPath.item)
         collectionView?.deleteItems(at: [indexPath])
     }
 }
