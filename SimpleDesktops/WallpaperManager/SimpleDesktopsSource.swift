@@ -96,7 +96,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
 
             if !links.isEmpty {
                 let image = SDImage()
-                image.previewLink = links[Int.random(in: links.startIndex ..< links.endIndex)]
+                image.previewLink = links.randomElement()
 
                 self.images.insert(image, at: self.images.startIndex)
                 self.addToDatabase(image: image)

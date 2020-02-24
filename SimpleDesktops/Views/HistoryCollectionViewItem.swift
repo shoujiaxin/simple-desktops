@@ -116,7 +116,9 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
 
-        wallpaperManager.source?.removeImage(at: indexPath.item)
+        if wallpaperManager.image?.name == wallpaperManager.source?.removeImage(at: indexPath.item).name {
+            wallpaperManager.image = wallpaperManager.source?.images.first
+        }
         collectionView?.deleteItems(at: [indexPath])
     }
 }

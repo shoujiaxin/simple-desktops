@@ -44,21 +44,17 @@ class WallpaperImageSource {
 
     /// Remove image from array and database
     /// - Parameter index: The index of the image to be removed
-    public func removeImage(at index: Int) {
+    public func removeImage(at index: Int) -> WallpaperImage {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(entity.property.name) = %@", images[index].name!)
         fetchRequest.fetchLimit = 1
 
-        if let results = try? WallpaperImageSource.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
-            guard let object = results.first else {
-                return
-            }
-
+        if let results = try? WallpaperImageSource.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject], let object = results.first {
             WallpaperImageSource.managedObjectContext.delete(object)
             try? WallpaperImageSource.managedObjectContext.save()
         }
 
-        images.remove(at: index)
+        return images.remove(at: index)
     }
 
     /// Retrive all history images from database
