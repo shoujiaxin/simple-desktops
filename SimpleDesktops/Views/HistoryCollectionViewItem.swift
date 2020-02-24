@@ -36,6 +36,22 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         view.layer?.borderWidth = 0
     }
 
+    override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+
+        guard let index = collectionView?.indexPath(for: self)?.item else {
+            return
+        }
+
+        let appDelegate = NSApp.delegate as! AppDelegate
+        let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
+        let wallpaperManager = popoverViewController.wallpaperManager
+
+        popoverViewController.transition(to: .preview)
+
+        wallpaperManager.image = wallpaperManager.source?.images[index]
+    }
+
     override func rightMouseUp(with event: NSEvent) {
         super.rightMouseUp(with: event)
 
