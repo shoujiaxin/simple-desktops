@@ -1,0 +1,6 @@
+framework module Pods_Simple_Desktops {
+  umbrella header "Pods-Simple Desktops-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -231,7 +231,8 @@ public class Entities {
                     }
                 }
             } else {
-                if encoder.canEncode(String(codePoint)) { // uses fallback encoder for simplicity
+                if encoder.canEncode(String(codePoint)) // uses fallback encoder for simplicity
+                {
                     accum.append(String(codePoint))
                 } else {
                     appendEncoded(accum: accum, escapeMode: escapeMode, codePoint: codePoint)

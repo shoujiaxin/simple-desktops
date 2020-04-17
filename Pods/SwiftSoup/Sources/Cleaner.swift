@@ -28,7 +28,8 @@ open class Cleaner {
     public func clean(_ dirtyDocument: Document) throws -> Document {
         // Validate.notNull(dirtyDocument)
         let clean: Document = Document.createShell(dirtyDocument.getBaseUri())
-        if dirtyDocument.body() != nil, clean.body() != nil { // frameset documents won't have a body. the clean doc will have empty body.
+        if dirtyDocument.body() != nil, clean.body() != nil // frameset documents won't have a body. the clean doc will have empty body.
+        {
             try copySafeNodes(dirtyDocument.body()!, clean.body()!)
         }
         return clean

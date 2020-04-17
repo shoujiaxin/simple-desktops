@@ -685,7 +685,8 @@ class HtmlTreeBuilder: TreeBuilder {
             { break } // jump to 8, else continue back to 4
         }
         while true {
-            if !skip { // step 7: on later than entry
+            if !skip // step 7: on later than entry
+            {
                 pos += 1
                 entry = formattingElements[pos]
             }

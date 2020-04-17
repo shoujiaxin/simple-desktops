@@ -66,7 +66,8 @@ public class XmlTreeBuilder: TreeBuilder {
         try insertNode(el)
         if startTag.isSelfClosing() {
             tokeniser.acknowledgeSelfClosingFlag()
-            if !tag.isKnownTag() { // unknown tag, remember this is self closing for output. see above.
+            if !tag.isKnownTag() // unknown tag, remember this is self closing for output. see above.
+            {
                 tag.setSelfClosing()
             }
         } else {
