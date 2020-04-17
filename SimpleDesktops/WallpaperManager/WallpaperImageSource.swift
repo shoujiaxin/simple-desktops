@@ -45,11 +45,7 @@ class WallpaperImageSource {
     /// Remove image from array and database
     /// - Parameter index: The index of the image to be removed
     public func removeImage(at index: Int) -> WallpaperImage {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
-        fetchRequest.predicate = NSPredicate(format: "\(entity.property.name) = %@", images[index].name!)
-        fetchRequest.fetchLimit = 1
-
-        if let results = try? WallpaperImageSource.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject], let object = results.first {
+        if let object = retrieveFromDatabase(at: index) {
             WallpaperImageSource.managedObjectContext.delete(object)
             try? WallpaperImageSource.managedObjectContext.save()
         }
@@ -57,9 +53,21 @@ class WallpaperImageSource {
         return images.remove(at: index)
     }
 
-    /// Retrive all history images from database
+    /// Retrieve the object of images[index] from database
+    /// - Parameter index: The index of the image to be retrieved
+    /// - Returns: NSManagedObject of the image
+    public func retrieveFromDatabase(at index: Int) -> NSManagedObject? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
+        fetchRequest.predicate = NSPredicate(format: "\(entity.property.name) = %@", images[index].name!)
+        fetchRequest.fetchLimit = 1
+
+        let results = try? WallpaperImageSource.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject]
+        return results?.first
+    }
+
+    /// Retrieve all history images from database
     /// - Parameter timeAscending: The order of images by timestamp
-    public func retriveFromDatabase(timeAscending: Bool) -> [NSManagedObject] {
+    public func retrieveAllFromDatabase(timeAscending: Bool) -> [NSManagedObject] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: entity.property.timeStamp, ascending: timeAscending)]
 

@@ -62,7 +62,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
         entity.name = "SDImage"
 
         // Load history images to array
-        for object in retriveFromDatabase(timeAscending: false) {
+        for object in retrieveAllFromDatabase(timeAscending: false) {
             if let previewLink = object.value(forKey: entity.property.previewLink) as? String {
                 let image = SDImage()
                 image.previewLink = previewLink
@@ -97,6 +97,11 @@ class SimpleDesktopsSource: WallpaperImageSource {
             if !links.isEmpty {
                 let image = SDImage()
                 image.previewLink = links.randomElement()
+
+                // The image is already loaded, remove it first to avoid duplicates
+                if let index = self.images.firstIndex(where: { $0.name == image.name }) {
+                    _ = self.removeImage(at: index)
+                }
 
                 self.images.insert(image, at: self.images.startIndex)
                 self.addToDatabase(image: image)
