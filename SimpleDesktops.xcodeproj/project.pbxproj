@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		192A03C223DEA9A200CF0517 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192A03C123DEA9A200CF0517 /* Options.swift */; };
 		1985967323E011640062A1A1 /* UpdateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* UpdateButton.swift */; };
 		198C8E1D23E6B39200CB7CEE /* HistoryCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */; };
+		199D129C244986A100FE50F7 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 199D129B244986A100FE50F7 /* SwiftSoup */; };
 		19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */; };
 		19AFE81523E6BE7F0072DAF9 /* HistoryCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AFE81423E6BE7F0072DAF9 /* HistoryCollectionViewItem.swift */; };
 		19C8EC6D23DED15A006EFD9B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C8EC6C23DED15A006EFD9B /* Utils.swift */; };
@@ -25,7 +26,6 @@
 		19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120523E344210094AC66 /* PreferencesViewController.swift */; };
 		19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120723E345DE0094AC66 /* HistoryViewController.swift */; };
 		19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120D23E4086E0094AC66 /* PillButton.swift */; };
-		C36632DE4DF13E5BFD06E4C7 /* Pods_Simple_Desktops.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDFA2A483F45715783FEC5E3 /* Pods_Simple_Desktops.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,11 +50,6 @@
 		19FC120523E344210094AC66 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		19FC120723E345DE0094AC66 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		19FC120D23E4086E0094AC66 /* PillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillButton.swift; sourceTree = "<group>"; };
-		2CFB4EF3F541CF969ABB49C8 /* Pods-SimpleDesktops.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleDesktops.release.xcconfig"; path = "Target Support Files/Pods-SimpleDesktops/Pods-SimpleDesktops.release.xcconfig"; sourceTree = "<group>"; };
-		5E1D821B72C6647084D71290 /* Pods-SimpleDesktops.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleDesktops.debug.xcconfig"; path = "Target Support Files/Pods-SimpleDesktops/Pods-SimpleDesktops.debug.xcconfig"; sourceTree = "<group>"; };
-		AC6044BB01BBD43C7A294C1E /* Pods-Simple Desktops.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Simple Desktops.debug.xcconfig"; path = "Target Support Files/Pods-Simple Desktops/Pods-Simple Desktops.debug.xcconfig"; sourceTree = "<group>"; };
-		AD7A75642E4DAF262FC54D08 /* Pods-Simple Desktops.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Simple Desktops.release.xcconfig"; path = "Target Support Files/Pods-Simple Desktops/Pods-Simple Desktops.release.xcconfig"; sourceTree = "<group>"; };
-		FDFA2A483F45715783FEC5E3 /* Pods_Simple_Desktops.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Simple_Desktops.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C36632DE4DF13E5BFD06E4C7 /* Pods_Simple_Desktops.framework in Frameworks */,
+				199D129C244986A100FE50F7 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,8 +69,6 @@
 			children = (
 				19D262F123C305E6000DCF10 /* SimpleDesktops */,
 				19D262F023C305E6000DCF10 /* Products */,
-				CF7EC8A20CA3983BF3F91A5D /* Pods */,
-				414997077A0E516B4D95A9A8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,25 +131,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		414997077A0E516B4D95A9A8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				FDFA2A483F45715783FEC5E3 /* Pods_Simple_Desktops.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CF7EC8A20CA3983BF3F91A5D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5E1D821B72C6647084D71290 /* Pods-SimpleDesktops.debug.xcconfig */,
-				2CFB4EF3F541CF969ABB49C8 /* Pods-SimpleDesktops.release.xcconfig */,
-				AC6044BB01BBD43C7A294C1E /* Pods-Simple Desktops.debug.xcconfig */,
-				AD7A75642E4DAF262FC54D08 /* Pods-Simple Desktops.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -164,17 +138,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 19D2630223C305E7000DCF10 /* Build configuration list for PBXNativeTarget "Simple Desktops" */;
 			buildPhases = (
-				043FF8EAD0D8F8EEA06C178D /* [CP] Check Pods Manifest.lock */,
 				19D262EB23C305E6000DCF10 /* Sources */,
 				19D262EC23C305E6000DCF10 /* Frameworks */,
 				19D262ED23C305E6000DCF10 /* Resources */,
-				74842B9356CF74522946ED9D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Simple Desktops";
+			packageProductDependencies = (
+				199D129B244986A100FE50F7 /* SwiftSoup */,
+			);
 			productName = SimpleDesktops;
 			productReference = 19D262EF23C305E6000DCF10 /* Simple Desktops.app */;
 			productType = "com.apple.product-type.application";
@@ -203,6 +178,9 @@
 				Base,
 			);
 			mainGroup = 19D262E623C305E6000DCF10;
+			packageReferences = (
+				199D129A244986A100FE50F7 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 19D262F023C305E6000DCF10 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -224,48 +202,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		043FF8EAD0D8F8EEA06C178D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Simple Desktops-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		74842B9356CF74522946ED9D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Simple Desktops/Pods-Simple Desktops-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Simple Desktops/Pods-Simple Desktops-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Simple Desktops/Pods-Simple Desktops-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		19D262EB23C305E6000DCF10 /* Sources */ = {
@@ -419,14 +355,13 @@
 		};
 		19D2630323C305E7000DCF10 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC6044BB01BBD43C7A294C1E /* Pods-Simple Desktops.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SimpleDesktops/Info.plist;
@@ -438,19 +373,19 @@
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		19D2630423C305E7000DCF10 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD7A75642E4DAF262FC54D08 /* Pods-Simple Desktops.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SimpleDesktops/Info.plist;
@@ -462,6 +397,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -487,6 +423,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		199D129A244986A100FE50F7 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		199D129B244986A100FE50F7 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 199D129A244986A100FE50F7 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		19D262F623C305E6000DCF10 /* SimpleDesktops.xcdatamodeld */ = {
