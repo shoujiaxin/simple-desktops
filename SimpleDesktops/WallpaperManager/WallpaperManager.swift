@@ -29,7 +29,19 @@ class WallpaperManager {
         directory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
 
         source = SimpleDesktopsSource()
-        image = source!.images.first
+
+        if source!.images.isEmpty {
+            // Launch for the first time
+            let queue = DispatchQueue(label: "WallpaperManager.init")
+            queue.async {
+                while !(self.source!.random()) {
+                    // Empty
+                }
+                self.image = self.source!.images.first
+            }
+        } else {
+            image = source!.images.first
+        }
     }
 
     // MARK: Public Methods
