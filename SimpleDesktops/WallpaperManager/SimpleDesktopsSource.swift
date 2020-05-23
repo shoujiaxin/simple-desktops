@@ -39,19 +39,19 @@ class SimpleDesktopsSource: WallpaperImageSource {
 
         func download(to path: URL, completionHandler: @escaping (Error?) -> Void) {
             if let link = fullLink {
-                WallpaperImageSource.downloadImage(from: link, to: path, completionHandler: completionHandler)
+                WallpaperImageLoader.downloadImage(from: link, to: path, completionHandler: completionHandler)
             }
         }
 
         func fullImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
             if let link = fullLink {
-                WallpaperImageSource.getImage(from: link, completionHandler: completionHandler)
+                WallpaperImageLoader.fetchImage(from: link, completionHandler: completionHandler)
             }
         }
 
         func previewImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
             if let link = previewLink {
-                WallpaperImageSource.getImage(from: link, completionHandler: completionHandler)
+                WallpaperImageLoader.fetchImage(from: link, completionHandler: completionHandler)
             }
         }
     }
