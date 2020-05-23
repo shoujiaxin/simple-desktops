@@ -10,12 +10,15 @@ import Cocoa
 import os.log
 
 class WallpaperImageLoader {
+    // Singleton pattern
+    public static let shared = WallpaperImageLoader()
+
     /// Download the image from link to path
     /// - Parameters:
     ///   - link: Source link of the image
     ///   - path: Path to save the image
     ///   - completionHandler: Callback of completion
-    public static func downloadImage(from link: String, to path: URL, completionHandler: @escaping (Error?) -> Void) {
+    public func downloadImage(from link: String, to path: URL, completionHandler: @escaping (Error?) -> Void) {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: path.path) {
             DispatchQueue(label: "WallpaperImageSource.downloadImage").async {
@@ -51,7 +54,7 @@ class WallpaperImageLoader {
     /// - Parameters:
     ///   - link: Source link of the image
     ///   - completionHandler: Callback of completion
-    public static func fetchImage(from link: String, completionHandler: @escaping (NSImage?, Error?) -> Void) {
+    public func fetchImage(from link: String, completionHandler: @escaping (NSImage?, Error?) -> Void) {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: URL(string: link)!) { data, _, error in
             if let error = error {
