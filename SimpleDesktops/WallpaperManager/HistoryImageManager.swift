@@ -9,13 +9,16 @@
 import Cocoa
 
 class HistoryImageManager {
-    public static var managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
+    // Singleton pattern
+    public static let shared = HistoryImageManager()
+
+    public let managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
 
     /// Insert image to database
     /// - Parameters:
     ///   - image: Information of the image to be inserted
     ///   - entity: Information of the entity to insert the image into
-    public static func insert(_ image: WallpaperImage, toEntity entity: HistoryImageEntity) {
+    public func insert(_ image: WallpaperImage, toEntity entity: HistoryImageEntity) {
         let object = NSEntityDescription.insertNewObject(forEntityName: entity.name, into: managedObjectContext)
         object.setValue(image.fullLink, forKey: entity.property.fullLink)
         object.setValue(image.name, forKey: entity.property.name)
@@ -30,7 +33,7 @@ class HistoryImageManager {
     ///   - name: Full link of the image to be retrieved
     ///   - entity: Information of the entity to retrieve from
     /// - Returns: Retrieved object
-    public static func retrieve(byFullLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
+    public func retrieve(byFullLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(entity.property.fullLink) = %@", link)
         fetchRequest.fetchLimit = 1
@@ -44,7 +47,7 @@ class HistoryImageManager {
     ///   - name: Name of the image to be retrieved
     ///   - entity: Information of the entity to retrieve from
     /// - Returns: Retrieved object
-    public static func retrieve(byName name: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
+    public func retrieve(byName name: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(entity.property.name) = %@", name)
         fetchRequest.fetchLimit = 1
@@ -58,7 +61,7 @@ class HistoryImageManager {
     ///   - name: Preview link of the image to be retrieved
     ///   - entity: Information of the entity to retrieve from
     /// - Returns: Retrieved object
-    public static func retrieve(byPreviewLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
+    public func retrieve(byPreviewLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.predicate = NSPredicate(format: "\(entity.property.previewLink) = %@", link)
         fetchRequest.fetchLimit = 1
@@ -72,7 +75,7 @@ class HistoryImageManager {
     ///   - entity: Information of the entity to retrieve from
     ///   - timeAscending: The order of images by timestamp
     /// - Returns: Retrieved objects
-    public static func retrieveAll(fromEntity entity: HistoryImageEntity, timeAscending: Bool) -> [NSManagedObject] {
+    public func retrieveAll(fromEntity entity: HistoryImageEntity, timeAscending: Bool) -> [NSManagedObject] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: entity.property.timeStamp, ascending: timeAscending)]
 

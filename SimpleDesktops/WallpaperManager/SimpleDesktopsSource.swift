@@ -62,7 +62,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
 
     init() {
         // Load history images to array
-        for object in HistoryImageManager.retrieveAll(fromEntity: entity, timeAscending: false) {
+        for object in HistoryImageManager.shared.retrieveAll(fromEntity: entity, timeAscending: false) {
             if let previewLink = object.value(forKey: entity.property.previewLink) as? String {
                 let image = SDImage()
                 image.previewLink = previewLink
@@ -74,9 +74,9 @@ class SimpleDesktopsSource: WallpaperImageSource {
     }
 
     func removeImage(at index: Int) -> WallpaperImage {
-        if let imageName = images[index].name, let object = HistoryImageManager.retrieve(byName: imageName, fromEntity: entity) {
-            HistoryImageManager.managedObjectContext.delete(object)
-            try? HistoryImageManager.managedObjectContext.save()
+        if let imageName = images[index].name, let object = HistoryImageManager.shared.retrieve(byName: imageName, fromEntity: entity) {
+            HistoryImageManager.shared.managedObjectContext.delete(object)
+            try? HistoryImageManager.shared.managedObjectContext.save()
         }
 
         return images.remove(at: index)
@@ -113,7 +113,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
                 }
 
                 self.images.insert(image, at: self.images.startIndex)
-                HistoryImageManager.insert(image, toEntity: self.entity)
+                HistoryImageManager.shared.insert(image, toEntity: self.entity)
 
                 success = true
             }
