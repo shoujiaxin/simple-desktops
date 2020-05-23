@@ -56,13 +56,13 @@ class SimpleDesktopsSource: WallpaperImageSource {
         }
     }
 
-    override init() {
-        super.init()
+    var entity: HistoryImageEntity = HistoryImageEntity(name: "SDImage")
 
-        entity.name = "SDImage"
+    var images: [WallpaperImage] = []
 
+    init() {
         // Load history images to array
-        for object in retrieveAllFromDatabase(timeAscending: false) {
+        for object in HistoryImageManager.retrieveAll(fromEntity: entity, timeAscending: false) {
             if let previewLink = object.value(forKey: entity.property.previewLink) as? String {
                 let image = SDImage()
                 image.previewLink = previewLink
@@ -73,7 +73,16 @@ class SimpleDesktopsSource: WallpaperImageSource {
         SimpleDesktopsSource.updateMaxPage()
     }
 
-    override func random() -> Bool {
+    func removeImage(at index: Int) -> WallpaperImage {
+        if let imageName = images[index].name, let object = HistoryImageManager.retrieve(byName: imageName, fromEntity: entity) {
+            HistoryImageManager.managedObjectContext.delete(object)
+            try? HistoryImageManager.managedObjectContext.save()
+        }
+
+        return images.remove(at: index)
+    }
+
+    func updateImage() -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
 
         var links: [String] = []
@@ -104,7 +113,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
                 }
 
                 self.images.insert(image, at: self.images.startIndex)
-                self.addToDatabase(image: image)
+                HistoryImageManager.insert(image, toEntity: self.entity)
 
                 success = true
             }

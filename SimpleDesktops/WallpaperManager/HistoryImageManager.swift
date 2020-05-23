@@ -9,13 +9,13 @@
 import Cocoa
 
 class HistoryImageManager {
-    private static var managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
+    public static var managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
 
     /// Insert image to database
     /// - Parameters:
     ///   - image: Information of the image to be inserted
     ///   - entity: Information of the entity to insert the image into
-    public static func insert(image: WallpaperImage, toEntity entity: HistoryImageEntity) {
+    public static func insert(_ image: WallpaperImage, toEntity entity: HistoryImageEntity) {
         let object = NSEntityDescription.insertNewObject(forEntityName: entity.name, into: managedObjectContext)
         object.setValue(image.fullLink, forKey: entity.property.fullLink)
         object.setValue(image.name, forKey: entity.property.name)

@@ -34,7 +34,7 @@ class WallpaperManager {
             // Launch for the first time
             let queue = DispatchQueue(label: "WallpaperManager.init")
             queue.async {
-                while !(self.source!.random()) {
+                while !(self.source!.updateImage()) {
                     // Empty
                 }
                 self.image = self.source!.images.first
@@ -100,7 +100,7 @@ class WallpaperManager {
     public func update(completionHandler: @escaping (NSImage?, Error?) -> Void) {
         let queue = DispatchQueue(label: "WallpaperManager.update")
         queue.async {
-            while !(self.source!.random()) {
+            while !(self.source!.updateImage()) {
                 // Empty
             }
             self.image = self.source?.images.first
@@ -119,7 +119,7 @@ class WallpaperManager {
 
         let queue = DispatchQueue(label: "WallpaperManager.changeBackground")
         queue.async {
-            while !(self.source!.random()) {
+            while !(self.source!.updateImage()) {
                 // Empty
             }
             self.image = self.source?.images.first

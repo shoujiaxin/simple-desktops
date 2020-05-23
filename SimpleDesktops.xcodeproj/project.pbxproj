@@ -70,12 +70,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		198F0DDA247963C300C37351 /* Protocol */ = {
+		198F0DDA247963C300C37351 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
 				19D9216624003A7C00D16407 /* WallpaperImage.swift */,
+				19D9216824017F9900D16407 /* WallpaperImageSource.swift */,
 			);
-			path = Protocol;
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		19D262E623C305E6000DCF10 = {
@@ -126,9 +127,8 @@
 		19E124E923E2D76E00CE8D42 /* WallpaperManager */ = {
 			isa = PBXGroup;
 			children = (
-				198F0DDA247963C300C37351 /* Protocol */,
+				198F0DDA247963C300C37351 /* Protocols */,
 				198F0DDB247964AA00C37351 /* WallpaperImageLoader.swift */,
-				19D9216824017F9900D16407 /* WallpaperImageSource.swift */,
 				19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */,
 				19E124E723E2C45E00CE8D42 /* WallpaperManager.swift */,
 				198F0DDF24796A8E00C37351 /* HistoryImageEntity.swift */,

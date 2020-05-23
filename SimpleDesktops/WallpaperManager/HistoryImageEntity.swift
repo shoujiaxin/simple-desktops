@@ -18,4 +18,8 @@ class HistoryImageEntity {
 
     var name: String = ""
     var property: EntityProperty = EntityProperty()
+
+    init(name: String) {
+        self.name = name
+    }
 }
