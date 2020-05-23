@@ -7,11 +7,18 @@
 //
 
 import Cocoa
-import os.log
+
+#if DEBUG
+    import os.log
+#endif
 
 class WallpaperImageLoader {
     // Singleton pattern
     public static let shared = WallpaperImageLoader()
+
+    #if DEBUG
+        private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperImageLoader")
+    #endif
 
     /// Download the image from link to path
     /// - Parameters:
@@ -27,8 +34,9 @@ class WallpaperImageLoader {
             return
         }
 
-        let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperImageLoader.downloadImage")
-        os_log("Downloading image: %s", log: osLog, type: .debug, link)
+        #if DEBUG
+            os_log("Downloading image: %s", log: osLog, type: .debug, link)
+        #endif
 
         let session = URLSession(configuration: .default)
         let task = session.downloadTask(with: URL(string: link)!) { url, _, error in
@@ -55,6 +63,10 @@ class WallpaperImageLoader {
     ///   - link: Source link of the image
     ///   - completionHandler: Callback of completion
     public func fetchImage(from link: String, completionHandler: @escaping (NSImage?, Error?) -> Void) {
+        #if DEBUG
+            os_log("Fetching image: %s", log: osLog, type: .debug, link)
+        #endif
+
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: URL(string: link)!) { data, _, error in
             if let error = error {

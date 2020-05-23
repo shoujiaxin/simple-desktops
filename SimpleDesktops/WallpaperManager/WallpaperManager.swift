@@ -24,6 +24,7 @@ class WallpaperManager {
 
     private static var observer: NSObjectProtocol?
     private var timer: Timer?
+    private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
 
     init() {
         directory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
@@ -126,16 +127,14 @@ class WallpaperManager {
 
             self.change { error in
                 if let error = error {
-                    let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "changeBackground")
-                    os_log("Failed to change wallpaper: %{public}@", log: osLog, type: .error, error.localizedDescription)
+                    os_log("Failed to change wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
                 }
             }
 
             // Pre-cache preview image
             self.image?.previewImage(completionHandler: { _, error in
                 if let error = error {
-                    let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "changeBackground")
-                    os_log("Failed to get preview image: %{public}@", log: osLog, type: .error, error.localizedDescription)
+                    os_log("Failed to get preview image: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
                 }
             })
         }
@@ -152,8 +151,9 @@ class WallpaperManager {
             for screen in screens {
                 try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
             }
+
+            os_log("Wallpaper is changed to: %s", log: osLog, type: .info, url.path)
         } catch {
-            let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "setWallpaper")
             os_log("Failed to set wallpaper: %{public}@", log: osLog, type: .error, error.localizedDescription)
 
             throw error
