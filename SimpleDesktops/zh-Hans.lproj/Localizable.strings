@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  SimpleDesktops
+
+  Created by Jiaxin Shou on 2020/5/25.
+  Copyright © 2020 Jiaxin Shou. All rights reserved.
+*/
+
+"Done" = "完成";
+
+"Move to Trash" = "移到废纸篓";
+
+"Reveal in Finder" = "在访达中显示";
+
+"Set as Wallpaper" = "设为壁纸";

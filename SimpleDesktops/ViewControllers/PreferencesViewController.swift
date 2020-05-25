@@ -17,7 +17,7 @@ class PreferencesViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        doneButton.attributedTitle = NSMutableAttributedString(string: "Done", attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
+        doneButton.attributedTitle = NSMutableAttributedString(string: NSLocalizedString("Done", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
 
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
         let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion")

@@ -56,10 +56,10 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         super.rightMouseUp(with: event)
 
         let menu = NSMenu()
-        menu.addItem(withTitle: "Set as wallpaper", action: #selector(setWallpaperMenuItemClicked(sender:)), keyEquivalent: "")
-        menu.addItem(withTitle: "Reveal in Finder", action: #selector(revealInFinderMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Set as Wallpaper", comment: ""), action: #selector(setWallpaperMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Reveal in Finder", comment: ""), action: #selector(revealInFinderMenuItemClicked(sender:)), keyEquivalent: "")
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Move to Trash", action: #selector(moveToTrashMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Move to Trash", comment: ""), action: #selector(moveToTrashMenuItemClicked(sender:)), keyEquivalent: "")
         for item in menu.items {
             item.target = self
         }

@@ -26,6 +26,7 @@
 		19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120523E344210094AC66 /* PreferencesViewController.swift */; };
 		19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120723E345DE0094AC66 /* HistoryViewController.swift */; };
 		19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120D23E4086E0094AC66 /* PillButton.swift */; };
+		6B19B36F247BA1CB004E635B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B19B371247BA1CB004E635B /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,8 @@
 		19FC120523E344210094AC66 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		19FC120723E345DE0094AC66 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		19FC120D23E4086E0094AC66 /* PillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillButton.swift; sourceTree = "<group>"; };
+		6B19B36C247B9EFF004E635B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		6B19B370247BA1CB004E635B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,7 @@
 				19D262F223C305E6000DCF10 /* AppDelegate.swift */,
 				19D262F923C305E7000DCF10 /* Assets.xcassets */,
 				19D262FB23C305E7000DCF10 /* Main.storyboard */,
+				6B19B371247BA1CB004E635B /* Localizable.strings */,
 				19C8EC6C23DED15A006EFD9B /* Utils.swift */,
 				192A03C123DEA9A200CF0517 /* Options.swift */,
 				19FC120C23E407CF0094AC66 /* Views */,
@@ -176,6 +180,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 19D262E623C305E6000DCF10;
 			packageReferences = (
@@ -196,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				19D262FA23C305E7000DCF10 /* Assets.xcassets in Resources */,
+				6B19B36F247BA1CB004E635B /* Localizable.strings in Resources */,
 				19D262FD23C305E7000DCF10 /* Main.storyboard in Resources */,
 				198C8E1D23E6B39200CB7CEE /* HistoryCollectionViewItem.xib in Resources */,
 			);
@@ -233,8 +239,17 @@
 			isa = PBXVariantGroup;
 			children = (
 				19D262FC23C305E7000DCF10 /* Base */,
+				6B19B36C247B9EFF004E635B /* zh-Hans */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6B19B371247BA1CB004E635B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6B19B370247BA1CB004E635B /* zh-Hans */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -244,6 +259,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -304,6 +320,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
