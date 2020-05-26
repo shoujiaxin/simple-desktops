@@ -39,30 +39,30 @@ class SimpleDesktopsSource: WallpaperImageSource {
 
         func download(to path: URL, completionHandler: @escaping (Error?) -> Void) {
             if let link = fullLink {
-                WallpaperImageSource.downloadImage(from: link, to: path, completionHandler: completionHandler)
+                WallpaperImageLoader.shared.downloadImage(from: link, to: path, completionHandler: completionHandler)
             }
         }
 
         func fullImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
             if let link = fullLink {
-                WallpaperImageSource.getImage(from: link, completionHandler: completionHandler)
+                WallpaperImageLoader.shared.fetchImage(from: link, completionHandler: completionHandler)
             }
         }
 
         func previewImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
             if let link = previewLink {
-                WallpaperImageSource.getImage(from: link, completionHandler: completionHandler)
+                WallpaperImageLoader.shared.fetchImage(from: link, completionHandler: completionHandler)
             }
         }
     }
 
-    override init() {
-        super.init()
+    var entity: HistoryImageEntity = HistoryImageEntity(name: "SDImage")
 
-        entity.name = "SDImage"
+    var images: [WallpaperImage] = []
 
+    init() {
         // Load history images to array
-        for object in retrieveAllFromDatabase(timeAscending: false) {
+        for object in HistoryImageManager.shared.retrieveAll(fromEntity: entity, timeAscending: false) {
             if let previewLink = object.value(forKey: entity.property.previewLink) as? String {
                 let image = SDImage()
                 image.previewLink = previewLink
@@ -73,7 +73,16 @@ class SimpleDesktopsSource: WallpaperImageSource {
         SimpleDesktopsSource.updateMaxPage()
     }
 
-    override func random() -> Bool {
+    func removeImage(at index: Int) -> WallpaperImage {
+        if let imageName = images[index].name, let object = HistoryImageManager.shared.retrieve(byName: imageName, fromEntity: entity) {
+            HistoryImageManager.shared.managedObjectContext.delete(object)
+            try? HistoryImageManager.shared.managedObjectContext.save()
+        }
+
+        return images.remove(at: index)
+    }
+
+    func updateImage() -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
 
         var links: [String] = []
@@ -104,7 +113,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
                 }
 
                 self.images.insert(image, at: self.images.startIndex)
-                self.addToDatabase(image: image)
+                HistoryImageManager.shared.insert(image, toEntity: self.entity)
 
                 success = true
             }
