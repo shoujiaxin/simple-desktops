@@ -30,6 +30,7 @@
 		19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120723E345DE0094AC66 /* HistoryViewController.swift */; };
 		19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120D23E4086E0094AC66 /* PillButton.swift */; };
 		6B19B36F247BA1CB004E635B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B19B371247BA1CB004E635B /* Localizable.strings */; };
+		6B19B3B6247D29C9004E635B /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6B19B3B5247D29C9004E635B /* SDWebImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B19B3B6247D29C9004E635B /* SDWebImage in Frameworks */,
 				199D129C244986A100FE50F7 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +172,7 @@
 			name = "Simple Desktops";
 			packageProductDependencies = (
 				199D129B244986A100FE50F7 /* SwiftSoup */,
+				6B19B3B5247D29C9004E635B /* SDWebImage */,
 			);
 			productName = SimpleDesktops;
 			productReference = 19D262EF23C305E6000DCF10 /* Simple Desktops.app */;
@@ -202,6 +205,7 @@
 			mainGroup = 19D262E623C305E6000DCF10;
 			packageReferences = (
 				199D129A244986A100FE50F7 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				6B19B3B4247D29C9004E635B /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = 19D262F023C305E6000DCF10 /* Products */;
 			projectDirPath = "";
@@ -470,6 +474,14 @@
 				minimumVersion = 2.3.1;
 			};
 		};
+		6B19B3B4247D29C9004E635B /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -477,6 +489,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 199D129A244986A100FE50F7 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		6B19B3B5247D29C9004E635B /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B19B3B4247D29C9004E635B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 
