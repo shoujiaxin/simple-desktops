@@ -9,11 +9,11 @@
 import Cocoa
 
 protocol WallpaperImage {
-    var fullLink: String? { get set }
+    var fullUrl: URL? { get set }
 
     var name: String? { get set }
 
-    var previewLink: String? { get set }
+    var previewUrl: URL? { get set }
 
     func download(to: URL, completionHandler: @escaping (Error?) -> Void)
 

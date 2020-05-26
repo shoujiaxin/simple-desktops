@@ -11,47 +11,49 @@ import SwiftSoup
 
 class SimpleDesktopsSource: WallpaperImageSource {
     public class SDImage: WallpaperImage {
-        var fullLink: String? {
+        var fullUrl: URL? {
             get {
-                guard let previewLink = previewLink else {
+                guard let lastComponent = previewUrl?.lastPathComponent,
+                    let re = try? NSRegularExpression(pattern: "^.+\\.[a-z]{2,4}\\.", options: .caseInsensitive),
+                    let range = re.matches(in: lastComponent, options: .anchored, range: NSRange(location: 0, length: lastComponent.count)).first?.range else {
                     return nil
                 }
 
-                let range = previewLink.range(of: ".295x184_q100.png")
-                return String(previewLink[..<(range?.lowerBound)!])
+                let imageName = String(lastComponent[Range(range, in: lastComponent)!].dropLast())
+                return previewUrl?.deletingLastPathComponent().appendingPathComponent(imageName)
             }
             set {}
         }
 
         var name: String? {
             get {
-                guard let fullLink = fullLink else {
+                guard let components = fullUrl?.pathComponents,
+                    let index = components.firstIndex(of: "desktops") else {
                     return nil
                 }
 
-                let range = fullLink.range(of: "desktops/")
-                return String(fullLink[(range?.upperBound...)!]).replacingOccurrences(of: "/", with: "-")
+                return components[(index + 1)...].joined(separator: "-")
             }
             set {}
         }
 
-        var previewLink: String?
+        var previewUrl: URL?
 
         func download(to path: URL, completionHandler: @escaping (Error?) -> Void) {
-            if let link = fullLink {
-                WallpaperImageLoader.shared.downloadImage(from: link, to: path, completionHandler: completionHandler)
+            if let link = fullUrl {
+                WallpaperImageLoader.shared.downloadImage(from: link.absoluteString, to: path, completionHandler: completionHandler)
             }
         }
 
         func fullImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
-            if let link = fullLink {
-                WallpaperImageLoader.shared.fetchImage(from: link, completionHandler: completionHandler)
+            if let link = fullUrl {
+                WallpaperImageLoader.shared.fetchImage(from: link.absoluteString, completionHandler: completionHandler)
             }
         }
 
         func previewImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
-            if let link = previewLink {
-                WallpaperImageLoader.shared.fetchImage(from: link, completionHandler: completionHandler)
+            if let link = previewUrl {
+                WallpaperImageLoader.shared.fetchImage(from: link.absoluteString, completionHandler: completionHandler)
             }
         }
     }
@@ -63,9 +65,9 @@ class SimpleDesktopsSource: WallpaperImageSource {
     init() {
         // Load history images to array
         for object in HistoryImageManager.shared.retrieveAll(fromEntity: entity, timeAscending: false) {
-            if let previewLink = object.value(forKey: entity.property.previewLink) as? String {
+            if let url = object.value(forKey: entity.property.previewUrl) as? URL {
                 let image = SDImage()
-                image.previewLink = previewLink
+                image.previewUrl = url
                 images.append(image)
             }
         }
@@ -103,9 +105,9 @@ class SimpleDesktopsSource: WallpaperImageSource {
                 }
             }
 
-            if !links.isEmpty {
+            if let link = links.randomElement() {
                 let image = SDImage()
-                image.previewLink = links.randomElement()
+                image.previewUrl = URL(string: link)
 
                 // The image is already loaded, remove it first to avoid duplicates
                 if let index = self.images.firstIndex(where: { $0.name == image.name }) {

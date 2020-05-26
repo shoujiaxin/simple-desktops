@@ -10,9 +10,9 @@ import Foundation
 
 class HistoryImageEntity {
     class EntityProperty {
-        var fullLink: String = "fullLink"
+        var fullUrl: String = "fullUrl"
         var name: String = "name"
-        var previewLink: String = "previewLink"
+        var previewUrl: String = "previewUrl"
         var timeStamp: String = "timeStamp"
     }
 

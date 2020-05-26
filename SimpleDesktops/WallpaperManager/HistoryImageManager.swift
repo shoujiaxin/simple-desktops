@@ -20,9 +20,9 @@ class HistoryImageManager {
     ///   - entity: Information of the entity to insert the image into
     public func insert(_ image: WallpaperImage, toEntity entity: HistoryImageEntity) {
         let object = NSEntityDescription.insertNewObject(forEntityName: entity.name, into: managedObjectContext)
-        object.setValue(image.fullLink, forKey: entity.property.fullLink)
+        object.setValue(image.fullUrl, forKey: entity.property.fullUrl)
         object.setValue(image.name, forKey: entity.property.name)
-        object.setValue(image.previewLink, forKey: entity.property.previewLink)
+        object.setValue(image.previewUrl, forKey: entity.property.previewUrl)
         object.setValue(Date(), forKey: entity.property.timeStamp)
 
         try? managedObjectContext.save()
@@ -35,7 +35,7 @@ class HistoryImageManager {
     /// - Returns: Retrieved object
     public func retrieve(byFullLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
-        fetchRequest.predicate = NSPredicate(format: "\(entity.property.fullLink) = %@", link)
+        fetchRequest.predicate = NSPredicate(format: "\(entity.property.fullUrl) = %@", link)
         fetchRequest.fetchLimit = 1
 
         let results = try? managedObjectContext.fetch(fetchRequest) as? [NSManagedObject]
@@ -63,7 +63,7 @@ class HistoryImageManager {
     /// - Returns: Retrieved object
     public func retrieve(byPreviewLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
-        fetchRequest.predicate = NSPredicate(format: "\(entity.property.previewLink) = %@", link)
+        fetchRequest.predicate = NSPredicate(format: "\(entity.property.previewUrl) = %@", link)
         fetchRequest.fetchLimit = 1
 
         let results = try? managedObjectContext.fetch(fetchRequest) as? [NSManagedObject]
