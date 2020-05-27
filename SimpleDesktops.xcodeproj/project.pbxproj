@@ -10,7 +10,6 @@
 		192A03C223DEA9A200CF0517 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192A03C123DEA9A200CF0517 /* Options.swift */; };
 		1985967323E011640062A1A1 /* UpdateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1985967223E011640062A1A1 /* UpdateButton.swift */; };
 		198C8E1D23E6B39200CB7CEE /* HistoryCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */; };
-		198F0DDC247964AA00C37351 /* WallpaperImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198F0DDB247964AA00C37351 /* WallpaperImageLoader.swift */; };
 		198F0DE024796A8E00C37351 /* HistoryImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198F0DDF24796A8E00C37351 /* HistoryImageEntity.swift */; };
 		198F0DE224796B2B00C37351 /* HistoryImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198F0DE124796B2B00C37351 /* HistoryImageManager.swift */; };
 		199D129C244986A100FE50F7 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 199D129B244986A100FE50F7 /* SwiftSoup */; };
@@ -37,7 +36,6 @@
 		192A03C123DEA9A200CF0517 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1985967223E011640062A1A1 /* UpdateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateButton.swift; sourceTree = "<group>"; };
 		198C8E1B23E6B39200CB7CEE /* HistoryCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryCollectionViewItem.xib; sourceTree = "<group>"; };
-		198F0DDB247964AA00C37351 /* WallpaperImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperImageLoader.swift; sourceTree = "<group>"; };
 		198F0DDF24796A8E00C37351 /* HistoryImageEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryImageEntity.swift; sourceTree = "<group>"; };
 		198F0DE124796B2B00C37351 /* HistoryImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryImageManager.swift; sourceTree = "<group>"; };
 		19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsSource.swift; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				198F0DDA247963C300C37351 /* Protocols */,
-				198F0DDB247964AA00C37351 /* WallpaperImageLoader.swift */,
 				19AE50F723E2BDD400F27A9C /* SimpleDesktopsSource.swift */,
 				19E124E723E2C45E00CE8D42 /* WallpaperManager.swift */,
 				198F0DDF24796A8E00C37351 /* HistoryImageEntity.swift */,
@@ -244,7 +241,6 @@
 				19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */,
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				198F0DE224796B2B00C37351 /* HistoryImageManager.swift in Sources */,
-				198F0DDC247964AA00C37351 /* WallpaperImageLoader.swift in Sources */,
 				19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */,
 				19E124E823E2C45E00CE8D42 /* WallpaperManager.swift in Sources */,
 				19AE50F823E2BDD400F27A9C /* SimpleDesktopsSource.swift in Sources */,

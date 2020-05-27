@@ -38,24 +38,6 @@ class SimpleDesktopsSource: WallpaperImageSource {
         }
 
         var previewUrl: URL?
-
-        func download(to path: URL, completionHandler: @escaping (Error?) -> Void) {
-            if let link = fullUrl {
-                WallpaperImageLoader.shared.downloadImage(from: link.absoluteString, to: path, completionHandler: completionHandler)
-            }
-        }
-
-        func fullImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
-            if let link = fullUrl {
-                WallpaperImageLoader.shared.fetchImage(from: link.absoluteString, completionHandler: completionHandler)
-            }
-        }
-
-        func previewImage(completionHandler: @escaping (NSImage?, Error?) -> Void) {
-            if let link = previewUrl {
-                WallpaperImageLoader.shared.fetchImage(from: link.absoluteString, completionHandler: completionHandler)
-            }
-        }
     }
 
     var entity: HistoryImageEntity = HistoryImageEntity(name: "SDImage")

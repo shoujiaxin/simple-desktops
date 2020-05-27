@@ -49,7 +49,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         popoverViewController.transition(to: .preview)
 
-        wallpaperManager.image = wallpaperManager.source?.images[index]
+        wallpaperManager.image = wallpaperManager.source.images[index]
     }
 
     override func rightMouseUp(with event: NSEvent) {
@@ -81,15 +81,13 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         popoverViewController.transition(to: .preview)
 
         previewViewController.isUpdating = true
-        wallpaperManager.image = wallpaperManager.source?.images[index]
+        wallpaperManager.image = wallpaperManager.source.images[index]
         wallpaperManager.change { error in
-            DispatchQueue.main.sync {
-                previewViewController.isUpdating = false
+            previewViewController.isUpdating = false
 
-                if let error = error {
-                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    return
-                }
+            if let error = error {
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
             }
         }
     }
@@ -103,7 +101,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
 
-        let url = URL(fileURLWithPath: (wallpaperManager.source?.images[index].name)!, relativeTo: wallpaperManager.directory)
+        let url = URL(fileURLWithPath: (wallpaperManager.source.images[index].name)!, relativeTo: wallpaperManager.wallpaperDirectory)
         NSWorkspace.shared.activateFileViewerSelecting([url.absoluteURL])
     }
 
@@ -116,8 +114,8 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
 
-        if wallpaperManager.image?.name == wallpaperManager.source?.removeImage(at: indexPath.item).name {
-            wallpaperManager.image = wallpaperManager.source?.images.first
+        if wallpaperManager.image?.name == wallpaperManager.source.removeImage(at: indexPath.item).name {
+            wallpaperManager.image = wallpaperManager.source.images.first
         }
         collectionView?.deleteItems(at: [indexPath])
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -765,13 +765,6 @@
                                     <action selector="updateButtonClicked:" target="Miv-G2-hpW" id="u3h-Oj-YiE"/>
                                 </connections>
                             </button>
-                            <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="2j1-4o-ab5">
-                                <rect key="frame" x="184" y="169" width="32" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="32" id="LlG-3i-m3i"/>
-                                    <constraint firstAttribute="height" constant="32" id="xaM-UV-sa1"/>
-                                </constraints>
-                            </progressIndicator>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="dG0-4U-o0X" customClass="PillButton" customModule="Simple_Desktops" customModuleProvider="target">
                                 <rect key="frame" x="80" y="10" width="240" height="40"/>
                                 <constraints>
@@ -808,7 +801,6 @@
                             <constraint firstItem="ey8-ub-JbC" firstAttribute="leading" secondItem="dG0-4U-o0X" secondAttribute="trailing" constant="24" id="CLM-fD-lO1"/>
                             <constraint firstItem="dG0-4U-o0X" firstAttribute="top" secondItem="78w-KF-qoe" secondAttribute="bottom" constant="10" id="GjG-s8-SkL"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="leading" secondItem="WeH-DP-Lqg" secondAttribute="leading" id="H3d-Wg-gIb"/>
-                            <constraint firstItem="2j1-4o-ab5" firstAttribute="centerX" secondItem="Q35-5Y-5Wa" secondAttribute="centerX" id="IiY-1b-qPJ"/>
                             <constraint firstItem="WIb-lR-xHN" firstAttribute="top" secondItem="WeH-DP-Lqg" secondAttribute="top" constant="10" id="JGw-TO-tdL"/>
                             <constraint firstItem="78w-KF-qoe" firstAttribute="top" secondItem="WIb-lR-xHN" secondAttribute="bottom" constant="10" id="SeR-4r-csX"/>
                             <constraint firstAttribute="bottom" secondItem="dG0-4U-o0X" secondAttribute="bottom" constant="10" id="U7i-Wt-g6I"/>
@@ -816,14 +808,12 @@
                             <constraint firstItem="dG0-4U-o0X" firstAttribute="centerY" secondItem="ey8-ub-JbC" secondAttribute="centerY" id="akC-i1-VuJ"/>
                             <constraint firstAttribute="trailing" secondItem="78w-KF-qoe" secondAttribute="trailing" id="bmw-cP-kbY"/>
                             <constraint firstItem="Q35-5Y-5Wa" firstAttribute="centerX" secondItem="78w-KF-qoe" secondAttribute="centerX" id="d9B-lF-Hzm"/>
-                            <constraint firstItem="2j1-4o-ab5" firstAttribute="centerY" secondItem="Q35-5Y-5Wa" secondAttribute="centerY" id="oMX-TZ-Xps"/>
                             <constraint firstItem="dG0-4U-o0X" firstAttribute="centerX" secondItem="WeH-DP-Lqg" secondAttribute="centerX" id="tOf-3z-3ba"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="downloadButton" destination="ey8-ub-JbC" id="Pay-Rb-0c4"/>
                         <outlet property="imageView" destination="78w-KF-qoe" id="aK4-ky-L2r"/>
-                        <outlet property="progressIndicator" destination="2j1-4o-ab5" id="8lY-SP-m0F"/>
                         <outlet property="setWallpaperButton" destination="dG0-4U-o0X" id="TQN-9i-893"/>
                         <outlet property="updateButton" destination="Q35-5Y-5Wa" id="dTU-kk-Y8L"/>
                     </connections>
@@ -957,7 +947,7 @@
                                     <constraint firstAttribute="height" constant="15" id="vBI-3a-MQW"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="goP-Kb-qBI">
-                                    <font key="font" metaFont="system" size="12"/>
+                                    <font key="font" metaFont="label" size="12"/>
                                     <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>

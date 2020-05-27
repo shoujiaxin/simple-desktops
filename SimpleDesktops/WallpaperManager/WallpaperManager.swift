@@ -8,6 +8,7 @@
 
 import Cocoa
 import os.log
+import SDWebImage
 
 class WallpaperManager {
     public enum WallpaperError: Error {
@@ -18,30 +19,24 @@ class WallpaperManager {
         case unknownImageFormat
     }
 
-    public var directory: URL
     public var image: WallpaperImage?
-    public let source: WallpaperImageSource?
+    public let source: WallpaperImageSource!
+    public let wallpaperDirectory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
 
     private static var observer: NSObjectProtocol?
     private var timer: Timer?
     private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
 
     init() {
-        directory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
-
         source = SimpleDesktopsSource()
 
-        if source!.images.isEmpty {
+        if source.images.isEmpty {
             // Launch for the first time
-            let queue = DispatchQueue(label: "WallpaperManager.init")
-            queue.async {
-                while !(self.source!.updateImage()) {
-                    // Empty
-                }
-                self.image = self.source!.images.first
+            update { image, _ in
+                self.image = image
             }
         } else {
-            image = source!.images.first
+            image = source.images.first
         }
     }
 
@@ -49,47 +44,49 @@ class WallpaperManager {
 
     public func change(completionHandler: @escaping (Error?) -> Void) {
         guard let imageName = image?.name else {
+            completionHandler(WallpaperError.noImage)
             return
         }
 
         let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: directory.path) {
+        if !fileManager.fileExists(atPath: wallpaperDirectory.path) {
             // Create the folder if it not exists
             do {
-                try fileManager.createDirectory(atPath: directory.path, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(at: wallpaperDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                DispatchQueue(label: "WallpaperManager.change").async {
-                    completionHandler(error)
-                }
+                completionHandler(error)
                 return
             }
         }
 
-        let url = URL(fileURLWithPath: imageName, relativeTo: directory)
-        image?.download(to: url) { error in
+        SDWebImageDownloader.shared.downloadImage(with: image?.fullUrl, options: .highPriority, progress: nil) { _, data, error, finished in
             if let error = error {
                 completionHandler(error)
                 return
             }
 
-            // Change wallpaper for current workspaces
-            do {
-                try self.setWallpaper(with: url)
-            } catch {
-                completionHandler(error)
-                return
-            }
+            if finished {
+                let url = self.wallpaperDirectory.appendingPathComponent(imageName)
 
-            // Change wallpaper for other workspaces when changed to
-            if let observer = WallpaperManager.observer {
-                NSWorkspace.shared.notificationCenter.removeObserver(observer, name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
-            }
-            WallpaperManager.observer = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
-                // Assume the image will NOT be removed manually
-                try? self.setWallpaper(with: url)
-            }
+                // Save wallpaper
+                do {
+                    try data?.write(to: url)
+                } catch {
+                    completionHandler(error)
+                    return
+                }
 
-            completionHandler(nil)
+                // Change wallpaper for other workspaces when changed to
+                if let observer = WallpaperManager.observer {
+                    NSWorkspace.shared.notificationCenter.removeObserver(observer, name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
+                }
+                WallpaperManager.observer = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
+                    // Assume the image will NOT be removed manually
+                    try? self.setWallpaper(with: url)
+                }
+
+                completionHandler(nil)
+            }
         }
     }
 
@@ -98,15 +95,21 @@ class WallpaperManager {
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeBackground(sender:)), userInfo: nil, repeats: true)
     }
 
-    public func update(completionHandler: @escaping (NSImage?, Error?) -> Void) {
+    public func update(completionHandler: @escaping (WallpaperImage?, Error?) -> Void) {
         let queue = DispatchQueue(label: "WallpaperManager.update")
         queue.async {
-            while !(self.source!.updateImage()) {
-                // Empty
+            var retryCnt = 5
+            while !self.source.updateImage(), retryCnt > 0 {
+                retryCnt -= 1
             }
-            self.image = self.source?.images.first
 
-            self.image?.previewImage(completionHandler: completionHandler)
+            DispatchQueue.main.sync {
+                if retryCnt > 0 {
+                    completionHandler(self.source.images.first, nil)
+                } else {
+                    completionHandler(nil, WallpaperError.failedToLoadImage)
+                }
+            }
         }
     }
 
@@ -118,25 +121,13 @@ class WallpaperManager {
             return
         }
 
-        let queue = DispatchQueue(label: "WallpaperManager.changeBackground")
-        queue.async {
-            while !(self.source!.updateImage()) {
-                // Empty
-            }
-            self.image = self.source?.images.first
-
+        update { image, _ in
+            self.image = image
             self.change { error in
                 if let error = error {
                     os_log("Failed to change wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
                 }
             }
-
-            // Pre-cache preview image
-            self.image?.previewImage(completionHandler: { _, error in
-                if let error = error {
-                    os_log("Failed to get preview image: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
-                }
-            })
         }
     }
 

@@ -7,11 +7,11 @@
 //
 
 import Cocoa
+import SDWebImage
 
 class PreviewViewController: NSViewController {
     @IBOutlet var downloadButton: NSButton!
     @IBOutlet var imageView: NSImageView!
-    @IBOutlet var progressIndicator: NSProgressIndicator!
     @IBOutlet var setWallpaperButton: PillButton!
     @IBOutlet var updateButton: UpdateButton!
 
@@ -19,14 +19,12 @@ class PreviewViewController: NSViewController {
         willSet {
             if newValue {
                 updateButton.isHidden = true
-                progressIndicator.isHidden = false
-                progressIndicator.startAnimation(nil)
+                imageView.sd_imageIndicator?.startAnimatingIndicator()
                 setWallpaperButton.isEnabled = false
                 downloadButton.isEnabled = false
             } else {
                 updateButton.isHidden = false
-                progressIndicator.isHidden = true
-                progressIndicator.stopAnimation(nil)
+                imageView.sd_imageIndicator?.stopAnimatingIndicator()
                 setWallpaperButton.isEnabled = true
                 downloadButton.isEnabled = true
             }
@@ -38,13 +36,10 @@ class PreviewViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        wallpaperManager = (parent as! PopoverViewController).wallpaperManager
-
-        progressIndicator.appearance = Utils.currentAppearance()
-        progressIndicator.isHidden = true
-
+        imageView.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         setWallpaperButton.attributedTitle = NSMutableAttributedString(string: NSLocalizedString("Set as Wallpaper", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: NSColor.textColor])
 
+        wallpaperManager = (parent as! PopoverViewController).wallpaperManager
         if Options.shared.changePicture {
             wallpaperManager.change(every: Options.shared.changeInterval.seconds)
         }
@@ -58,16 +53,12 @@ class PreviewViewController: NSViewController {
         }
 
         isUpdating = true
-        wallpaperManager.image?.previewImage { image, error in
-            DispatchQueue.main.sync {
-                self.isUpdating = false
+        imageView.sd_setImage(with: wallpaperManager.image?.previewUrl, placeholderImage: nil, options: .highPriority) { _, error, _, _ in
+            self.isUpdating = false
 
-                if let error = error {
-                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    return
-                }
-
-                self.imageView.image = image
+            if let error = error {
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
             }
         }
     }
@@ -78,18 +69,17 @@ class PreviewViewController: NSViewController {
         }
 
         let directory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
-        let url = URL(fileURLWithPath: imageName, relativeTo: directory)
 
         isUpdating = true
-        wallpaperManager.image?.download(to: url) { error in
-            DispatchQueue.main.sync {
-                self.isUpdating = false
+        SDWebImageDownloader.shared.downloadImage(with: wallpaperManager.image?.fullUrl, options: .highPriority, progress: nil) { _, data, error, _ in
+            self.isUpdating = false
 
-                if let error = error {
-                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    return
-                }
+            if let error = error {
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
             }
+
+            try? data?.write(to: directory.appendingPathComponent(imageName))
         }
     }
 
@@ -106,13 +96,11 @@ class PreviewViewController: NSViewController {
     @IBAction func setWallpaperButtonClicked(_: Any) {
         isUpdating = true
         wallpaperManager.change { error in
-            DispatchQueue.main.sync {
-                self.isUpdating = false
+            self.isUpdating = false
 
-                if let error = error {
-                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    return
-                }
+            if let error = error {
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
             }
         }
     }
@@ -120,15 +108,20 @@ class PreviewViewController: NSViewController {
     @IBAction func updateButtonClicked(_: Any) {
         isUpdating = true
         wallpaperManager.update { image, error in
-            DispatchQueue.main.sync {
+            if let error = error {
+                self.isUpdating = false
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
+            }
+
+            self.wallpaperManager.image = image
+            self.imageView.sd_setImage(with: image?.previewUrl, placeholderImage: self.imageView.image, options: .highPriority) { _, error, _, _ in
                 self.isUpdating = false
 
                 if let error = error {
                     Utils.showCriticalAlert(withInformation: error.localizedDescription)
                     return
                 }
-
-                self.imageView.image = image
             }
         }
     }
