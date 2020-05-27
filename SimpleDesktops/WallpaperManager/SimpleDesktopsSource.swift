@@ -14,7 +14,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
         var fullUrl: URL? {
             get {
                 guard let lastComponent = previewUrl?.lastPathComponent,
-                    let re = try? NSRegularExpression(pattern: "^.+\\.[a-z]{2,4}\\.", options: .caseInsensitive),
+                    let re = try? NSRegularExpression(pattern: #"^.+\.[a-z]{2,4}\."#, options: .caseInsensitive),
                     let range = re.matches(in: lastComponent, options: .anchored, range: NSRange(location: 0, length: lastComponent.count)).first?.range else {
                     return nil
                 }
@@ -119,23 +119,6 @@ class SimpleDesktopsSource: WallpaperImageSource {
 
                 success = true
             }
-
-//            while !links.isEmpty {
-//                let index = Int.random(in: links.startIndex ..< links.endIndex)
-//                let image = SDImage()
-//                image.previewLink = links[index]
-//
-//                // Check if duplicate
-//                if self.images.contains(where: { $0.name == image.name }) {
-//                    links.remove(at: index)
-//                } else {
-//                    self.images.insert(image, at: self.images.startIndex)
-//                    self.addToDatabase(image: image)
-//
-//                    success = true
-//                    break
-//                }
-//            }
 
             semaphore.signal()
         }
