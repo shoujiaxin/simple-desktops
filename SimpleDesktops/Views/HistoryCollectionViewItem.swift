@@ -114,9 +114,20 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
 
-        if wallpaperManager.image?.name == wallpaperManager.source.removeImage(at: indexPath.item).name {
-            wallpaperManager.image = wallpaperManager.source.images.first
-        }
         collectionView?.deleteItems(at: [indexPath])
+
+        if let removedImageName = wallpaperManager.source.removeImage(at: indexPath.item).name {
+            // Trash the latest image
+            if wallpaperManager.image?.name == removedImageName {
+                wallpaperManager.image = wallpaperManager.source.images.first
+            }
+
+            // Trash the image file
+            let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(removedImageName)
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: url.path) {
+                try? fileManager.trashItem(at: url, resultingItemURL: nil)
+            }
+        }
     }
 }
