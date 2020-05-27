@@ -68,9 +68,10 @@ class WallpaperManager {
             if finished {
                 let url = self.wallpaperDirectory.appendingPathComponent(imageName)
 
-                // Save wallpaper
+                // Save & change wallpaper
                 do {
                     try data?.write(to: url)
+                    try self.setWallpaper(with: url)
                 } catch {
                     completionHandler(error)
                     return
