@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SDWebImage
 
 class HistoryCollectionViewItem: NSCollectionViewItem {
     override func viewDidLoad() {
@@ -46,6 +47,14 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
+
+        // Cancel loading or downloading
+        if popoverViewController.previewViewController.isUpdating {
+            SDWebImageManager.shared.cancelAll()
+            SDWebImageDownloader.shared.cancelAllDownloads()
+
+            popoverViewController.previewViewController.isUpdating = false
+        }
 
         popoverViewController.transition(to: .preview)
 
