@@ -60,7 +60,11 @@ class PreviewViewController: NSViewController {
         }
 
         isLoading = true
-        imageView.sd_setImage(with: wallpaperManager.image?.previewUrl, placeholderImage: nil, options: .highPriority) { _, error, _, _ in
+        imageView.sd_setImage(with: wallpaperManager.image?.previewUrl, placeholderImage: nil, options: .highPriority, progress: { receivedSize, expectedSize, _ in
+            DispatchQueue.main.sync {
+                self.progressIndicator.increment(by: Double(receivedSize) / Double(expectedSize) * self.progressIndicator.maxValue - self.progressIndicator.doubleValue)
+            }
+        }) { _, error, _, _ in
             self.isLoading = false
 
             if let error = error {
