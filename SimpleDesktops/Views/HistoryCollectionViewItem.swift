@@ -49,11 +49,11 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let wallpaperManager = popoverViewController.wallpaperManager
 
         // Cancel loading or downloading
-        if popoverViewController.previewViewController.isUpdating {
+        if popoverViewController.previewViewController.isLoading {
             SDWebImageManager.shared.cancelAll()
             SDWebImageDownloader.shared.cancelAllDownloads()
 
-            popoverViewController.previewViewController.isUpdating = false
+            popoverViewController.previewViewController.isLoading = false
         }
 
         popoverViewController.transition(to: .preview)
@@ -89,10 +89,12 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         // Return to preview view
         popoverViewController.transition(to: .preview)
 
-        previewViewController.isUpdating = true
+        previewViewController.progressIndicator.isIndeterminate = true
+        previewViewController.isLoading = true
         wallpaperManager.image = wallpaperManager.source.images[index]
         wallpaperManager.change { error in
-            previewViewController.isUpdating = false
+            previewViewController.progressIndicator.isIndeterminate = false
+            previewViewController.isLoading = false
 
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
