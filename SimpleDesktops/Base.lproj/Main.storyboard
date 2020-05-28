@@ -928,6 +928,9 @@
                                             <menuItem title="Every 15 minutes" id="V4D-TG-szF">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
+                                            <menuItem title="Every 30 minutes" id="GjT-BJ-DXo">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
                                             <menuItem title="Every hour" id="5hb-vw-B0L">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>

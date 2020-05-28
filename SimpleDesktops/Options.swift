@@ -15,6 +15,7 @@ class Options {
         case everyMinute
         case everyFiveMinutes
         case everyFifteenMinutes
+        case everyThirtyMinutes
         case everyHour
         case everyDay
 
@@ -23,6 +24,7 @@ class Options {
             case .everyMinute: return 60
             case .everyFiveMinutes: return 300
             case .everyFifteenMinutes: return 900
+            case .everyThirtyMinutes: return 1800
             case .everyHour: return 3600
             case .everyDay: return 86400
             }
@@ -33,8 +35,9 @@ class Options {
             case 0: return everyMinute
             case 1: return everyFiveMinutes
             case 2: return everyFifteenMinutes
-            case 3: return everyHour
-            case 4: return everyDay
+            case 3: return everyThirtyMinutes
+            case 4: return everyHour
+            case 5: return everyDay
             default: return everyHour
             }
         }

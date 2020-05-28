@@ -427,3 +427,6 @@
 
 /* Class = "NSButtonCell"; title = "Change picture:"; ObjectID = "zUJ-H7-HUD"; */
 "zUJ-H7-HUD.title" = "更改图片：";
+
+/* Class = "NSMenuItem"; title = "Every 30 minutes"; ObjectID = "GjT-BJ-DXo"; */
+"GjT-BJ-DXo.title" = "每30分钟";
