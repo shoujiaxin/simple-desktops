@@ -62,6 +62,7 @@ class WallpaperManager {
         SDWebImageDownloader.shared.downloadImage(with: image?.fullUrl, options: .highPriority, progress: nil) { _, data, error, finished in
             if let error = error {
                 completionHandler(error)
+                os_log("Failed to download image: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
                 return
             }
 
@@ -72,8 +73,11 @@ class WallpaperManager {
                 do {
                     try data?.write(to: url)
                     try self.setWallpaper(with: url)
+
+                    os_log("Wallpaper is changed to: %{public}@", log: self.osLog, type: .info, url.path)
                 } catch {
                     completionHandler(error)
+                    os_log("Failed to set wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
                     return
                 }
 
@@ -143,11 +147,7 @@ class WallpaperManager {
             for screen in screens {
                 try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
             }
-
-            os_log("Wallpaper is changed to: %s", log: osLog, type: .info, url.path)
         } catch {
-            os_log("Failed to set wallpaper: %{public}@", log: osLog, type: .error, error.localizedDescription)
-
             throw error
         }
     }
