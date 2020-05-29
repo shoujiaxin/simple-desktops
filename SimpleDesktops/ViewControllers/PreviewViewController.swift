@@ -123,8 +123,10 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func updateButtonClicked(_: Any) {
+        progressIndicator.isIndeterminate = true
         isLoading = true
         wallpaperManager.update { image, error in
+            self.progressIndicator.isIndeterminate = false
             if let error = error {
                 self.isLoading = false
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
