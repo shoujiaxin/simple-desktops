@@ -65,12 +65,29 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         super.rightMouseUp(with: event)
 
         let menu = NSMenu()
+        menu.autoenablesItems = false
         menu.addItem(withTitle: NSLocalizedString("Set as Wallpaper", comment: ""), action: #selector(setWallpaperMenuItemClicked(sender:)), keyEquivalent: "")
-        menu.addItem(withTitle: NSLocalizedString("Reveal in Finder", comment: ""), action: #selector(revealInFinderMenuItemClicked(sender:)), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Show in Finder", comment: ""), action: #selector(showInFinderMenuItemClicked(sender:)), keyEquivalent: "")
         menu.addItem(.separator())
-        menu.addItem(withTitle: NSLocalizedString("Move to Trash", comment: ""), action: #selector(moveToTrashMenuItemClicked(sender:)), keyEquivalent: "")
+        let deleteMenuItem = menu.addItem(withTitle: NSLocalizedString("Delete", comment: ""), action: #selector(deleteMenuItemClicked(sender:)), keyEquivalent: "")
         for item in menu.items {
             item.target = self
+        }
+
+        // Add key equivalent
+        deleteMenuItem.keyEquivalentModifierMask = .command
+        deleteMenuItem.keyEquivalent = "d"
+
+        // Disable "Reveal in Finder" if the image has NOT been downloaded
+        let appDelegate = NSApp.delegate as! AppDelegate
+        let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
+        let wallpaperManager = popoverViewController.wallpaperManager
+        guard let index = collectionView?.indexPath(for: self)?.item, let imageName = wallpaperManager.source.images[index].name else {
+            return
+        }
+        let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(imageName)
+        if !FileManager.default.fileExists(atPath: url.path) {
+            menu.item(at: 1)?.isEnabled = false
         }
 
         menu.popUp(positioning: menu.items[0], at: NSEvent.mouseLocation, in: nil)
@@ -103,7 +120,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         }
     }
 
-    @objc func revealInFinderMenuItemClicked(sender _: Any) {
+    @objc func showInFinderMenuItemClicked(sender _: Any) {
         guard let index = collectionView?.indexPath(for: self)?.item else {
             return
         }
@@ -116,7 +133,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         NSWorkspace.shared.activateFileViewerSelecting([url.absoluteURL])
     }
 
-    @objc func moveToTrashMenuItemClicked(sender _: Any) {
+    @objc func deleteMenuItemClicked(sender _: Any) {
         guard let indexPath = collectionView?.indexPath(for: self) else {
             return
         }
@@ -124,8 +141,6 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
-
-        collectionView?.deleteItems(at: [indexPath])
 
         if let removedImageName = wallpaperManager.source.removeImage(at: indexPath.item).name {
             // Trash the latest image
@@ -140,5 +155,8 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
                 try? fileManager.trashItem(at: url, resultingItemURL: nil)
             }
         }
+
+        // MUST update the data source first
+        collectionView?.deleteItems(at: [indexPath])
     }
 }

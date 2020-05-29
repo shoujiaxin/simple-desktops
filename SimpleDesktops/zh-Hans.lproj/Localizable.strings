@@ -6,10 +6,10 @@
   Copyright © 2020 Jiaxin Shou. All rights reserved.
 */
 
+"Delete" = "删除";
+
 "Done" = "完成";
 
-"Move to Trash" = "移到废纸篓";
-
-"Reveal in Finder" = "在访达中显示";
+"Show in Finder" = "在访达中显示";
 
 "Set as Wallpaper" = "设为壁纸";
