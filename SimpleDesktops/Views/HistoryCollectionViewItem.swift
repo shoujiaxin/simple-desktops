@@ -102,13 +102,15 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let previewViewController = popoverViewController.previewViewController
         let wallpaperManager = popoverViewController.wallpaperManager
+        wallpaperManager.image = wallpaperManager.source.images[index]
 
         // Return to preview view
+        previewViewController.imageView.sd_setImage(with: wallpaperManager.image?.previewUrl, completed: nil)
         popoverViewController.transition(to: .preview)
 
         previewViewController.progressIndicator.isIndeterminate = true
         previewViewController.isLoading = true
-        wallpaperManager.image = wallpaperManager.source.images[index]
+
         wallpaperManager.change { error in
             previewViewController.progressIndicator.isIndeterminate = false
             previewViewController.isLoading = false
