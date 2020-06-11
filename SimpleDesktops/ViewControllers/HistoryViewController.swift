@@ -12,7 +12,7 @@ import SDWebImage
 class HistoryViewController: NSViewController {
     @IBOutlet var collectionView: NSCollectionView!
 
-    private var wallpaperManager: WallpaperManager!
+    private weak var wallpaperManager: WallpaperManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()

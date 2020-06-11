@@ -40,9 +40,9 @@ class SimpleDesktopsSource: WallpaperImageSource {
         var previewUrl: URL?
     }
 
-    var entity: HistoryImageEntity = HistoryImageEntity(name: "SDImage")
+    public let entity: HistoryImageEntity = HistoryImageEntity(name: "SDImage")
 
-    var images: [WallpaperImage] = []
+    public var images: [WallpaperImage] = []
 
     init() {
         // Load history images to array
@@ -57,7 +57,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
         SimpleDesktopsSource.updateMaxPage()
     }
 
-    func removeImage(at index: Int) -> WallpaperImage {
+    public func removeImage(at index: Int) -> WallpaperImage {
         if let imageName = images[index].name, let object = HistoryImageManager.shared.retrieve(byName: imageName, fromEntity: entity) {
             HistoryImageManager.shared.managedObjectContext.delete(object)
             try? HistoryImageManager.shared.managedObjectContext.save()
@@ -66,7 +66,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
         return images.remove(at: index)
     }
 
-    func updateImage() -> Bool {
+    public func updateImage() -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
 
         var links: [String] = []

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol WallpaperImageSource {
+protocol WallpaperImageSource: AnyObject {
     var entity: HistoryImageEntity { get }
 
     var images: [WallpaperImage] { get set }

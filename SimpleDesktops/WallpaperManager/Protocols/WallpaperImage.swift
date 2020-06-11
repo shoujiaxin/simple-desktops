@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol WallpaperImage {
+protocol WallpaperImage: AnyObject {
     var fullUrl: URL? { get set }
 
     var name: String? { get set }

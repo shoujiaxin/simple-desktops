@@ -15,7 +15,7 @@ class PreviewViewController: NSViewController {
     @IBOutlet var setWallpaperButton: PillButton!
     @IBOutlet var updateButton: UpdateButton!
 
-    public var progressIndicator: NSProgressIndicator!
+    public weak var progressIndicator: NSProgressIndicator!
 
     public var isLoading: Bool = false {
         willSet {
@@ -35,7 +35,7 @@ class PreviewViewController: NSViewController {
         }
     }
 
-    private var wallpaperManager: WallpaperManager!
+    private weak var wallpaperManager: WallpaperManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()

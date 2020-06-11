@@ -19,8 +19,8 @@ class WallpaperManager {
         case unknownImageFormat
     }
 
-    public var image: WallpaperImage?
-    public let source: WallpaperImageSource!
+    public weak var image: WallpaperImage?
+    public let source: WallpaperImageSource = SimpleDesktopsSource()
     public let wallpaperDirectory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
 
     private static var observer: NSObjectProtocol?
@@ -28,8 +28,6 @@ class WallpaperManager {
     private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
 
     init() {
-        source = SimpleDesktopsSource()
-
         if source.images.isEmpty {
             // Launch for the first time
             update { image, _ in
