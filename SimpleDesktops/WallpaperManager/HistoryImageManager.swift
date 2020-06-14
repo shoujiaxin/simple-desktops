@@ -13,6 +13,7 @@ class HistoryImageManager {
     public static let shared = HistoryImageManager()
 
     private let managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
+    private var cacheObjects: [NSManagedObject] = []
 
     /// Insert image to database
     /// - Parameters:
@@ -25,7 +26,7 @@ class HistoryImageManager {
         object.setValue(image.previewUrl, forKey: entity.property.previewUrl)
         object.setValue(Date(), forKey: entity.property.timeStamp)
 
-        try? managedObjectContext.save()
+//        try? managedObjectContext.save()
     }
 
     /// Delete image by name
@@ -35,7 +36,7 @@ class HistoryImageManager {
     public func delete(byName name: String, fromEntity entity: HistoryImageEntity) {
         if let object = retrieve(byName: name, fromEntity: entity) {
             managedObjectContext.delete(object)
-            try? managedObjectContext.save()
+//            try? managedObjectContext.save()
         }
     }
 
@@ -87,10 +88,17 @@ class HistoryImageManager {
     ///   - timeAscending: The order of images by timestamp
     /// - Returns: Retrieved objects
     public func retrieveAll(fromEntity entity: HistoryImageEntity, timeAscending: Bool) -> [NSManagedObject] {
+        if !cacheObjects.isEmpty, !managedObjectContext.hasChanges {
+            return cacheObjects
+        }
+
+        try? managedObjectContext.save()
+
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: entity.property.timeStamp, ascending: timeAscending)]
 
         if let results = try? managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
+            cacheObjects = results
             return results
         }
         return []
