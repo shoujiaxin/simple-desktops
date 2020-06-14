@@ -34,6 +34,8 @@ class HistoryViewController: NSViewController {
     }
 }
 
+// MARK: NSCollectionViewDataSource
+
 extension HistoryViewController: NSCollectionViewDataSource {
     func collectionView(_: NSCollectionView, numberOfItemsInSection _: Int) -> Int {
         return wallpaperManager.source.images.count

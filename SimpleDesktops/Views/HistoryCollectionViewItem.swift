@@ -49,11 +49,11 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let wallpaperManager = popoverViewController.wallpaperManager
 
         // Cancel loading or downloading
-        if popoverViewController.previewViewController.isLoading {
+        while popoverViewController.previewViewController.loadingTaskCount > 0 {
             SDWebImageManager.shared.cancelAll()
             SDWebImageDownloader.shared.cancelAllDownloads()
 
-            popoverViewController.previewViewController.isLoading = false
+            popoverViewController.previewViewController.stopLoading(self)
         }
 
         popoverViewController.transition(to: .preview)
@@ -82,10 +82,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
-        guard let index = collectionView?.indexPath(for: self)?.item, let imageName = wallpaperManager.source.images[index].name else {
-            return
-        }
-        let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(imageName)
+        let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(view.toolTip!)
         if !FileManager.default.fileExists(atPath: url.path) {
             menu.item(at: 1)?.isEnabled = false
         }
@@ -100,21 +97,13 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let previewViewController = popoverViewController.previewViewController
         let wallpaperManager = popoverViewController.wallpaperManager
-        wallpaperManager.image = wallpaperManager.source.images[index]
 
         // Return to preview view
-        previewViewController.imageView.sd_setImage(with: wallpaperManager.image?.previewUrl, completed: nil)
         popoverViewController.transition(to: .preview)
 
-        previewViewController.progressIndicator.isIndeterminate = true
-        previewViewController.isLoading = true
-
+        wallpaperManager.image = wallpaperManager.source.images[index]
         wallpaperManager.change { error in
-            previewViewController.progressIndicator.isIndeterminate = false
-            previewViewController.isLoading = false
-
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
                 return
@@ -123,15 +112,11 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
     }
 
     @objc func showInFinderMenuItemClicked(sender _: Any) {
-        guard let index = collectionView?.indexPath(for: self)?.item else {
-            return
-        }
-
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
 
-        let url = URL(fileURLWithPath: (wallpaperManager.source.images[index].name)!, relativeTo: wallpaperManager.wallpaperDirectory)
+        let url = URL(fileURLWithPath: view.toolTip!, relativeTo: wallpaperManager.wallpaperDirectory)
         NSWorkspace.shared.activateFileViewerSelecting([url.absoluteURL])
     }
 
@@ -144,21 +129,15 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
         let wallpaperManager = popoverViewController.wallpaperManager
 
-        if let removedImageName = wallpaperManager.source.removeImage(at: indexPath.item).name {
-            // Trash the latest image
-            if wallpaperManager.image?.name == removedImageName {
-                wallpaperManager.image = wallpaperManager.source.images.first
-            }
+        HistoryImageManager.shared.delete(byName: view.toolTip!, fromEntity: wallpaperManager.source.entity)
 
-            // Trash the image file
-            let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(removedImageName)
-            let fileManager = FileManager.default
-            if fileManager.fileExists(atPath: url.path) {
-                try? fileManager.trashItem(at: url, resultingItemURL: nil)
-            }
+        // Trash the image file if downloaded
+        let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(view.toolTip!)
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: url.path) {
+            try? fileManager.trashItem(at: url, resultingItemURL: nil)
         }
 
-        // MUST update the data source first
         collectionView?.deleteItems(at: [indexPath])
     }
 }

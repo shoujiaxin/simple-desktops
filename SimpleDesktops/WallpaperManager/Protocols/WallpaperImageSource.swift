@@ -11,9 +11,9 @@ import Cocoa
 protocol WallpaperImageSource: AnyObject {
     var entity: HistoryImageEntity { get }
 
-    var images: [WallpaperImage] { get set }
+    var images: [WallpaperImage] { get }
 
-    func removeImage(at index: Int) -> WallpaperImage
+    func removeImage(at index: Int)
 
-    func updateImage() -> Bool
+    func updateImage() -> WallpaperImage?
 }

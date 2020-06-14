@@ -19,7 +19,17 @@ class WallpaperManager {
         case unknownImageFormat
     }
 
-    public weak var image: WallpaperImage?
+    public var image: WallpaperImage? {
+        willSet {
+            if let newImage = newValue {
+                DispatchQueue.main.async {
+                    self.delegate?.updatePreview(with: newImage)
+                }
+            }
+        }
+    }
+
+    public weak var delegate: WallpaperManagerDelegate?
     public let source: WallpaperImageSource = SimpleDesktopsSource()
     public let wallpaperDirectory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
 
@@ -28,13 +38,12 @@ class WallpaperManager {
     private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
 
     init() {
-        if source.images.isEmpty {
+        let historyImages = source.images
+        if historyImages.isEmpty {
             // Launch for the first time
-            update { image, _ in
-                self.image = image
-            }
+            update { _ in }
         } else {
-            image = source.images.first
+            image = historyImages.first
         }
     }
 
@@ -57,7 +66,12 @@ class WallpaperManager {
             }
         }
 
-        SDWebImageDownloader.shared.downloadImage(with: image?.fullUrl, options: .highPriority, progress: nil) { _, data, error, finished in
+        delegate?.startLoading(self)
+        SDWebImageDownloader.shared.downloadImage(with: image?.fullUrl, options: .highPriority, progress: { receivedSize, expectedSize, _ in
+            self.delegate?.loadingProgress(at: Double(receivedSize) / Double(expectedSize))
+        }) { _, data, error, finished in
+            self.delegate?.stopLoading(self)
+
             if let error = error {
                 completionHandler(error)
                 os_log("Failed to download image: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
@@ -98,20 +112,26 @@ class WallpaperManager {
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeBackground(sender:)), userInfo: nil, repeats: true)
     }
 
-    public func update(completionHandler: @escaping (WallpaperImage?, Error?) -> Void) {
+    public func update(completionHandler: @escaping (Error?) -> Void) {
+        delegate?.startLoading(self)
         let queue = DispatchQueue(label: "WallpaperManager.update")
         queue.async {
             var retryCnt = 5
-            while !self.source.updateImage(), retryCnt > 0 {
+            while retryCnt > 0 {
+                if let image = self.source.updateImage() {
+                    self.image = image
+                    DispatchQueue.main.async {
+                        self.delegate?.stopLoading(self)
+                        completionHandler(nil)
+                    }
+                    return
+                }
                 retryCnt -= 1
             }
 
-            DispatchQueue.main.sync {
-                if retryCnt > 0 {
-                    completionHandler(self.source.images.first, nil)
-                } else {
-                    completionHandler(nil, WallpaperError.failedToLoadImage)
-                }
+            DispatchQueue.main.async {
+                self.delegate?.stopLoading(self)
+                completionHandler(WallpaperError.failedToLoadImage)
             }
         }
     }
@@ -124,8 +144,11 @@ class WallpaperManager {
             return
         }
 
-        update { image, _ in
-            self.image = image
+        update { error in
+            if let error = error {
+                os_log("Failed to update wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
+            }
+
             self.change { error in
                 if let error = error {
                     os_log("Failed to change wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)

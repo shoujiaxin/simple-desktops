@@ -30,6 +30,7 @@
 		19FC120E23E4086E0094AC66 /* PillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FC120D23E4086E0094AC66 /* PillButton.swift */; };
 		6B19B36F247BA1CB004E635B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B19B371247BA1CB004E635B /* Localizable.strings */; };
 		6B19B3B6247D29C9004E635B /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6B19B3B5247D29C9004E635B /* SDWebImage */; };
+		6B6A8B2624961910004FD62B /* WallpaperManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6A8B2524961910004FD62B /* WallpaperManagerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		19FC120D23E4086E0094AC66 /* PillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillButton.swift; sourceTree = "<group>"; };
 		6B19B36C247B9EFF004E635B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		6B19B370247BA1CB004E635B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6B6A8B2524961910004FD62B /* WallpaperManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManagerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 			children = (
 				19D9216624003A7C00D16407 /* WallpaperImage.swift */,
 				19D9216824017F9900D16407 /* WallpaperImageSource.swift */,
+				6B6A8B2524961910004FD62B /* WallpaperManagerDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				1985967323E011640062A1A1 /* UpdateButton.swift in Sources */,
 				192A03C223DEA9A200CF0517 /* Options.swift in Sources */,
 				19FC120623E344210094AC66 /* PreferencesViewController.swift in Sources */,
+				6B6A8B2624961910004FD62B /* WallpaperManagerDelegate.swift in Sources */,
 				19D262F323C305E6000DCF10 /* AppDelegate.swift in Sources */,
 				198F0DE224796B2B00C37351 /* HistoryImageManager.swift in Sources */,
 				19FC120823E345DE0094AC66 /* HistoryViewController.swift in Sources */,

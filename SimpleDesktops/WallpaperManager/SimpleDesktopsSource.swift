@@ -42,35 +42,34 @@ class SimpleDesktopsSource: WallpaperImageSource {
 
     public let entity: HistoryImageEntity = HistoryImageEntity(name: "SDImage")
 
-    public var images: [WallpaperImage] = []
-
-    init() {
+    public var images: [WallpaperImage] {
         // Load history images to array
+        var arr: [WallpaperImage] = []
         for object in HistoryImageManager.shared.retrieveAll(fromEntity: entity, timeAscending: false) {
             if let url = object.value(forKey: entity.property.previewUrl) as? URL {
                 let image = SDImage()
                 image.previewUrl = url
-                images.append(image)
+                arr.append(image)
             }
         }
+        return arr
+    }
 
+    init() {
         SimpleDesktopsSource.updateMaxPage()
     }
 
-    public func removeImage(at index: Int) -> WallpaperImage {
-        if let imageName = images[index].name, let object = HistoryImageManager.shared.retrieve(byName: imageName, fromEntity: entity) {
-            HistoryImageManager.shared.managedObjectContext.delete(object)
-            try? HistoryImageManager.shared.managedObjectContext.save()
+    public func removeImage(at index: Int) {
+        if let imageName = images[index].name {
+            HistoryImageManager.shared.delete(byName: imageName, fromEntity: entity)
         }
-
-        return images.remove(at: index)
     }
 
-    public func updateImage() -> Bool {
+    public func updateImage() -> WallpaperImage? {
         let semaphore = DispatchSemaphore(value: 0)
 
         var links: [String] = []
-        var success = false
+        var image: SDImage?
 
         let page = Int.random(in: 1 ... Options.shared.simpleDesktopsMaxPage)
         let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
@@ -88,18 +87,12 @@ class SimpleDesktopsSource: WallpaperImageSource {
             }
 
             if let link = links.randomElement() {
-                let image = SDImage()
-                image.previewUrl = URL(string: link)
+                image = SDImage()
+                image!.previewUrl = URL(string: link)
 
                 // The image is already loaded, remove it first to avoid duplicates
-                if let index = self.images.firstIndex(where: { $0.name == image.name }) {
-                    _ = self.removeImage(at: index)
-                }
-
-                self.images.insert(image, at: self.images.startIndex)
-                HistoryImageManager.shared.insert(image, toEntity: self.entity)
-
-                success = true
+                HistoryImageManager.shared.delete(byName: image!.name!, fromEntity: self.entity)
+                HistoryImageManager.shared.insert(image!, toEntity: self.entity)
             }
 
             semaphore.signal()
@@ -108,7 +101,7 @@ class SimpleDesktopsSource: WallpaperImageSource {
         task.resume()
         _ = semaphore.wait(timeout: .distantFuture)
 
-        return success
+        return image
     }
 
     // MARK: Private Methods

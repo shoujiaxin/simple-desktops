@@ -16,24 +16,7 @@ class PreviewViewController: NSViewController {
     @IBOutlet var updateButton: UpdateButton!
 
     public weak var progressIndicator: NSProgressIndicator!
-
-    public var isLoading: Bool = false {
-        willSet {
-            if newValue {
-                downloadButton.isEnabled = false
-                imageView.sd_imageIndicator?.startAnimatingIndicator()
-                setWallpaperButton.isEnabled = false
-                updateButton.isHidden = true
-
-                progressIndicator.doubleValue = 0
-            } else {
-                downloadButton.isEnabled = true
-                imageView.sd_imageIndicator?.stopAnimatingIndicator()
-                setWallpaperButton.isEnabled = true
-                updateButton.isHidden = false
-            }
-        }
-    }
+    public var loadingTaskCount = 0
 
     private weak var wallpaperManager: WallpaperManager!
 
@@ -50,44 +33,24 @@ class PreviewViewController: NSViewController {
         if Options.shared.changePicture {
             wallpaperManager.change(every: Options.shared.changeInterval.seconds)
         }
-    }
 
-    override func viewDidAppear() {
-        super.viewDidAppear()
-
-        if isLoading {
-            return
-        }
-
-        isLoading = true
-        imageView.sd_setImage(with: wallpaperManager.image?.previewUrl, placeholderImage: nil, options: .highPriority, progress: { receivedSize, expectedSize, _ in
-            DispatchQueue.main.sync {
-                self.progressIndicator.increment(by: Double(receivedSize) / Double(expectedSize) * self.progressIndicator.maxValue - self.progressIndicator.doubleValue)
-            }
-        }) { _, error, _, _ in
-            self.isLoading = false
-
-            if let error = error {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                return
-            }
+        if let image = wallpaperManager.image {
+            updatePreview(with: image)
         }
     }
 
     @IBAction func downloadButtonClicked(_: Any) {
-        guard let imageName = wallpaperManager.image?.name else {
+        guard let image = wallpaperManager.image, let imageName = image.name else {
             return
         }
 
         let directory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
 
-        isLoading = true
-        SDWebImageDownloader.shared.downloadImage(with: wallpaperManager.image?.fullUrl, options: .highPriority, progress: { receivedSize, expectedSize, _ in
-            DispatchQueue.main.sync {
-                self.progressIndicator.increment(by: Double(receivedSize) / Double(expectedSize) * self.progressIndicator.maxValue - self.progressIndicator.doubleValue)
-            }
+        startLoading(self)
+        SDWebImageDownloader.shared.downloadImage(with: image.fullUrl, options: .highPriority, progress: { receivedSize, expectedSize, _ in
+            self.loadingProgress(at: Double(receivedSize) / Double(expectedSize))
         }) { _, data, error, _ in
-            self.isLoading = false
+            self.stopLoading(self)
 
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
@@ -109,12 +72,7 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
-        progressIndicator.isIndeterminate = true
-        isLoading = true
         wallpaperManager.change { error in
-            self.progressIndicator.isIndeterminate = false
-            self.isLoading = false
-
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
                 return
@@ -123,28 +81,63 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func updateButtonClicked(_: Any) {
-        progressIndicator.isIndeterminate = true
-        isLoading = true
-        wallpaperManager.update { image, error in
-            self.progressIndicator.isIndeterminate = false
+        wallpaperManager.update { error in
             if let error = error {
-                self.isLoading = false
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
                 return
             }
+        }
+    }
+}
 
-            self.wallpaperManager.image = image
-            self.imageView.sd_setImage(with: image?.previewUrl, placeholderImage: self.imageView.image, options: .highPriority, progress: { receivedSize, expectedSize, _ in
-                DispatchQueue.main.sync {
-                    self.progressIndicator.increment(by: Double(receivedSize) / Double(expectedSize) * self.progressIndicator.maxValue - self.progressIndicator.doubleValue)
-                }
-            }) { _, error, _, _ in
-                self.isLoading = false
+// MARK: WallpaperManagerDelegate
 
-                if let error = error {
-                    Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                    return
-                }
+extension PreviewViewController: WallpaperManagerDelegate {
+    func loadingProgress(at percent: Double) {
+        DispatchQueue.main.async {
+            self.progressIndicator.increment(by: percent * self.progressIndicator.maxValue - self.progressIndicator.doubleValue)
+        }
+    }
+
+    func startLoading(_: Any?) {
+        loadingTaskCount += 1
+
+        DispatchQueue.main.async {
+            self.progressIndicator.doubleValue = 0
+
+            self.downloadButton.isEnabled = false
+            self.imageView.sd_imageIndicator?.startAnimatingIndicator()
+            self.setWallpaperButton.isEnabled = false
+            self.updateButton.isHidden = true
+        }
+    }
+
+    func stopLoading(_: Any?) {
+        loadingTaskCount -= 1
+        if loadingTaskCount > 0 {
+            return
+        } else if loadingTaskCount < 0 {
+            loadingTaskCount = 0
+        }
+
+        DispatchQueue.main.async {
+            self.downloadButton.isEnabled = true
+            self.imageView.sd_imageIndicator?.stopAnimatingIndicator()
+            self.setWallpaperButton.isEnabled = true
+            self.updateButton.isHidden = false
+        }
+    }
+
+    func updatePreview(with image: WallpaperImage) {
+        startLoading(self)
+        imageView.sd_setImage(with: image.previewUrl, placeholderImage: imageView.image, options: .highPriority, progress: { receivedSize, expectedSize, _ in
+            self.loadingProgress(at: Double(receivedSize) / Double(expectedSize))
+        }) { _, error, _, _ in
+            self.stopLoading(self)
+
+            if let error = error {
+                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                return
             }
         }
     }

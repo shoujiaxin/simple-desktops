@@ -27,6 +27,8 @@ class PopoverViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        wallpaperManager.delegate = previewViewController
+
         addChild(historyViewController)
         addChild(preferencesViewController)
         addChild(previewViewController)

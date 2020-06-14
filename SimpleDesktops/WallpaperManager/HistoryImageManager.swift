@@ -12,7 +12,7 @@ class HistoryImageManager {
     // Singleton pattern
     public static let shared = HistoryImageManager()
 
-    public let managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
+    private let managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
 
     /// Insert image to database
     /// - Parameters:
@@ -28,9 +28,20 @@ class HistoryImageManager {
         try? managedObjectContext.save()
     }
 
+    /// Delete image by name
+    /// - Parameters:
+    ///   - name: Name of the image to be retrieved
+    ///   - entity: Information of the entity to retrieve from
+    public func delete(byName name: String, fromEntity entity: HistoryImageEntity) {
+        if let object = retrieve(byName: name, fromEntity: entity) {
+            managedObjectContext.delete(object)
+            try? managedObjectContext.save()
+        }
+    }
+
     /// Retrieve image by full link
     /// - Parameters:
-    ///   - name: Full link of the image to be retrieved
+    ///   - link: Full link of the image to be retrieved
     ///   - entity: Information of the entity to retrieve from
     /// - Returns: Retrieved object
     public func retrieve(byFullLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
@@ -58,7 +69,7 @@ class HistoryImageManager {
 
     /// Retrieve image by preview link
     /// - Parameters:
-    ///   - name: Preview link of the image to be retrieved
+    ///   - link: Preview link of the image to be retrieved
     ///   - entity: Information of the entity to retrieve from
     /// - Returns: Retrieved object
     public func retrieve(byPreviewLink link: String, fromEntity entity: HistoryImageEntity) -> NSManagedObject? {
