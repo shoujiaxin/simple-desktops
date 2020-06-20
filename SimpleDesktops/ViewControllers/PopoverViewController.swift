@@ -20,14 +20,13 @@ class PopoverViewController: NSViewController {
     public let historyViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "HistoryViewController") as HistoryViewController
     public let preferencesViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreferencesViewController") as PreferencesViewController
     public let previewViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PreviewViewController") as PreviewViewController
-    public var wallpaperManager = WallpaperManager()
 
     private var currentVCState = ViewControllerState.preview
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        wallpaperManager.delegate = previewViewController
+        WallpaperManager.shared.delegate = previewViewController
 
         addChild(historyViewController)
         addChild(preferencesViewController)

@@ -46,7 +46,6 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.wallpaperManager
 
         // Cancel loading or downloading
         while popoverViewController.previewViewController.loadingTaskCount > 0 {
@@ -58,7 +57,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         popoverViewController.transition(to: .preview)
 
-        wallpaperManager.image = wallpaperManager.source.images[index]
+        WallpaperManager.shared.selectImage(at: index)
     }
 
     override func rightMouseUp(with event: NSEvent) {
@@ -79,10 +78,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         deleteMenuItem.keyEquivalent = "d"
 
         // Disable "Reveal in Finder" if the image has NOT been downloaded
-        let appDelegate = NSApp.delegate as! AppDelegate
-        let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.wallpaperManager
-        let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(view.toolTip!)
+        let url = WallpaperManager.wallpaperDirectory.appendingPathComponent(view.toolTip!)
         if !FileManager.default.fileExists(atPath: url.path) {
             menu.item(at: 1)?.isEnabled = false
         }
@@ -97,13 +93,12 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.wallpaperManager
 
         // Return to preview view
         popoverViewController.transition(to: .preview)
 
-        wallpaperManager.image = wallpaperManager.source.images[index]
-        wallpaperManager.change { error in
+        WallpaperManager.shared.selectImage(at: index)
+        WallpaperManager.shared.change { error in
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
                 return
@@ -112,11 +107,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
     }
 
     @objc func showInFinderMenuItemClicked(sender _: Any) {
-        let appDelegate = NSApp.delegate as! AppDelegate
-        let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.wallpaperManager
-
-        let url = URL(fileURLWithPath: view.toolTip!, relativeTo: wallpaperManager.wallpaperDirectory)
+        let url = URL(fileURLWithPath: view.toolTip!, relativeTo: WallpaperManager.wallpaperDirectory)
         NSWorkspace.shared.activateFileViewerSelecting([url.absoluteURL])
     }
 
@@ -125,14 +116,10 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
             return
         }
 
-        let appDelegate = NSApp.delegate as! AppDelegate
-        let popoverViewController = appDelegate.popover.contentViewController as! PopoverViewController
-        let wallpaperManager = popoverViewController.wallpaperManager
-
-        HistoryImageManager.shared.delete(byName: view.toolTip!, fromEntity: wallpaperManager.source.entity)
+        WallpaperManager.shared.delete(byName: view.toolTip!)
 
         // Trash the image file if downloaded
-        let url = wallpaperManager.wallpaperDirectory.appendingPathComponent(view.toolTip!)
+        let url = WallpaperManager.wallpaperDirectory.appendingPathComponent(view.toolTip!)
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: url.path) {
             try? fileManager.trashItem(at: url, resultingItemURL: nil)

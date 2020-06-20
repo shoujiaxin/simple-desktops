@@ -12,14 +12,10 @@ import SDWebImage
 class HistoryViewController: NSViewController {
     @IBOutlet var collectionView: NSCollectionView!
 
-    private weak var wallpaperManager: WallpaperManager!
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collectionView.backgroundColors = [.clear]
-
-        wallpaperManager = (parent as! PopoverViewController).wallpaperManager
     }
 
     override func viewWillAppear() {
@@ -38,7 +34,7 @@ class HistoryViewController: NSViewController {
 
 extension HistoryViewController: NSCollectionViewDataSource {
     func collectionView(_: NSCollectionView, numberOfItemsInSection _: Int) -> Int {
-        return wallpaperManager.source.images.count
+        return WallpaperManager.shared.images.count
     }
 
     func collectionView(_: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
@@ -49,8 +45,8 @@ extension HistoryViewController: NSCollectionViewDataSource {
         item.imageView?.sd_imageIndicator?.startAnimatingIndicator()
         item.imageView?.toolTip = "Loading..."
 
-        item.imageView?.sd_setImage(with: wallpaperManager.source.images[indexPath.item].previewUrl, placeholderImage: nil, completed: { _, _, _, _ in
-            item.imageView?.toolTip = self.wallpaperManager.source.images[indexPath.item].name
+        item.imageView?.sd_setImage(with: WallpaperManager.shared.images[indexPath.item].previewUrl, placeholderImage: nil, completed: { _, _, _, _ in
+            item.imageView?.toolTip = WallpaperManager.shared.images[indexPath.item].name
         })
 
         return item

@@ -11,6 +11,9 @@ import os.log
 import SDWebImage
 
 class WallpaperManager {
+    public static let shared = WallpaperManager()
+    public static let wallpaperDirectory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
+
     public enum WallpaperError: Error {
         case failedToLoadImage
         case failedToSaveImage
@@ -29,10 +32,13 @@ class WallpaperManager {
         }
     }
 
-    public weak var delegate: WallpaperManagerDelegate?
-    public let source: WallpaperImageSource = SimpleDesktopsSource()
-    public let wallpaperDirectory = URL(fileURLWithPath: "\(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0])/\((Bundle.main.infoDictionary!["CFBundleName"])!)/Wallpapers", isDirectory: true)
+    public var images: [WallpaperImage] {
+        return source.images
+    }
 
+    public weak var delegate: WallpaperManagerDelegate?
+
+    private let source: WallpaperImageSource = SimpleDesktopsSource()
     private static var observer: NSObjectProtocol?
     private var timer: Timer?
     private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
@@ -49,6 +55,8 @@ class WallpaperManager {
 
     // MARK: Public Methods
 
+    /// Set the wallpaper
+    /// - Parameter completionHandler: Callback of completion
     public func change(completionHandler: @escaping (Error?) -> Void) {
         guard let imageName = image?.name else {
             completionHandler(WallpaperError.noImage)
@@ -56,10 +64,10 @@ class WallpaperManager {
         }
 
         let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: wallpaperDirectory.path) {
+        if !fileManager.fileExists(atPath: WallpaperManager.wallpaperDirectory.path) {
             // Create the folder if it not exists
             do {
-                try fileManager.createDirectory(at: wallpaperDirectory, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(at: WallpaperManager.wallpaperDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 completionHandler(error)
                 return
@@ -79,7 +87,7 @@ class WallpaperManager {
             }
 
             if finished {
-                let url = self.wallpaperDirectory.appendingPathComponent(imageName)
+                let url = WallpaperManager.wallpaperDirectory.appendingPathComponent(imageName)
 
                 // Save & change wallpaper
                 do {
@@ -107,11 +115,27 @@ class WallpaperManager {
         }
     }
 
+    /// Set the wallpaper regularly
+    /// - Parameter timeInterval: Time interval of each change
     public func change(every timeInterval: TimeInterval) {
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeBackground(sender:)), userInfo: nil, repeats: true)
     }
 
+    /// Delete history wallpaper by its name
+    /// - Parameter name: Name of the wallpaper to be deleted
+    public func delete(byName name: String) {
+        HistoryImageManager.shared.delete(byName: name, fromEntity: source.entity)
+    }
+
+    /// Select the wallpaper from history
+    /// - Parameter index: Index of the image selected
+    public func selectImage(at index: Int) {
+        image = images[index]
+    }
+
+    /// Fetch a new wallpaper image and add to history database
+    /// - Parameter completionHandler: Callback of completion
     public func update(completionHandler: @escaping (Error?) -> Void) {
         delegate?.startLoading(self)
         let queue = DispatchQueue(label: "WallpaperManager.update")

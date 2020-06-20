@@ -18,8 +18,6 @@ class PreviewViewController: NSViewController {
     public weak var progressIndicator: NSProgressIndicator!
     public var loadingTaskCount = 0
 
-    private weak var wallpaperManager: WallpaperManager!
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,18 +27,17 @@ class PreviewViewController: NSViewController {
         progressIndicator = imageView.sd_imageIndicator!.indicatorView as? NSProgressIndicator
         progressIndicator.isIndeterminate = false
 
-        wallpaperManager = (parent as! PopoverViewController).wallpaperManager
         if Options.shared.changePicture {
-            wallpaperManager.change(every: Options.shared.changeInterval.seconds)
+            WallpaperManager.shared.change(every: Options.shared.changeInterval.seconds)
         }
 
-        if let image = wallpaperManager.image {
+        if let image = WallpaperManager.shared.image {
             updatePreview(with: image)
         }
     }
 
     @IBAction func downloadButtonClicked(_: Any) {
-        guard let image = wallpaperManager.image, let imageName = image.name else {
+        guard let image = WallpaperManager.shared.image, let imageName = image.name else {
             return
         }
 
@@ -72,7 +69,7 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
-        wallpaperManager.change { error in
+        WallpaperManager.shared.change { error in
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
                 return
@@ -81,7 +78,7 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func updateButtonClicked(_: Any) {
-        wallpaperManager.update { error in
+        WallpaperManager.shared.update { error in
             if let error = error {
                 Utils.showCriticalAlert(withInformation: error.localizedDescription)
                 return
