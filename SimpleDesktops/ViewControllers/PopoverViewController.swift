@@ -61,12 +61,12 @@ class PopoverViewController: NSViewController {
             }
         }
 
-        transition(from: children[currentVCState.rawValue], to: children[targetVCState.rawValue], options: transitionOptions, completionHandler: nil)
+        transition(from: children[currentVCState.rawValue], to: children[targetVCState.rawValue], options: transitionOptions) {
+            self.currentVCState = targetVCState
+        }
         if let size = viewSize {
             let appDelegate = NSApp.delegate as! AppDelegate
             appDelegate.popover.contentSize = size
         }
-
-        currentVCState = targetVCState
     }
 }
