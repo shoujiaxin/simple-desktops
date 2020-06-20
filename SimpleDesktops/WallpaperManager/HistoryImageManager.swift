@@ -13,7 +13,7 @@ class HistoryImageManager {
     public static let shared = HistoryImageManager()
 
     private let managedObjectContext: NSManagedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.viewContext
-    private var cacheObjects: [NSManagedObject] = []
+    private var cachedObjects: [NSManagedObject] = []
 
     /// Insert image to database
     /// - Parameters:
@@ -88,8 +88,8 @@ class HistoryImageManager {
     ///   - timeAscending: The order of images by timestamp
     /// - Returns: Retrieved objects
     public func retrieveAll(fromEntity entity: HistoryImageEntity, timeAscending: Bool) -> [NSManagedObject] {
-        if !cacheObjects.isEmpty, !managedObjectContext.hasChanges {
-            return cacheObjects
+        if !cachedObjects.isEmpty, !managedObjectContext.hasChanges {
+            return cachedObjects
         }
 
         try? managedObjectContext.save()
@@ -98,7 +98,7 @@ class HistoryImageManager {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: entity.property.timeStamp, ascending: timeAscending)]
 
         if let results = try? managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
-            cacheObjects = results
+            cachedObjects = results
             return results
         }
         return []
