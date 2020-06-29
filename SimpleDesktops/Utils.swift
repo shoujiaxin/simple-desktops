@@ -27,4 +27,16 @@ class Utils {
         alert.messageText = NSLocalizedString("Error", comment: "")
         alert.runModal()
     }
+
+    static func showNotification(withTitle title: String, information: String?, contentImage: NSImage?) {
+        let notification = NSUserNotification()
+        notification.identifier = "\(Bundle.main.bundleIdentifier ?? "")@\(Date().timeIntervalSince1970)"
+        notification.title = title
+        notification.informativeText = information
+        notification.soundName = nil
+        notification.contentImage = contentImage
+
+        NSUserNotificationCenter.default.removeDeliveredNotification(notification)
+        NSUserNotificationCenter.default.deliver(notification)
+    }
 }

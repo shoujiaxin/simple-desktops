@@ -23,6 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.behavior = NSPopover.Behavior.transient
         popover.contentViewController = NSStoryboard(name: "Main", bundle: nil).instantiateController(identifier: "PopoverViewController") as PopoverViewController
 
+        NSUserNotificationCenter.default.delegate = self
+
         Options.shared.loadOptions()
     }
 
@@ -134,5 +136,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.activate(ignoringOtherApps: true)
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
         }
+    }
+}
+
+extension AppDelegate: NSUserNotificationCenterDelegate {
+    func userNotificationCenter(_: NSUserNotificationCenter, shouldPresent _: NSUserNotification) -> Bool {
+        // Always show notifications even the app is active
+        return true
     }
 }

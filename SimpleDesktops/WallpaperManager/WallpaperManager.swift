@@ -77,7 +77,7 @@ class WallpaperManager {
         delegate?.startLoading(self)
         SDWebImageDownloader.shared.downloadImage(with: image?.fullUrl, options: .highPriority, progress: { receivedSize, expectedSize, _ in
             self.delegate?.loadingProgress(at: Double(receivedSize) / Double(expectedSize))
-        }) { _, data, error, finished in
+        }) { image, data, error, finished in
             self.delegate?.stopLoading(self)
 
             if let error = error {
@@ -94,6 +94,7 @@ class WallpaperManager {
                     try data?.write(to: url)
                     try self.setWallpaper(with: url)
 
+                    Utils.showNotification(withTitle: NSLocalizedString("Set Wallpaper Successfully", comment: ""), information: imageName, contentImage: image)
                     os_log("Wallpaper is changed to: %{public}@", log: self.osLog, type: .info, url.path)
                 } catch {
                     completionHandler(error)
