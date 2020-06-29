@@ -17,16 +17,16 @@ class Utils {
         return NSAppearance(named: .aqua)
     }
 
-    static func showCriticalAlert(withInformation information: String) {
-        NSApp.activate(ignoringOtherApps: true)
-
-        let alert = NSAlert()
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-        alert.alertStyle = NSAlert.Style.critical
-        alert.informativeText = information
-        alert.messageText = NSLocalizedString("Error", comment: "")
-        alert.runModal()
-    }
+//    static func showCriticalAlert(withInformation information: String) {
+//        NSApp.activate(ignoringOtherApps: true)
+//
+//        let alert = NSAlert()
+//        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+//        alert.alertStyle = NSAlert.Style.critical
+//        alert.informativeText = information
+//        alert.messageText = NSLocalizedString("Error", comment: "")
+//        alert.runModal()
+//    }
 
     static func showNotification(withTitle title: String, information: String?, contentImage: NSImage?) {
         let notification = NSUserNotification()

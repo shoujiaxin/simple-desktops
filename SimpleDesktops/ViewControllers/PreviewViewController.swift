@@ -46,15 +46,20 @@ class PreviewViewController: NSViewController {
         startLoading(self)
         SDWebImageDownloader.shared.downloadImage(with: image.fullUrl, options: .highPriority, progress: { receivedSize, expectedSize, _ in
             self.loadingProgress(at: Double(receivedSize) / Double(expectedSize))
-        }) { _, data, error, _ in
+        }) { image, data, error, _ in
             self.stopLoading(self)
 
             if let error = error {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                Utils.showNotification(withTitle: NSLocalizedString("Failed to Download Wallpaper", comment: ""), information: error.localizedDescription, contentImage: NSImage(named: NSImage.cautionName))
                 return
             }
 
-            try? data?.write(to: directory.appendingPathComponent(imageName))
+            do {
+                try data?.write(to: directory.appendingPathComponent(imageName))
+                Utils.showNotification(withTitle: NSLocalizedString("Wallpaper Downloaded", comment: ""), information: imageName, contentImage: image)
+            } catch {
+                Utils.showNotification(withTitle: NSLocalizedString("Failed to Download Wallpaper", comment: ""), information: error.localizedDescription, contentImage: NSImage(named: NSImage.cautionName))
+            }
         }
     }
 
@@ -69,18 +74,14 @@ class PreviewViewController: NSViewController {
     }
 
     @IBAction func setWallpaperButtonClicked(_: Any) {
-        WallpaperManager.shared.change { error in
-            if let error = error {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                return
-            }
+        WallpaperManager.shared.change { _ in
         }
     }
 
     @IBAction func updateButtonClicked(_: Any) {
         WallpaperManager.shared.update { error in
             if let error = error {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                Utils.showNotification(withTitle: NSLocalizedString("Failed to Load Wallpaper", comment: ""), information: error.localizedDescription, contentImage: NSImage(named: NSImage.cautionName))
                 return
             }
         }
@@ -133,7 +134,7 @@ extension PreviewViewController: WallpaperManagerDelegate {
             self.stopLoading(self)
 
             if let error = error {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
+                Utils.showNotification(withTitle: NSLocalizedString("Failed to Load Wallpaper", comment: ""), information: error.localizedDescription, contentImage: NSImage(named: NSImage.cautionName))
                 return
             }
         }

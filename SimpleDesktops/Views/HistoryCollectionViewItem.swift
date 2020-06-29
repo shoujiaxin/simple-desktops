@@ -98,11 +98,7 @@ class HistoryCollectionViewItem: NSCollectionViewItem {
         popoverViewController.transition(to: .preview)
 
         WallpaperManager.shared.selectImage(at: index)
-        WallpaperManager.shared.change { error in
-            if let error = error {
-                Utils.showCriticalAlert(withInformation: error.localizedDescription)
-                return
-            }
+        WallpaperManager.shared.change { _ in
         }
     }
 

@@ -98,6 +98,8 @@ class WallpaperManager {
                     os_log("Wallpaper is changed to: %{public}@", log: self.osLog, type: .info, url.path)
                 } catch {
                     completionHandler(error)
+
+                    Utils.showNotification(withTitle: NSLocalizedString("Failed to Set Wallpaper", comment: ""), information: nil, contentImage: NSImage(named: NSImage.cautionName))
                     os_log("Failed to set wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
                     return
                 }

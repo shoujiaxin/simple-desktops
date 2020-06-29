@@ -15,3 +15,11 @@
 "Set as Wallpaper" = "设为壁纸";
 
 "Set Wallpaper Successfully" = "壁纸设置成功"
+
+"Failed to Set Wallpaper" = "设置壁纸失败"
+
+"Failed to Load Wallpaper" = "加载壁纸失败"
+
+"Failed to Download Wallpaper" = "下载壁纸失败"
+
+"Wallpaper Downloaded" = "壁纸已下载"
