@@ -854,7 +854,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="400" height="310"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="16" minimumLineSpacing="16" id="cPd-lY-uNa">
-                                                <size key="itemSize" width="176" height="110"/>
+                                                <size key="itemSize" width="168" height="105"/>
                                                 <edgeInsets key="sectionInset" left="16" right="16" top="0.0" bottom="0.0"/>
                                             </collectionViewFlowLayout>
                                             <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
