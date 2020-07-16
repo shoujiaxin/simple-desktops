@@ -33,6 +33,9 @@ class PreviewViewController: NSViewController {
 
         if let image = WallpaperManager.shared.image {
             updatePreview(with: image)
+        } else {
+            // Launch for the first time
+            updateButtonClicked(self)
         }
     }
 

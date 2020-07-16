@@ -44,13 +44,7 @@ class WallpaperManager {
     private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
 
     init() {
-        let historyImages = source.images
-        if historyImages.isEmpty {
-            // Launch for the first time
-            update { _ in }
-        } else {
-            image = historyImages.first
-        }
+        image = source.images.first
     }
 
     // MARK: Public Methods
