@@ -30,7 +30,7 @@ class Utils {
 
     static func showNotification(withTitle title: String, information: String?, contentImage: NSImage?) {
         let notification = NSUserNotification()
-        notification.identifier = "\(Bundle.main.bundleIdentifier ?? "")@\(Date().timeIntervalSince1970)"
+        notification.identifier = Bundle.main.bundleIdentifier
         notification.title = title
         notification.informativeText = information
         notification.soundName = nil
