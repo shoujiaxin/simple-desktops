@@ -57,8 +57,28 @@ class Options {
     }
 
     var simpleDesktopsMaxPage = Options.defaultOptions.simpleDesktopsMaxPage
-    var changePicture = Options.defaultOptions.changePicture
-    var changeInterval = Options.defaultOptions.changeInterval
+
+    var changePicture = Options.defaultOptions.changePicture {
+        willSet {
+            if !newValue {
+                nextChangeDate = nil
+
+                WallpaperManager.shared.timer?.invalidate()
+            }
+        }
+    }
+
+    var changeInterval = Options.defaultOptions.changeInterval {
+        willSet {
+            if changePicture {
+                nextChangeDate = Date().addingTimeInterval(newValue.seconds)
+
+                WallpaperManager.shared.resetTimer(with: newValue.seconds)
+            }
+        }
+    }
+
+    var nextChangeDate: Date?
 
     func loadOptions() {
         let preferences = UserDefaults.standard

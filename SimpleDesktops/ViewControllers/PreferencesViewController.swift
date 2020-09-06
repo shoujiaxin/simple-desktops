@@ -35,8 +35,7 @@ class PreferencesViewController: NSViewController {
         case NSControl.StateValue.on:
             Options.shared.changePicture = true
             intervalPopUpButton.isEnabled = true
-
-            WallpaperManager.shared.change(every: Options.shared.changeInterval.seconds)
+            Options.shared.changeInterval = Options.ChangeInterval.from(rawValue: intervalPopUpButton.indexOfSelectedItem)
         case NSControl.StateValue.off:
             Options.shared.changePicture = false
             intervalPopUpButton.isEnabled = false
@@ -52,8 +51,6 @@ class PreferencesViewController: NSViewController {
 
     @IBAction func intervalChanged(_ sender: NSPopUpButton) {
         Options.shared.changeInterval = Options.ChangeInterval.from(rawValue: sender.indexOfSelectedItem)
-
-        WallpaperManager.shared.change(every: Options.shared.changeInterval.seconds)
     }
 
     @IBAction func quitButtonClicked(_: Any) {

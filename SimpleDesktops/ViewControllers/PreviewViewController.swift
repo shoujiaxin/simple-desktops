@@ -27,10 +27,6 @@ class PreviewViewController: NSViewController {
         progressIndicator = imageView.sd_imageIndicator!.indicatorView as? NSProgressIndicator
         progressIndicator.isIndeterminate = false
 
-        if Options.shared.changePicture {
-            WallpaperManager.shared.change(every: Options.shared.changeInterval.seconds)
-        }
-
         if let image = WallpaperManager.shared.image {
             updatePreview(with: image)
         } else {

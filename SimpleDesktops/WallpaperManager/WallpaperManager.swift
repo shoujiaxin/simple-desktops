@@ -38,13 +38,36 @@ class WallpaperManager {
 
     public weak var delegate: WallpaperManagerDelegate?
 
+    public var timer: Timer?
+
     private let source: WallpaperImageSource = SimpleDesktopsSource()
-    private static var observer: NSObjectProtocol?
-    private var timer: Timer?
+
     private let osLog = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WallpaperManager")
 
     init() {
         image = source.images.first
+
+        // Change wallpaper for other workspaces when changed to
+        NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
+            // Assume the image will NOT be removed manually
+            try? self.setWallpaper()
+        }
+
+        // Update wallpaper when wake from sleep
+        NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: nil) { _ in
+            guard let nextChangeDate = Options.shared.nextChangeDate else {
+                return
+            }
+
+            let currentDate = Date()
+            if currentDate > nextChangeDate {
+                self.changeBackground(sender: nil)
+
+                self.resetTimer(with: Options.shared.changeInterval.seconds)
+
+                Options.shared.nextChangeDate = currentDate.addingTimeInterval(Options.shared.changeInterval.seconds)
+            }
+        }
     }
 
     // MARK: Public Methods
@@ -86,7 +109,7 @@ class WallpaperManager {
                 // Save & change wallpaper
                 do {
                     try data?.write(to: url)
-                    try self.setWallpaper(with: url)
+                    try self.setWallpaper()
 
                     Utils.showNotification(withTitle: NSLocalizedString("Set Wallpaper Successfully", comment: ""), information: imageName, contentImage: image)
                     os_log("Wallpaper is changed to: %{public}@", log: self.osLog, type: .info, url.path)
@@ -98,31 +121,20 @@ class WallpaperManager {
                     return
                 }
 
-                // Change wallpaper for other workspaces when changed to
-                if let observer = WallpaperManager.observer {
-                    NSWorkspace.shared.notificationCenter.removeObserver(observer, name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
-                }
-                WallpaperManager.observer = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
-                    // Assume the image will NOT be removed manually
-                    try? self.setWallpaper(with: url)
-                }
-
                 completionHandler(nil)
             }
         }
-    }
-
-    /// Set the wallpaper regularly
-    /// - Parameter timeInterval: Time interval of each change
-    public func change(every timeInterval: TimeInterval) {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeBackground(sender:)), userInfo: nil, repeats: true)
     }
 
     /// Delete history wallpaper by its name
     /// - Parameter name: Name of the wallpaper to be deleted
     public func delete(byName name: String) {
         HistoryImageManager.shared.delete(byName: name, fromEntity: source.entity)
+    }
+
+    public func resetTimer(with timeInterval: TimeInterval) {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(changeBackground(sender:)), userInfo: nil, repeats: true)
     }
 
     /// Select the wallpaper from history
@@ -159,12 +171,7 @@ class WallpaperManager {
 
     // MARK: Private Methods
 
-    @objc private func changeBackground(sender _: Timer) {
-        if !Options.shared.changePicture {
-            timer?.invalidate() // Stop the timer
-            return
-        }
-
+    @objc private func changeBackground(sender _: Any?) {
         update { error in
             if let error = error {
                 os_log("Failed to update wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
@@ -178,7 +185,12 @@ class WallpaperManager {
         }
     }
 
-    private func setWallpaper(with url: URL) throws {
+    private func setWallpaper() throws {
+        guard let imageName = image?.name else {
+            return
+        }
+
+        let url = WallpaperManager.wallpaperDirectory.appendingPathComponent(imageName)
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: url.path) else {
             throw WallpaperError.fileNotExists
