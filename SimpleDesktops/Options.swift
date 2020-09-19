@@ -73,7 +73,11 @@ class Options {
             if changePicture {
                 nextChangeDate = Date().addingTimeInterval(newValue.seconds)
 
-                WallpaperManager.shared.resetTimer(with: newValue.seconds)
+                if newValue == .everyDay {
+                    WallpaperManager.shared.resetTimer(with: ChangeInterval.everyHour.seconds)
+                } else {
+                    WallpaperManager.shared.resetTimer(with: newValue.seconds)
+                }
             }
         }
     }

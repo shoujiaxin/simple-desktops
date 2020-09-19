@@ -64,8 +64,6 @@ class WallpaperManager {
                 self.changeBackground(sender: nil)
 
                 self.resetTimer(with: Options.shared.changeInterval.seconds)
-
-                Options.shared.nextChangeDate = currentDate.addingTimeInterval(Options.shared.changeInterval.seconds)
             }
         }
     }
@@ -172,6 +170,13 @@ class WallpaperManager {
     // MARK: Private Methods
 
     @objc private func changeBackground(sender _: Any?) {
+        if Options.shared.changeInterval == .everyDay, let nextChangeDate = Options.shared.nextChangeDate {
+            let currentDate = Date()
+            if currentDate < nextChangeDate {
+                return
+            }
+        }
+
         update { error in
             if let error = error {
                 os_log("Failed to update wallpaper: %{public}@", log: self.osLog, type: .error, error.localizedDescription)
@@ -183,6 +188,8 @@ class WallpaperManager {
                 }
             }
         }
+
+        Options.shared.nextChangeDate = Options.shared.nextChangeDate?.addingTimeInterval(Options.shared.changeInterval.seconds)
     }
 
     private func setWallpaper() throws {
