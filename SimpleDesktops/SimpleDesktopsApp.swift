@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.image = NSImage(systemSymbolName: "photo.on.rectangle", accessibilityDescription: nil) // TODO: Menu bar icon
         statusItem.button?.action = #selector(togglePopover(_:))
 
-        let contentView = ContentView()
+        let contentView = PopoverView()
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
 
         popover = NSPopover()

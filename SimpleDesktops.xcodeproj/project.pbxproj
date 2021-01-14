@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */; };
-		294A4B3325B01E6500DA8631 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3225B01E6500DA8631 /* ContentView.swift */; };
+		294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3225B01E6500DA8631 /* PopoverView.swift */; };
 		294A4B3525B01E6600DA8631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3425B01E6600DA8631 /* Assets.xcassets */; };
 		294A4B3825B01E6600DA8631 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */; };
 		294A4B3A25B01E6600DA8631 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* Persistence.swift */; };
@@ -18,7 +18,7 @@
 /* Begin PBXFileReference section */
 		294A4B2D25B01E6500DA8631 /* SimpleDesktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleDesktops.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsApp.swift; sourceTree = "<group>"; };
-		294A4B3225B01E6500DA8631 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		294A4B3225B01E6500DA8631 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		294A4B3425B01E6600DA8631 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		294A4B3925B01E6600DA8631 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */,
-				294A4B3225B01E6500DA8631 /* ContentView.swift */,
+				29E054A325B0379600BACF46 /* Views */,
 				294A4B3425B01E6600DA8631 /* Assets.xcassets */,
 				294A4B3925B01E6600DA8631 /* Persistence.swift */,
 				294A4B3E25B01E6600DA8631 /* Info.plist */,
@@ -75,6 +75,14 @@
 				294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		29E054A325B0379600BACF46 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				294A4B3225B01E6500DA8631 /* PopoverView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,7 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				294A4B3A25B01E6600DA8631 /* Persistence.swift in Sources */,
-				294A4B3325B01E6500DA8631 /* ContentView.swift in Sources */,
+				294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */,
 				294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */,
 				294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */,
 			);
