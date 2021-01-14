@@ -23,15 +23,17 @@ struct SimpleDesktopsApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     var popover: NSPopover!
-    let persistenceController: PersistenceController = .shared
 
     func applicationDidFinishLaunching(_: Notification) {
+        let viewContext = PersistenceController().container.viewContext
+        let fetcher = WallpaperFetcher(in: viewContext)
+        let contentView = PopoverView()
+            .environment(\.managedObjectContext, viewContext)
+            .environmentObject(fetcher)
+
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusItem.button?.image = NSImage(systemSymbolName: "photo.on.rectangle", accessibilityDescription: nil) // TODO: Menu bar icon
         statusItem.button?.action = #selector(togglePopover(_:))
-
-        let contentView = PopoverView()
-            .environment(\.managedObjectContext, persistenceController.container.viewContext)
 
         popover = NSPopover()
         popover.behavior = NSPopover.Behavior.transient

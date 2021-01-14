@@ -5,25 +5,50 @@
 //  Created by Jiaxin Shou on 2021/1/14.
 //
 
+import Combine
 import SwiftSoup
 import SwiftUI
 
 class WallpaperFetcher: ObservableObject {
-    @Published private(set) var imageUrl: URL?
+    @Published private(set) var image: NSImage? {
+        didSet {
+            DispatchQueue.main.async {
+                self.isLoading = false
+            }
+        }
+    }
+
+    @Published private(set) var isLoading: Bool = false
 
     private var context: NSManagedObjectContext
+
+    private var fetchImageCancellable: AnyCancellable?
+
+    private var imageUrl: URL? {
+        willSet {
+            if let url = newValue {
+                fetchImageCancellable?.cancel()
+                fetchImageCancellable = fetchImageCancellable(for: url)
+            }
+        }
+    }
 
     init(in context: NSManagedObjectContext) {
         self.context = context
 
-        if let wallpaper = try? context.fetch(Wallpaper.fetchRequest(.all)).first {
-            imageUrl = wallpaper.previewUrl
+        if let wallpaper = try? context.fetch(Wallpaper.fetchRequest(.all)).first,
+           let url = wallpaper.previewUrl
+        {
+            imageUrl = url
+            fetchImageCancellable = fetchImageCancellable(for: url)
         } else {
-            fetchURL() // TODO: isLoading = true
+            fetchURL()
         }
     }
 
     func fetchURL() {
+        isLoading = true
+
         var links: [String] = []
         let page = Int.random(in: 1 ... 51)
         let url = URL(string: "http://simpledesktops.com/browse/\(page)/")! // TODO: update max page
@@ -49,5 +74,13 @@ class WallpaperFetcher: ObservableObject {
         }
 
         task.resume()
+    }
+
+    private func fetchImageCancellable(for url: URL) -> AnyCancellable? {
+        URLSession.shared.dataTaskPublisher(for: url)
+            .map { data, _ in NSImage(data: data) }
+            .receive(on: DispatchQueue.main)
+            .replaceError(with: nil)
+            .assign(to: \.image, on: self)
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PopoverView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var fetcher: WallpaperFetcher
 
 //    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(.all)) var wallpapers: FetchedResults<Wallpaper>
 
@@ -32,13 +33,15 @@ struct PopoverView: View {
                 .buttonStyle(PlainButtonStyle())
             }
 
-            PreviewView(fetcher: WallpaperFetcher(in: viewContext))
+            PreviewView()
+                .environmentObject(fetcher)
                 .aspectRatio(previewImageAspectRatio, contentMode: .fill)
 
-            setWallpaperButon // TODO: disable when loading
+            setWallpaperButon
                 .frame(width: 240, height: 40)
                 .padding(imageButtonPadding)
                 .buttonStyle(PlainButtonStyle())
+                .disabled(fetcher.isLoading)
         }
         .frame(width: 400)
     }
@@ -93,7 +96,11 @@ struct PopoverView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+        let viewContext = PersistenceController().container.viewContext
+        let fetcher = WallpaperFetcher(in: viewContext)
+
         PopoverView()
-//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environment(\.managedObjectContext, viewContext)
+            .environmentObject(fetcher)
     }
 }

@@ -5,40 +5,38 @@
 //  Created by Jiaxin Shou on 2021/1/14.
 //
 
-import SDWebImageSwiftUI
 import SwiftUI
 
 struct PreviewView: View {
-    @ObservedObject var fetcher: WallpaperFetcher
+    @EnvironmentObject var fetcher: WallpaperFetcher
 
     // MARK: - States
 
     @State private var buttonOpacity: Double = 0.2
-    @State private var isLoading: Bool = false
 
     // MARK: - Views
 
     var body: some View {
         ZStack {
-            WebImage(url: fetcher.imageUrl)
-                .onSuccess { _, _, _ in
-                    isLoading = false // TODO: runtime warning
-                }
-                .onFailure { _ in
-                    isLoading = false // TODO: runtime warning
-                }
-                .resizable()
-                .indicator(.progress)
+            if let image = fetcher.image {
+                Image(nsImage: image)
+                    .resizable()
+            } else {
+                Rectangle() // Placeholder
+                    .foregroundColor(.clear)
+            }
 
-            if !isLoading {
+            if !fetcher.isLoading {
                 button
             }
+        }
+        .onAppear {
+            buttonOpacity = buttonIdleOpacity
         }
     }
 
     private var button: some View {
         Button(action: {
-            isLoading = true
             fetcher.fetchURL()
         }) {
             ZStack {
@@ -46,12 +44,12 @@ struct PreviewView: View {
                     .foregroundColor(.secondary)
 
                 Image(systemName: "arrow.clockwise.circle") // TODO: button icon
-                    .font(Font.system(size: 32, weight: .semibold))
+                    .font(Font.system(size: buttonIconSize, weight: .semibold))
             }
-            .frame(width: 48, height: 48)
+            .frame(width: buttonSize, height: buttonSize)
             .opacity(buttonOpacity)
             .onHover { hovering in
-                buttonOpacity = hovering ? 0.8 : 0.2
+                buttonOpacity = hovering ? buttonHoveringOpacity : buttonIdleOpacity
             }
         }
         .buttonStyle(PlainButtonStyle())
@@ -60,11 +58,19 @@ struct PreviewView: View {
     // MARK: - Draw Constants
 
     private let cornerRadius: CGFloat = 8
+    private let buttonIconSize: CGFloat = 32
+    private let buttonSize: CGFloat = 48
+    private let buttonHoveringOpacity: Double = 0.8
+    private let buttonIdleOpacity: Double = 0.2
 }
 
 struct PreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        PreviewView(fetcher: WallpaperFetcher(in: PersistenceController.shared.container.viewContext))
+        let viewContext = PersistenceController().container.viewContext
+        let fetcher = WallpaperFetcher(in: viewContext)
+
+        PreviewView()
+            .environmentObject(fetcher)
             .previewLayout(.sizeThatFits)
     }
 }
