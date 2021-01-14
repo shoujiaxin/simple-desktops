@@ -11,6 +11,8 @@ import SwiftUI
 struct PopoverView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
+    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(.all)) var wallpapers: FetchedResults<Wallpaper>
+
     // MARK: - Views
 
     var body: some View {
@@ -30,10 +32,8 @@ struct PopoverView: View {
                 .buttonStyle(PlainButtonStyle())
             }
 
-            // TODO: Preview image view
-            Rectangle()
+            PreviewView(of: wallpapers.first)
                 .aspectRatio(previewImageAspectRatio, contentMode: .fill)
-                .foregroundColor(.orange)
 
             setWallpaperButon
                 .frame(width: 240, height: 40)
