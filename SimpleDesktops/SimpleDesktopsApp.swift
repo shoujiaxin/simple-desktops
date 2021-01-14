@@ -9,12 +9,40 @@ import SwiftUI
 
 @main
 struct SimpleDesktopsApp: App {
-    let persistenceController = PersistenceController.shared
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            Group {
+                // No window
+            }
+        }
+    }
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    var statusItem: NSStatusItem!
+    var popover: NSPopover!
+    let persistenceController = PersistenceController.shared
+
+    func applicationDidFinishLaunching(_: Notification) {
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        statusItem.button?.image = NSImage(systemSymbolName: "photo.on.rectangle", accessibilityDescription: nil) // TODO: Menu bar icon
+        statusItem.button?.action = #selector(togglePopover(_:))
+
+        let contentView = ContentView()
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+
+        popover = NSPopover()
+        popover.behavior = NSPopover.Behavior.transient
+        popover.contentViewController = NSHostingController(rootView: contentView)
+    }
+
+    @objc private func togglePopover(_ sender: Any?) {
+        if popover.isShown {
+            popover.performClose(sender)
+        } else {
+            popover.show(relativeTo: statusItem.button!.bounds, of: statusItem.button!, preferredEdge: NSRectEdge.minY)
         }
     }
 }
