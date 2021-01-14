@@ -23,7 +23,7 @@ struct SimpleDesktopsApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     var popover: NSPopover!
-    let persistenceController = PersistenceController.shared
+    let persistenceController: PersistenceController = .shared
 
     func applicationDidFinishLaunching(_: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)

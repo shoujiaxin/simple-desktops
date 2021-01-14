@@ -94,6 +94,6 @@ struct PopoverView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         PopoverView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
