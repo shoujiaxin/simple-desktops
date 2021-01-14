@@ -9,38 +9,52 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 struct PreviewView: View {
-    var wallpaper: Wallpaper?
+    @ObservedObject var fetcher: WallpaperFetcher
+
+    // MARK: - States
 
     @State private var buttonOpacity: Double = 0.2
+    @State private var isLoading: Bool = false
 
-    init(of wallpaper: Wallpaper?) {
-        self.wallpaper = wallpaper
-    }
+    // MARK: - Views
 
     var body: some View {
         ZStack {
-            WebImage(url: wallpaper?.url)
+            WebImage(url: fetcher.imageUrl)
                 .onSuccess { _, _, _ in
+                    isLoading = false // TODO: runtime warning
+                }
+                .onFailure { _ in
+                    isLoading = false // TODO: runtime warning
                 }
                 .resizable()
-                .indicator(.activity)
+                .indicator(.progress)
 
-            Button(action: {}) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .foregroundColor(.secondary)
-
-                    Image(systemName: "arrow.clockwise.circle") // TODO: button icon
-                        .font(Font.system(size: 32, weight: .semibold))
-                }
-                .frame(width: 48, height: 48)
-                .opacity(buttonOpacity)
-                .onHover { hovering in
-                    buttonOpacity = hovering ? 0.8 : 0.2
-                }
+            if !isLoading {
+                button
             }
-            .buttonStyle(PlainButtonStyle())
         }
+    }
+
+    private var button: some View {
+        Button(action: {
+            isLoading = true
+            fetcher.fetchURL()
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .foregroundColor(.secondary)
+
+                Image(systemName: "arrow.clockwise.circle") // TODO: button icon
+                    .font(Font.system(size: 32, weight: .semibold))
+            }
+            .frame(width: 48, height: 48)
+            .opacity(buttonOpacity)
+            .onHover { hovering in
+                buttonOpacity = hovering ? 0.8 : 0.2
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 
     // MARK: - Draw Constants
@@ -50,7 +64,7 @@ struct PreviewView: View {
 
 struct PreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        PreviewView(of: nil)
+        PreviewView(fetcher: WallpaperFetcher(in: PersistenceController.shared.container.viewContext))
             .previewLayout(.sizeThatFits)
     }
 }

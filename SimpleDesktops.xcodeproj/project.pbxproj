@@ -16,6 +16,8 @@
 		29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054D225B05BEB00BACF46 /* Wallpaper.swift */; };
 		29E054DE25B05D1C00BACF46 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054DD25B05D1C00BACF46 /* SDWebImageSwiftUI */; };
 		29E054E725B05F8E00BACF46 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054E625B05F8E00BACF46 /* PreviewView.swift */; };
+		29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */; };
+		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,7 @@
 		294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
 		29E054D225B05BEB00BACF46 /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
 		29E054E625B05F8E00BACF46 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +41,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29E054DE25B05D1C00BACF46 /* SDWebImageSwiftUI in Frameworks */,
+				29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				29E054D225B05BEB00BACF46 /* Wallpaper.swift */,
+				29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			name = "Simple Desktops";
 			packageProductDependencies = (
 				29E054DD25B05D1C00BACF46 /* SDWebImageSwiftUI */,
+				29E054F125B0671B00BACF46 /* SwiftSoup */,
 			);
 			productName = SimpleDesktops;
 			productReference = 294A4B2D25B01E6500DA8631 /* Simple Desktops.app */;
@@ -149,6 +155,7 @@
 			mainGroup = 294A4B2425B01E6500DA8631;
 			packageReferences = (
 				29E054DC25B05D1C00BACF46 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 294A4B2E25B01E6500DA8631 /* Products */;
 			projectDirPath = "";
@@ -177,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */,
+				29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */,
 				294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */,
 				294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */,
 				29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */,
@@ -387,6 +395,14 @@
 				minimumVersion = 1.5.0;
 			};
 		};
+		29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -394,6 +410,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 29E054DC25B05D1C00BACF46 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		29E054F125B0671B00BACF46 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 /* End XCSwiftPackageProductDependency section */
 
