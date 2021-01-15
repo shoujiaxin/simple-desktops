@@ -9,8 +9,6 @@ import CoreData
 import SwiftUI
 
 struct PopoverView: View {
-//    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(.all)) var wallpapers: FetchedResults<Wallpaper>
-
     enum ViewState {
         case preview
         case preference
@@ -32,10 +30,13 @@ struct PopoverView: View {
 
             case .preference: Text("Pre") // TODO: preference view
 
-            case .history: Text("his") // TODO: history view
+            case .history:
+                HistoryView(currentView: $currentView)
+                    .environment(\.managedObjectContext, viewContext)
+                    .transition(.move(edge: .trailing))
             }
         }
-        .frame(width: 400)
+        .frame(width: 400, height: 358) // TODO: reactive size
     }
 }
 

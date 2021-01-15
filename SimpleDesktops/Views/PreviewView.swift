@@ -53,7 +53,9 @@ struct PreviewView: View {
 
     private var preferencesButton: some View {
         Button(action: {
-            currentView = .preference
+            withAnimation(.easeInOut) {
+                currentView = .preference
+            }
         }) {
             Image(systemName: "gearshape")
         }
@@ -61,7 +63,9 @@ struct PreviewView: View {
 
     private var historyButton: some View {
         Button(action: {
-            currentView = .history
+            withAnimation(.easeInOut) {
+                currentView = .history
+            }
         }) {
             Image(systemName: "clock")
         }
@@ -111,6 +115,12 @@ struct PreviewView: View {
 
 struct PreviewView_Previews: PreviewProvider {
     static var previews: some View {
+        let viewContext = PersistenceController().container.viewContext
+        let fetcher = WallpaperFetcher(in: viewContext)
+
         PreviewView(currentView: .constant(.preview))
+            .environment(\.managedObjectContext, viewContext)
+            .environmentObject(fetcher)
+            .previewLayout(.sizeThatFits)
     }
 }
