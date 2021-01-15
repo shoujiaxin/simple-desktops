@@ -13,8 +13,8 @@
 		294A4B3825B01E6600DA8631 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */; };
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
+		29D27B5E25B15960006674DB /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 29D27B5D25B15960006674DB /* SDWebImage */; };
 		29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054D225B05BEB00BACF46 /* Wallpaper.swift */; };
-		29E054DE25B05D1C00BACF46 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054DD25B05D1C00BACF46 /* SDWebImageSwiftUI */; };
 		29E054E725B05F8E00BACF46 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054E625B05F8E00BACF46 /* PreviewView.swift */; };
 		29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */; };
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29E054DE25B05D1C00BACF46 /* SDWebImageSwiftUI in Frameworks */,
+				29D27B5E25B15960006674DB /* SDWebImage in Frameworks */,
 				29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,8 +131,8 @@
 			);
 			name = "Simple Desktops";
 			packageProductDependencies = (
-				29E054DD25B05D1C00BACF46 /* SDWebImageSwiftUI */,
 				29E054F125B0671B00BACF46 /* SwiftSoup */,
+				29D27B5D25B15960006674DB /* SDWebImage */,
 			);
 			productName = SimpleDesktops;
 			productReference = 294A4B2D25B01E6500DA8631 /* Simple Desktops.app */;
@@ -162,8 +162,8 @@
 			);
 			mainGroup = 294A4B2425B01E6500DA8631;
 			packageReferences = (
-				29E054DC25B05D1C00BACF46 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				29D27B5C25B15960006674DB /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = 294A4B2E25B01E6500DA8631 /* Products */;
 			projectDirPath = "";
@@ -395,12 +395,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		29E054DC25B05D1C00BACF46 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+		29D27B5C25B15960006674DB /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.0;
+				minimumVersion = 5.10.2;
 			};
 		};
 		29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -414,10 +414,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		29E054DD25B05D1C00BACF46 /* SDWebImageSwiftUI */ = {
+		29D27B5D25B15960006674DB /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 29E054DC25B05D1C00BACF46 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
+			package = 29D27B5C25B15960006674DB /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
 		};
 		29E054F125B0671B00BACF46 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;

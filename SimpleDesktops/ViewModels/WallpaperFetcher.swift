@@ -5,6 +5,7 @@
 //  Created by Jiaxin Shou on 2021/1/14.
 //
 
+import SDWebImage
 import SwiftSoup
 import SwiftUI
 
@@ -74,6 +75,23 @@ class WallpaperFetcher: ObservableObject {
         }
 
         task.resume()
+    }
+
+    func download() {
+        guard let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false),
+              let imageUrl = imageUrl,
+              let wallpaper = Wallpaper.withPreviewURL(imageUrl, in: context)
+        else {
+            return
+        }
+
+        SDWebImageDownloader.shared.downloadImage(with: wallpaper.url, options: .highPriority) { receivedSize, expectedSize, _ in
+            print(Double(receivedSize / expectedSize))
+            // TODO: downloading progress
+        } completed: { _, data, _, _ in
+            try? data?.write(to: directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString))
+            // TODO: send notification
+        }
     }
 
     private func fetchImage(from url: URL) {

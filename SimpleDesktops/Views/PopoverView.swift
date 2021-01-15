@@ -65,7 +65,7 @@ struct PopoverView: View {
 
     private var downloadButton: some View {
         Button(action: {
-            // TODO: download
+            fetcher.download()
         }) {
             Image(systemName: "square.and.arrow.down")
         }
