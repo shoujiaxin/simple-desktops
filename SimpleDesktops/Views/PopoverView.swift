@@ -13,14 +13,23 @@ struct PopoverView: View {
         case preview
         case preference
         case history
+
+        var height: CGFloat {
+            self == .preference ? 163 : 358
+        }
     }
 
     @State private var currentView: ViewState = .preview
 
-    var body: some View {
-        let viewContext = PersistenceController().container.viewContext
-        let fetcher = WallpaperFetcher(in: viewContext)
+    private var viewContext: NSManagedObjectContext!
+    private var fetcher: WallpaperFetcher!
 
+    init() {
+        viewContext = PersistenceController().container.viewContext
+        fetcher = WallpaperFetcher(in: viewContext)
+    }
+
+    var body: some View {
         Group {
             switch currentView {
             case .preview:
@@ -38,7 +47,7 @@ struct PopoverView: View {
                     .transition(.move(edge: .trailing))
             }
         }
-        .frame(width: 400, height: 358) // TODO: reactive size
+        .frame(width: 400, height: currentView.height) // TODO: reactive size
     }
 }
 

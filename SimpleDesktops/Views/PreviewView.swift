@@ -59,7 +59,7 @@ struct PreviewView: View {
 
             ImageView()
                 .environmentObject(fetcher)
-                .aspectRatio(previewImageAspectRatio, contentMode: .fill)
+                .aspectRatio(previewImageAspectRatio, contentMode: .fit)
 
             CapsuleButton("Set as Wallpaper") {
                 // TODO: set as wallpaper
@@ -85,6 +85,6 @@ struct PreviewView_Previews: PreviewProvider {
         PreviewView(currentView: .constant(.preview))
             .environment(\.managedObjectContext, viewContext)
             .environmentObject(fetcher)
-            .previewLayout(.sizeThatFits)
+            .frame(width: 400)
     }
 }

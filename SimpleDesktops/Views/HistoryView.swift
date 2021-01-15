@@ -18,7 +18,7 @@ struct HistoryView: View {
     @State private var hoveringItem: Wallpaper?
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
                 ImageButton(image: {
                     Image(systemName: "chevron.backward")
@@ -74,6 +74,6 @@ struct HistoryView_Previews: PreviewProvider {
 
         HistoryView(currentView: .constant(.history))
             .environment(\.managedObjectContext, viewContext)
-            .previewLayout(.fixed(width: 400, height: 358))
+            .frame(width: 400, height: 358)
     }
 }
