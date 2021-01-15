@@ -73,7 +73,7 @@
 				294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */,
 				29E054A325B0379600BACF46 /* Views */,
 				29E054D125B05B3700BACF46 /* ViewModels */,
-				294A4B3925B01E6600DA8631 /* PersistenceController.swift */,
+				29D27B5525B1398A006674DB /* Utilities */,
 				294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */,
 				294A4B3625B01E6600DA8631 /* Preview Content */,
 			);
@@ -86,6 +86,14 @@
 				294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		29D27B5525B1398A006674DB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				294A4B3925B01E6600DA8631 /* PersistenceController.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		29E054A325B0379600BACF46 /* Views */ = {

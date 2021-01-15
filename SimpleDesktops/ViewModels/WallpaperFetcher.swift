@@ -5,7 +5,6 @@
 //  Created by Jiaxin Shou on 2021/1/14.
 //
 
-import Combine
 import SwiftSoup
 import SwiftUI
 
@@ -20,15 +19,16 @@ class WallpaperFetcher: ObservableObject {
 
     @Published private(set) var isLoading: Bool = false
 
+    @Published private(set) var loadingProgress: Double = 0
+
     private var context: NSManagedObjectContext
 
-    private var fetchImageCancellable: AnyCancellable?
+    private var loadingProgressObservation: NSKeyValueObservation?
 
     private var imageUrl: URL? {
         willSet {
             if let url = newValue {
-                fetchImageCancellable?.cancel()
-                fetchImageCancellable = fetchImageCancellable(for: url)
+                fetchImage(from: url)
             }
         }
     }
@@ -40,7 +40,7 @@ class WallpaperFetcher: ObservableObject {
            let url = wallpaper.previewUrl
         {
             imageUrl = url
-            fetchImageCancellable = fetchImageCancellable(for: url)
+            fetchImage(from: url)
         } else {
             fetchURL()
         }
@@ -76,11 +76,23 @@ class WallpaperFetcher: ObservableObject {
         task.resume()
     }
 
-    private func fetchImageCancellable(for url: URL) -> AnyCancellable? {
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { data, _ in NSImage(data: data) }
-            .receive(on: DispatchQueue.main)
-            .replaceError(with: nil)
-            .assign(to: \.image, on: self)
+    private func fetchImage(from url: URL) {
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.image = NSImage(data: data)
+            }
+        }
+
+        loadingProgressObservation = task.progress.observe(\.fractionCompleted) { progress, _ in
+            DispatchQueue.main.async {
+                self.loadingProgress = progress.fractionCompleted
+            }
+        }
+
+        task.resume()
     }
 }

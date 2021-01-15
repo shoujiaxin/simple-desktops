@@ -28,6 +28,9 @@ struct PreviewView: View {
 
             if !fetcher.isLoading {
                 button
+            } else {
+                ProgressView(value: fetcher.loadingProgress)
+                    .progressViewStyle(CircularProgressViewStyle())
             }
         }
         .onAppear {
