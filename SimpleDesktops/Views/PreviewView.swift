@@ -10,6 +10,8 @@ import SwiftUI
 struct PreviewView: View {
     @EnvironmentObject var fetcher: WallpaperFetcher
 
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     // MARK: - States
 
     @State private var buttonOpacity: Double = 0.2
@@ -44,10 +46,11 @@ struct PreviewView: View {
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.primary)
 
                 Image(systemName: "arrow.clockwise.circle") // TODO: button icon
                     .font(Font.system(size: buttonIconSize, weight: .semibold))
+                    .foregroundColor(colorScheme == .dark ? .black : .white)
             }
             .frame(width: buttonSize, height: buttonSize)
             .opacity(buttonOpacity)
