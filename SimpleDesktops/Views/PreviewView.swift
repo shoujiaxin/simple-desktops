@@ -18,25 +18,23 @@ struct PreviewView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                Group {
-                    preferencesButton
+            HStack {
+                preferencesButton
+                    .padding(imageButtonPadding)
 
-                    historyButton
+                historyButton
+                    .padding(imageButtonPadding)
 
-                    Spacer()
+                Spacer()
 
-                    if fetcher.isDownloading {
-                        ProgressView(value: fetcher.downloadingProgress)
-                            .frame(width: 60)
-                    }
-
-                    downloadButton
-                        .disabled(fetcher.isLoading)
+                if fetcher.isDownloading {
+                    ProgressView(value: fetcher.downloadingProgress)
+                        .frame(width: downloadProgressIndicator)
                 }
-                .padding(imageButtonPadding)
-                .font(Font.system(size: imageButtonSize, weight: .bold))
-                .buttonStyle(PlainButtonStyle())
+
+                downloadButton
+                    .padding(imageButtonPadding)
+                    .disabled(fetcher.isLoading)
             }
 
             ImageView()
@@ -44,9 +42,8 @@ struct PreviewView: View {
                 .aspectRatio(previewImageAspectRatio, contentMode: .fill)
 
             setWallpaperButon
-                .frame(width: 240, height: 40)
-                .padding(imageButtonPadding)
-                .buttonStyle(PlainButtonStyle())
+                .frame(width: capsuleButtonWidth, height: capsuleButtonHeight)
+                .padding(2 * imageButtonPadding)
                 .disabled(fetcher.isLoading)
         }
     }
@@ -58,7 +55,11 @@ struct PreviewView: View {
             }
         }) {
             Image(systemName: "gearshape")
+                .font(Font.system(size: imageButtonIconSize, weight: .bold))
+                .frame(width: imageButtonSize, height: imageButtonSize)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(PlainButtonStyle())
     }
 
     private var historyButton: some View {
@@ -68,25 +69,25 @@ struct PreviewView: View {
             }
         }) {
             Image(systemName: "clock")
+                .font(Font.system(size: imageButtonIconSize, weight: .bold))
+                .frame(width: imageButtonSize, height: imageButtonSize)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(PlainButtonStyle())
     }
 
     private var downloadButton: some View {
-        Group {
-            if fetcher.isDownloading {
-                Button(action: {
-                    fetcher.cancelDownload()
-                }) {
-                    Image(systemName: "xmark")
-                }
-            } else {
-                Button(action: {
-                    fetcher.download()
-                }) {
-                    Image(systemName: "square.and.arrow.down")
-                }
+        Button(action: {
+            fetcher.isDownloading ? fetcher.cancelDownload() : fetcher.download()
+        }) {
+            Group {
+                fetcher.isDownloading ? Image(systemName: "xmark") : Image(systemName: "square.and.arrow.down")
             }
+            .font(Font.system(size: imageButtonIconSize, weight: .bold))
+            .frame(width: imageButtonSize, height: imageButtonSize)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(PlainButtonStyle())
     }
 
     private var setWallpaperButon: some View {
@@ -98,19 +99,23 @@ struct PreviewView: View {
                 Capsule()
                     .stroke(lineWidth: 2.0)
 
-                Capsule()
-                    .foregroundColor(.clear)
-
                 Text("Set as Wallpaper")
+                    .frame(width: capsuleButtonWidth, height: capsuleButtonHeight)
+                    .contentShape(Capsule())
             }
         }
+        .buttonStyle(PlainButtonStyle())
     }
 
     // MARK: - Draw Constants
 
     private let previewImageAspectRatio: CGFloat = 1.6
-    private let imageButtonSize: CGFloat = 16
-    private let imageButtonPadding: CGFloat = 12
+    private let imageButtonIconSize: CGFloat = 16
+    private let imageButtonSize: CGFloat = 32
+    private let imageButtonPadding: CGFloat = 6
+    private let downloadProgressIndicator: CGFloat = 60
+    private let capsuleButtonWidth: CGFloat = 240
+    private let capsuleButtonHeight: CGFloat = 40
 }
 
 struct PreviewView_Previews: PreviewProvider {

@@ -28,7 +28,9 @@ struct PopoverView: View {
                     .environment(\.managedObjectContext, viewContext)
                     .environmentObject(fetcher)
 
-            case .preference: Text("Pre") // TODO: preference view
+            case .preference:
+                PreferenceView(currentView: $currentView)
+                    .transition(.move(edge: .bottom))
 
             case .history:
                 HistoryView(currentView: $currentView)

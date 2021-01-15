@@ -13,6 +13,7 @@
 		294A4B3825B01E6600DA8631 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */; };
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
+		29B06BCB25B1947C006EB273 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
 		29D27B6525B16598006674DB /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B6425B16598006674DB /* PreviewView.swift */; };
 		29D27B7025B16A0A006674DB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29D27B6F25B16A0A006674DB /* SDWebImageSwiftUI */; };
 		29D27B7325B16ABE006674DB /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B7225B16ABE006674DB /* HistoryView.swift */; };
@@ -32,6 +33,7 @@
 		294A4B3C25B01E6600DA8631 /* SimpleDesktops.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleDesktops.xcdatamodel; sourceTree = "<group>"; };
 		294A4B3E25B01E6600DA8631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
+		29B06BCA25B1947C006EB273 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
 		29D27B6425B16598006674DB /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		29D27B7225B16ABE006674DB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		29E054D225B05BEB00BACF46 /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				29D27B6425B16598006674DB /* PreviewView.swift */,
 				29E054E625B05F8E00BACF46 /* ImageView.swift */,
 				29D27B7225B16ABE006674DB /* HistoryView.swift */,
+				29B06BCA25B1947C006EB273 /* PreferenceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */,
 				29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */,
 				294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */,
+				29B06BCB25B1947C006EB273 /* PreferenceView.swift in Sources */,
 				29D27B7325B16ABE006674DB /* HistoryView.swift in Sources */,
 				29E054E725B05F8E00BACF46 /* ImageView.swift in Sources */,
 			);

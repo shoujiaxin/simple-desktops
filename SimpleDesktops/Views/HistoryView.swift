@@ -22,8 +22,6 @@ struct HistoryView: View {
             HStack {
                 backButton
                     .padding(imageButtonPadding)
-                    .font(Font.system(size: imageButtonSize, weight: .bold))
-                    .buttonStyle(PlainButtonStyle())
 
                 Spacer()
             }
@@ -60,7 +58,11 @@ struct HistoryView: View {
             }
         }) {
             Image(systemName: "chevron.backward")
+                .font(Font.system(size: imageButtonIconSize, weight: .bold))
+                .frame(width: imageButtonSize, height: imageButtonSize)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(PlainButtonStyle())
     }
 
     // MARK: - Draw Constants
@@ -68,8 +70,9 @@ struct HistoryView: View {
     private let historyImageWidth: CGFloat = 176
     private let historyImageAspectRatio: CGFloat = 1.6
     private let historyImageSpacing: CGFloat = 16
-    private let imageButtonSize: CGFloat = 16
-    private let imageButtonPadding: CGFloat = 12
+    private let imageButtonIconSize: CGFloat = 16
+    private let imageButtonSize: CGFloat = 32
+    private let imageButtonPadding: CGFloat = 6
     private let highlighLineWidth: CGFloat = 6
 }
 
