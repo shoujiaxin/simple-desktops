@@ -2,81 +2,115 @@
 //  PreviewView.swift
 //  Simple Desktops
 //
-//  Created by Jiaxin Shou on 2021/1/14.
+//  Created by Jiaxin Shou on 2021/1/15.
 //
 
 import SwiftUI
 
 struct PreviewView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
     @EnvironmentObject var fetcher: WallpaperFetcher
 
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-
-    // MARK: - States
-
-    @State private var buttonOpacity: Double = 0.2
+    @Binding var currentView: PopoverView.ViewState
 
     // MARK: - Views
 
     var body: some View {
-        ZStack {
-            if let image = fetcher.image {
-                Image(nsImage: image)
-                    .resizable()
-            } else {
-                Rectangle() // Placeholder
-                    .foregroundColor(.clear)
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                Group {
+                    preferencesButton
+
+                    historyButton
+
+                    Spacer()
+
+                    if fetcher.isDownloading {
+                        ProgressView(value: fetcher.downloadingProgress)
+                            .frame(width: 60)
+                    }
+
+                    downloadButton
+                        .disabled(fetcher.isLoading)
+                }
+                .padding(imageButtonPadding)
+                .font(Font.system(size: imageButtonSize, weight: .bold))
+                .buttonStyle(PlainButtonStyle())
             }
 
-            if !fetcher.isLoading {
-                button
-            } else {
-                ProgressView(value: fetcher.loadingProgress)
-                    .progressViewStyle(CircularProgressViewStyle())
-            }
-        }
-        .onAppear {
-            buttonOpacity = buttonIdleOpacity
+            ImageView()
+                .environmentObject(fetcher)
+                .aspectRatio(previewImageAspectRatio, contentMode: .fill)
+
+            setWallpaperButon
+                .frame(width: 240, height: 40)
+                .padding(imageButtonPadding)
+                .buttonStyle(PlainButtonStyle())
+                .disabled(fetcher.isLoading)
         }
     }
 
-    private var button: some View {
+    private var preferencesButton: some View {
         Button(action: {
-            fetcher.fetchURL()
+            currentView = .preference
         }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .foregroundColor(.primary)
+            Image(systemName: "gearshape")
+        }
+    }
 
-                Image(systemName: "arrow.clockwise.circle") // TODO: button icon
-                    .font(Font.system(size: buttonIconSize, weight: .semibold))
-                    .foregroundColor(colorScheme == .dark ? .black : .white)
-            }
-            .frame(width: buttonSize, height: buttonSize)
-            .opacity(buttonOpacity)
-            .onHover { hovering in
-                buttonOpacity = hovering ? buttonHoveringOpacity : buttonIdleOpacity
+    private var historyButton: some View {
+        Button(action: {
+            currentView = .history
+        }) {
+            Image(systemName: "clock")
+        }
+    }
+
+    private var downloadButton: some View {
+        Group {
+            if fetcher.isDownloading {
+                Button(action: {
+                    fetcher.cancelDownload()
+                }) {
+                    Image(systemName: "xmark")
+                }
+            } else {
+                Button(action: {
+                    fetcher.download()
+                }) {
+                    Image(systemName: "square.and.arrow.down")
+                }
             }
         }
-        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var setWallpaperButon: some View {
+        Button(action: {
+            // TODO: set as wallpaper
+        }) {
+            ZStack {
+                // TODO: Button color
+                Capsule()
+                    .stroke(lineWidth: 2.0)
+
+                Capsule()
+                    .foregroundColor(.clear)
+
+                Text("Set as Wallpaper")
+            }
+        }
     }
 
     // MARK: - Draw Constants
 
-    private let cornerRadius: CGFloat = 8
-    private let buttonIconSize: CGFloat = 32
-    private let buttonSize: CGFloat = 48
-    private let buttonHoveringOpacity: Double = 0.8
-    private let buttonIdleOpacity: Double = 0.2
+    private let previewImageAspectRatio: CGFloat = 1.6
+    private let imageButtonSize: CGFloat = 16
+    private let imageButtonPadding: CGFloat = 12
 }
 
 struct PreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewContext = PersistenceController().container.viewContext
-        let fetcher = WallpaperFetcher(in: viewContext)
-
-        PreviewView()
-            .environmentObject(fetcher)
-            .previewLayout(.sizeThatFits)
+        PreviewView(currentView: .constant(.preview))
     }
 }

@@ -9,108 +9,37 @@ import CoreData
 import SwiftUI
 
 struct PopoverView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject var fetcher: WallpaperFetcher
-
 //    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(.all)) var wallpapers: FetchedResults<Wallpaper>
 
-    // MARK: - Views
+    enum ViewState {
+        case preview
+        case preference
+        case history
+    }
+
+    @State private var currentView: ViewState = .preview
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                Group {
-                    preferencesButton
+        let viewContext = PersistenceController().container.viewContext
+        let fetcher = WallpaperFetcher(in: viewContext)
 
-                    historyButton
+        Group {
+            switch currentView {
+            case .preview:
+                PreviewView(currentView: $currentView)
+                    .environment(\.managedObjectContext, viewContext)
+                    .environmentObject(fetcher)
 
-                    Spacer()
+            case .preference: Text("Pre") // TODO: preference view
 
-                    if fetcher.isDownloading {
-                        ProgressView(value: fetcher.downloadingProgress)
-                            .frame(width: 60)
-                    }
-
-                    downloadButton
-                        .disabled(fetcher.isLoading)
-                }
-                .padding(imageButtonPadding)
-                .font(Font.system(size: imageButtonSize, weight: .bold))
-                .buttonStyle(PlainButtonStyle())
+            case .history: Text("his") // TODO: history view
             }
-
-            PreviewView()
-                .environmentObject(fetcher)
-                .aspectRatio(previewImageAspectRatio, contentMode: .fill)
-
-            setWallpaperButon
-                .frame(width: 240, height: 40)
-                .padding(imageButtonPadding)
-                .buttonStyle(PlainButtonStyle())
-                .disabled(fetcher.isLoading)
         }
         .frame(width: 400)
     }
-
-    private var preferencesButton: some View {
-        Button(action: {
-            // TODO: to preferences
-        }) {
-            Image(systemName: "gearshape")
-        }
-    }
-
-    private var historyButton: some View {
-        Button(action: {
-            // TODO: to histories
-        }) {
-            Image(systemName: "clock")
-        }
-    }
-
-    private var downloadButton: some View {
-        Group {
-            if fetcher.isDownloading {
-                Button(action: {
-                    fetcher.cancelDownload()
-                }) {
-                    Image(systemName: "xmark")
-                }
-            } else {
-                Button(action: {
-                    fetcher.download()
-                }) {
-                    Image(systemName: "square.and.arrow.down")
-                }
-            }
-        }
-    }
-
-    private var setWallpaperButon: some View {
-        Button(action: {
-            // TODO: set as wallpaper
-        }) {
-            ZStack {
-                // TODO: Button color
-                Capsule()
-                    .stroke(lineWidth: 2.0)
-
-                Capsule()
-                    .foregroundColor(.clear)
-
-                Text("Set as Wallpaper")
-            }
-        }
-    }
-
-    // MARK: - Draw Constants
-
-    private let previewImageAspectRatio: CGFloat = 1.6
-    private let imageButtonSize: CGFloat = 16
-    private let imageButtonPadding: CGFloat = 12
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct PopoverView_Previews: PreviewProvider {
     static var previews: some View {
         let viewContext = PersistenceController().container.viewContext
         let fetcher = WallpaperFetcher(in: viewContext)

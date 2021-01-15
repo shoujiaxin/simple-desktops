@@ -14,8 +14,9 @@
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
 		29D27B5E25B15960006674DB /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 29D27B5D25B15960006674DB /* SDWebImage */; };
+		29D27B6525B16598006674DB /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B6425B16598006674DB /* PreviewView.swift */; };
 		29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054D225B05BEB00BACF46 /* Wallpaper.swift */; };
-		29E054E725B05F8E00BACF46 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054E625B05F8E00BACF46 /* PreviewView.swift */; };
+		29E054E725B05F8E00BACF46 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054E625B05F8E00BACF46 /* ImageView.swift */; };
 		29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */; };
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
 /* End PBXBuildFile section */
@@ -30,8 +31,9 @@
 		294A4B3C25B01E6600DA8631 /* SimpleDesktops.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleDesktops.xcdatamodel; sourceTree = "<group>"; };
 		294A4B3E25B01E6600DA8631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
+		29D27B6425B16598006674DB /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		29E054D225B05BEB00BACF46 /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
-		29E054E625B05F8E00BACF46 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		29E054E625B05F8E00BACF46 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				294A4B3225B01E6500DA8631 /* PopoverView.swift */,
-				29E054E625B05F8E00BACF46 /* PreviewView.swift */,
+				29D27B6425B16598006674DB /* PreviewView.swift */,
+				29E054E625B05F8E00BACF46 /* ImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,12 +195,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */,
+				29D27B6525B16598006674DB /* PreviewView.swift in Sources */,
 				29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */,
 				294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */,
 				294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */,
 				29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */,
 				294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */,
-				29E054E725B05F8E00BACF46 /* PreviewView.swift in Sources */,
+				29E054E725B05F8E00BACF46 /* ImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
