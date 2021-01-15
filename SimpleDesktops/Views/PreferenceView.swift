@@ -13,8 +13,6 @@ struct PreferenceView: View {
     @State private var isAutoChangeOn: Bool = true
     @State private var selectedInterval: Int = 1
 
-    // MARK: - Views
-
     var body: some View {
         VStack {
             Toggle(isOn: $isAutoChangeOn) {
@@ -29,37 +27,19 @@ struct PreferenceView: View {
 
             Spacer()
 
-            doneButton
-                .frame(width: capsuleButtonWidth, height: capsuleButtonHeight)
-                .padding(imageButtonPadding)
-        }
-    }
-
-    private var doneButton: some View {
-        Button(action: {
-            withAnimation(.easeInOut) {
-                currentView = .preview
+            CapsuleButton("Done") {
+                withAnimation(.easeInOut) {
+                    currentView = .preview
+                }
             }
-        }) {
-            ZStack {
-                // TODO: Button color
-                Capsule()
-                    .stroke(lineWidth: 2.0)
-
-                Text("Done")
-                    .frame(width: capsuleButtonWidth, height: capsuleButtonHeight)
-                    .contentShape(Capsule())
-            }
+            .padding(imageButtonPadding)
         }
-        .buttonStyle(PlainButtonStyle())
     }
 
     // MARK: - Draw Constants
 
     private let intervalPickerWidth: CGFloat = 240
     private let imageButtonPadding: CGFloat = 12
-    private let capsuleButtonWidth: CGFloat = 240
-    private let capsuleButtonHeight: CGFloat = 40
 }
 
 struct PreferenceView_Previews: PreviewProvider {

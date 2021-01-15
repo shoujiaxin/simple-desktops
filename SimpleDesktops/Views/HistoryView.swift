@@ -20,8 +20,15 @@ struct HistoryView: View {
     var body: some View {
         VStack {
             HStack {
-                backButton
-                    .padding(imageButtonPadding)
+                ImageButton(image: {
+                    Image(systemName: "chevron.backward")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
+                }) {
+                    withAnimation(.easeInOut) {
+                        currentView = .preview
+                    }
+                }
+                .padding(buttonPaddingLength)
 
                 Spacer()
             }
@@ -51,28 +58,13 @@ struct HistoryView: View {
         }
     }
 
-    private var backButton: some View {
-        Button(action: {
-            withAnimation(.easeInOut) {
-                currentView = .preview
-            }
-        }) {
-            Image(systemName: "chevron.backward")
-                .font(Font.system(size: imageButtonIconSize, weight: .bold))
-                .frame(width: imageButtonSize, height: imageButtonSize)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-
     // MARK: - Draw Constants
 
     private let historyImageWidth: CGFloat = 176
     private let historyImageAspectRatio: CGFloat = 1.6
     private let historyImageSpacing: CGFloat = 16
-    private let imageButtonIconSize: CGFloat = 16
-    private let imageButtonSize: CGFloat = 32
-    private let imageButtonPadding: CGFloat = 6
+    private let buttonIconSize: CGFloat = 16
+    private let buttonPaddingLength: CGFloat = 6
     private let highlighLineWidth: CGFloat = 6
 }
 

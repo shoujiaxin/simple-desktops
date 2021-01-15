@@ -14,16 +14,28 @@ struct PreviewView: View {
 
     @Binding var currentView: PopoverView.ViewState
 
-    // MARK: - Views
-
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                preferencesButton
-                    .padding(imageButtonPadding)
+                // Preference button
+                ImageButton(image: {
+                    Image(systemName: "gearshape")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
+                }) {
+                    withAnimation(.easeInOut) {
+                        currentView = .preference
+                    }
+                }
 
-                historyButton
-                    .padding(imageButtonPadding)
+                // History button
+                ImageButton(image: {
+                    Image(systemName: "clock")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
+                }) {
+                    withAnimation(.easeInOut) {
+                        currentView = .history
+                    }
+                }
 
                 Spacer()
 
@@ -32,90 +44,37 @@ struct PreviewView: View {
                         .frame(width: downloadProgressIndicator)
                 }
 
-                downloadButton
-                    .padding(imageButtonPadding)
-                    .disabled(fetcher.isLoading)
+                // Download button
+                ImageButton(image: {
+                    Group {
+                        fetcher.isDownloading ? Image(systemName: "xmark") : Image(systemName: "square.and.arrow.down")
+                    }
+                    .font(Font.system(size: buttonIconSize, weight: .bold))
+                }) {
+                    fetcher.isDownloading ? fetcher.cancelDownload() : fetcher.download()
+                }
+                .disabled(fetcher.isLoading)
             }
+            .padding(buttonPaddingLength)
 
             ImageView()
                 .environmentObject(fetcher)
                 .aspectRatio(previewImageAspectRatio, contentMode: .fill)
 
-            setWallpaperButon
-                .frame(width: capsuleButtonWidth, height: capsuleButtonHeight)
-                .padding(2 * imageButtonPadding)
-                .disabled(fetcher.isLoading)
-        }
-    }
-
-    private var preferencesButton: some View {
-        Button(action: {
-            withAnimation(.easeInOut) {
-                currentView = .preference
+            CapsuleButton("Set as Wallpaper") {
+                // TODO: set as wallpaper
             }
-        }) {
-            Image(systemName: "gearshape")
-                .font(Font.system(size: imageButtonIconSize, weight: .bold))
-                .frame(width: imageButtonSize, height: imageButtonSize)
-                .contentShape(Rectangle())
+            .padding(2 * buttonPaddingLength)
+            .disabled(fetcher.isLoading)
         }
-        .buttonStyle(PlainButtonStyle())
-    }
-
-    private var historyButton: some View {
-        Button(action: {
-            withAnimation(.easeInOut) {
-                currentView = .history
-            }
-        }) {
-            Image(systemName: "clock")
-                .font(Font.system(size: imageButtonIconSize, weight: .bold))
-                .frame(width: imageButtonSize, height: imageButtonSize)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-
-    private var downloadButton: some View {
-        Button(action: {
-            fetcher.isDownloading ? fetcher.cancelDownload() : fetcher.download()
-        }) {
-            Group {
-                fetcher.isDownloading ? Image(systemName: "xmark") : Image(systemName: "square.and.arrow.down")
-            }
-            .font(Font.system(size: imageButtonIconSize, weight: .bold))
-            .frame(width: imageButtonSize, height: imageButtonSize)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-
-    private var setWallpaperButon: some View {
-        Button(action: {
-            // TODO: set as wallpaper
-        }) {
-            ZStack {
-                // TODO: Button color
-                Capsule()
-                    .stroke(lineWidth: 2.0)
-
-                Text("Set as Wallpaper")
-                    .frame(width: capsuleButtonWidth, height: capsuleButtonHeight)
-                    .contentShape(Capsule())
-            }
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 
     // MARK: - Draw Constants
 
     private let previewImageAspectRatio: CGFloat = 1.6
-    private let imageButtonIconSize: CGFloat = 16
-    private let imageButtonSize: CGFloat = 32
-    private let imageButtonPadding: CGFloat = 6
+    private let buttonIconSize: CGFloat = 16
+    private let buttonPaddingLength: CGFloat = 6
     private let downloadProgressIndicator: CGFloat = 60
-    private let capsuleButtonWidth: CGFloat = 240
-    private let capsuleButtonHeight: CGFloat = 40
 }
 
 struct PreviewView_Previews: PreviewProvider {
