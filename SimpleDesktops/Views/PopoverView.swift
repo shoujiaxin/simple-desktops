@@ -27,6 +27,7 @@ struct PopoverView: View {
                     Spacer()
 
                     downloadButton
+                        .disabled(fetcher.isLoading)
                 }
                 .padding(imageButtonPadding)
                 .font(Font.system(size: imageButtonSize, weight: .bold))
