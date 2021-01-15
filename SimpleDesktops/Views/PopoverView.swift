@@ -26,6 +26,11 @@ struct PopoverView: View {
 
                     Spacer()
 
+                    if fetcher.isDownloading {
+                        ProgressView(value: fetcher.downloadingProgress)
+                            .frame(width: 60)
+                    }
+
                     downloadButton
                         .disabled(fetcher.isLoading)
                 }
@@ -64,10 +69,20 @@ struct PopoverView: View {
     }
 
     private var downloadButton: some View {
-        Button(action: {
-            fetcher.download()
-        }) {
-            Image(systemName: "square.and.arrow.down")
+        Group {
+            if fetcher.isDownloading {
+                Button(action: {
+                    fetcher.cancelDownload()
+                }) {
+                    Image(systemName: "xmark")
+                }
+            } else {
+                Button(action: {
+                    fetcher.download()
+                }) {
+                    Image(systemName: "square.and.arrow.down")
+                }
+            }
         }
     }
 

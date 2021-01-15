@@ -14,17 +14,18 @@ class WallpaperFetcher: ObservableObject {
         didSet {
             DispatchQueue.main.async {
                 self.isLoading = false
+                self.loadingProgress = 0
             }
         }
     }
 
     @Published private(set) var isLoading: Bool = false
-
     @Published private(set) var loadingProgress: Double = 0
 
-    private var context: NSManagedObjectContext
+    @Published private(set) var isDownloading: Bool = false
+    @Published private(set) var downloadingProgress: Double = 0
 
-    private var loadingProgressObservation: NSKeyValueObservation?
+    private var context: NSManagedObjectContext
 
     private var imageUrl: URL? {
         willSet {
@@ -49,6 +50,7 @@ class WallpaperFetcher: ObservableObject {
 
     func fetchURL() {
         isLoading = true
+        loadingProgress = 0
 
         var links: [String] = []
         let page = Int.random(in: 1 ... 51)
@@ -85,32 +87,39 @@ class WallpaperFetcher: ObservableObject {
             return
         }
 
+        isDownloading = true
+        downloadingProgress = 0
+
         SDWebImageDownloader.shared.downloadImage(with: wallpaper.url, options: .highPriority) { receivedSize, expectedSize, _ in
-            print(Double(receivedSize / expectedSize))
-            // TODO: downloading progress
+            DispatchQueue.main.async {
+                self.downloadingProgress = Double(receivedSize) / Double(expectedSize)
+            }
         } completed: { _, data, _, _ in
             try? data?.write(to: directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString))
+
+            DispatchQueue.main.async {
+                self.isDownloading = false
+                self.downloadingProgress = 0
+            }
             // TODO: send notification
         }
     }
 
+    func cancelDownload() {
+        SDWebImageDownloader.shared.cancelAllDownloads()
+    }
+
     private func fetchImage(from url: URL) {
-        let task = URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil else {
-                return
-            }
-
+        SDWebImageManager.shared.loadImage(with: url, options: .highPriority) { receivedSize, expectedSize, _ in
             DispatchQueue.main.async {
-                self.image = NSImage(data: data)
+                self.loadingProgress = Double(receivedSize) / Double(expectedSize)
+            }
+        } completed: { image, _, _, _, _, _ in
+            if let image = image {
+                DispatchQueue.main.async {
+                    self.image = image
+                }
             }
         }
-
-        loadingProgressObservation = task.progress.observe(\.fractionCompleted) { progress, _ in
-            DispatchQueue.main.async {
-                self.loadingProgress = progress.fractionCompleted
-            }
-        }
-
-        task.resume()
     }
 }
