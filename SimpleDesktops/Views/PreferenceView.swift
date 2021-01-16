@@ -71,7 +71,7 @@ struct PreferenceView: View {
 
     // MARK: - Draw Constants
 
-    private let intervalPickerWidth: CGFloat = 240
+    private let intervalPickerWidth: CGFloat = 260
     private let pickerPadding: CGFloat = 24
     private let buttonPadding: CGFloat = 12
     private let buttonSpacing: CGFloat = 24
