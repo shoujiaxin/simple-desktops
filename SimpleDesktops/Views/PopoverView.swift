@@ -46,10 +46,11 @@ struct PopoverView: View {
             case .history:
                 HistoryView(currentView: $currentView)
                     .environment(\.managedObjectContext, viewContext)
+                    .environmentObject(fetcher)
                     .transition(.move(edge: .trailing))
             }
         }
-        .frame(width: 400, height: currentView.height) // TODO: reactive size
+        .frame(width: 400, height: currentView.height)
     }
 }
 

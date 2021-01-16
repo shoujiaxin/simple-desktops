@@ -126,6 +126,10 @@ class WallpaperFetcher: ObservableObject {
         }
     }
 
+    func setImageUrl(_ url: URL?) {
+        imageUrl = url
+    }
+
     private func fetchImage(from url: URL) {
         SDWebImageManager.shared.loadImage(with: url, options: .highPriority) { receivedSize, expectedSize, _ in
             DispatchQueue.main.async {

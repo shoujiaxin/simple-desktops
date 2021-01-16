@@ -68,7 +68,7 @@ struct PreviewView: View {
                 .environmentObject(fetcher)
                 .aspectRatio(previewImageAspectRatio, contentMode: .fit)
 
-            CapsuleButton("Set as Wallpaper") {
+            CapsuleButton("Set as Wallpaper") { // TODO: localization
                 fetcher.setWallpaper()
             }
             .padding(2 * buttonPaddingLength)

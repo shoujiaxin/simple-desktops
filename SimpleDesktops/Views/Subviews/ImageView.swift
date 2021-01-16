@@ -48,7 +48,7 @@ struct ImageView: View {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundColor(.primary)
 
-                Image(systemName: "arrow.clockwise.circle") // TODO: button icon
+                Image(systemName: "arrow.triangle.2.circlepath")
                     .font(Font.system(size: buttonIconSize, weight: .semibold))
                     .foregroundColor(colorScheme == .dark ? .black : .white)
             }

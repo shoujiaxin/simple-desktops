@@ -26,14 +26,14 @@ extension Wallpaper {
             wallpaper.updateTime = Date()
             wallpaper.objectWillChange.send()
         } else {
-            Wallpaper(with: url, in: context)
+            Wallpaper(withPreviewUrl: url, in: context)
         }
 
         try? context.save()
     }
 
     @discardableResult
-    convenience init(with url: URL, in context: NSManagedObjectContext) {
+    convenience init(withPreviewUrl url: URL, in context: NSManagedObjectContext) {
         self.init(context: context)
         // id
         id = UUID()

@@ -11,6 +11,8 @@ import SwiftUI
 struct HistoryView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
+    @EnvironmentObject var fetcher: WallpaperFetcher
+
     @FetchRequest(fetchRequest: Wallpaper.fetchRequest(.all)) var wallpapers: FetchedResults<Wallpaper>
 
     @Binding var currentView: PopoverView.ViewState
@@ -49,6 +51,14 @@ struct HistoryView: View {
                                 .onHover { _ in
                                     self.hoveringItem = wallpaper
                                 }
+                        }
+                        .contextMenu {
+                            Button(action: {
+                                fetcher.setImageUrl(wallpaper.previewUrl)
+                                fetcher.setWallpaper()
+                            }) {
+                                Text("Set as wallpaper")
+                            }
                         }
                     }
                 }
