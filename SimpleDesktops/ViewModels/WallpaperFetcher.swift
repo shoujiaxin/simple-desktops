@@ -79,9 +79,8 @@ class WallpaperFetcher: ObservableObject {
         task.resume()
     }
 
-    func download() {
-        guard let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false),
-              let imageUrl = imageUrl,
+    func download(to directory: URL, completionHandler: @escaping (URL?) -> Void = { _ in }) {
+        guard let imageUrl = imageUrl,
               let wallpaper = Wallpaper.withPreviewURL(imageUrl, in: context)
         else {
             return
@@ -95,18 +94,36 @@ class WallpaperFetcher: ObservableObject {
                 self.downloadingProgress = Double(receivedSize) / Double(expectedSize)
             }
         } completed: { _, data, _, _ in
-            try? data?.write(to: directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString))
+            let url = directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString)
+            try? data?.write(to: url)
 
             DispatchQueue.main.async {
                 self.isDownloading = false
                 self.downloadingProgress = 0
             }
-            // TODO: send notification
+
+            completionHandler(data == nil ? nil : url)
         }
     }
 
     func cancelDownload() {
         SDWebImageDownloader.shared.cancelAllDownloads()
+    }
+
+    func setWallpaper() {
+        guard let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String,
+              let directory = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(bundleName)
+        else {
+            return
+        }
+
+        download(to: directory.appendingPathComponent("Wallpapers")) { url in
+            if let url = url {
+                for screen in NSScreen.screens {
+                    try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+                }
+            }
+        }
     }
 
     private func fetchImage(from url: URL) {

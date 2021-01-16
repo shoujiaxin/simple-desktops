@@ -51,7 +51,14 @@ struct PreviewView: View {
                     }
                     .font(Font.system(size: buttonIconSize, weight: .bold))
                 }) {
-                    fetcher.isDownloading ? fetcher.cancelDownload() : fetcher.download()
+                    if fetcher.isDownloading {
+                        fetcher.cancelDownload()
+                    } else if let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+                        fetcher.download(to: directory) { url in
+                            // TODO: send notification
+                            print(url)
+                        }
+                    }
                 }
                 .disabled(fetcher.isLoading)
             }
@@ -62,7 +69,7 @@ struct PreviewView: View {
                 .aspectRatio(previewImageAspectRatio, contentMode: .fit)
 
             CapsuleButton("Set as Wallpaper") {
-                // TODO: set as wallpaper
+                fetcher.setWallpaper()
             }
             .padding(2 * buttonPaddingLength)
             .disabled(fetcher.isLoading)
