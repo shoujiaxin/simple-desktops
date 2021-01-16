@@ -13,7 +13,7 @@ struct HistoryView: View {
 
     @EnvironmentObject var fetcher: WallpaperFetcher
 
-    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(.all)) var wallpapers: FetchedResults<Wallpaper>
+    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(nil)) var wallpapers: FetchedResults<Wallpaper>
 
     @Binding var currentView: PopoverView.ViewState
 
@@ -53,11 +53,29 @@ struct HistoryView: View {
                                 }
                         }
                         .contextMenu {
+                            // Download button
                             Button(action: {
-                                fetcher.setImageUrl(wallpaper.previewUrl)
-                                fetcher.setWallpaper()
+                                if let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+                                    fetcher.download(wallpaper, to: directory)
+                                }
+                            }) {
+                                Text("Download")
+                            }
+
+                            // Set as wallpaper button
+                            Button(action: {
+                                fetcher.setWallpaper(wallpaper)
                             }) {
                                 Text("Set as wallpaper")
+                            }
+
+                            Divider()
+
+                            // Delete button
+                            Button(action: {
+                                fetcher.deleteWallpaper(wallpaper)
+                            }) {
+                                Text("Delete")
                             }
                         }
                     }

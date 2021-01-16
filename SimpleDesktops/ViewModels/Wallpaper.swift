@@ -9,30 +9,24 @@ import CoreData
 import Foundation
 
 extension Wallpaper {
-    static func fetchRequest(_ predicate: NSPredicate) -> NSFetchRequest<Wallpaper> {
+    static func fetchRequest(_ predicate: NSPredicate?) -> NSFetchRequest<Wallpaper> {
         let request = NSFetchRequest<Wallpaper>(entityName: "Wallpaper")
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "updateTime", ascending: false)]
         return request
     }
 
-    static func withPreviewURL(_ url: URL, in context: NSManagedObjectContext) -> Wallpaper? {
+    static func withPreviewURL(_ url: URL, in context: NSManagedObjectContext) -> Wallpaper {
         let request = fetchRequest(NSPredicate(format: "previewUrl = %@", url.absoluteString))
-        return try? context.fetch(request).first
-    }
-
-    static func update(by url: URL, in context: NSManagedObjectContext) {
-        if let wallpaper = withPreviewURL(url, in: context) {
+        if let wallpaper = try? context.fetch(request).first {
             wallpaper.updateTime = Date()
-            wallpaper.objectWillChange.send()
-        } else {
-            Wallpaper(withPreviewUrl: url, in: context)
+            try? context.save()
+            return wallpaper
         }
 
-        try? context.save()
+        return Wallpaper(withPreviewUrl: url, in: context)
     }
 
-    @discardableResult
     convenience init(withPreviewUrl url: URL, in context: NSManagedObjectContext) {
         self.init(context: context)
         // id
@@ -59,9 +53,7 @@ extension Wallpaper {
         {
             name = components[(index + 1)...].joined(separator: "-")
         }
-    }
-}
 
-extension NSPredicate {
-    static var all = NSPredicate(format: "TRUEPREDICATE")
+        try? context.save()
+    }
 }
