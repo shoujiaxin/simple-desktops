@@ -23,10 +23,12 @@ struct PopoverView: View {
 
     private var viewContext: NSManagedObjectContext!
     private var fetcher: WallpaperFetcher!
+    private var preferences: Preferences!
 
     init() {
         viewContext = PersistenceController().container.viewContext
         fetcher = WallpaperFetcher(in: viewContext)
+        preferences = Preferences()
     }
 
     var body: some View {
@@ -38,7 +40,7 @@ struct PopoverView: View {
                     .environmentObject(fetcher)
 
             case .preference:
-                PreferenceView(currentView: $currentView)
+                PreferenceView(preferences: Preferences(), currentView: $currentView)
                     .transition(.move(edge: .bottom))
 
             case .history:

@@ -8,10 +8,30 @@
 import SwiftUI
 
 struct PreferenceView: View {
+    @ObservedObject var preferences: Preferences
+
     @Binding var currentView: PopoverView.ViewState
 
-    @State private var isAutoChangeOn: Bool = true
-    @State private var selectedInterval: Int = 1
+    @Binding private var isAutoChangeOn: Bool
+    @Binding private var selectedInterval: Int
+
+    init(preferences: Preferences, currentView: Binding<PopoverView.ViewState>) {
+        _preferences = ObservedObject(initialValue: preferences)
+
+        _currentView = currentView
+
+        _isAutoChangeOn = .init(get: {
+            preferences.autoChange
+        }, set: { isEnable in
+            preferences.setAutoChange(isEnable)
+        })
+
+        _selectedInterval = .init(get: {
+            preferences.changeInterval
+        }, set: { selectedTag in
+            preferences.selectChangeInterval(at: selectedTag)
+        })
+    }
 
     var body: some View {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
@@ -20,8 +40,10 @@ struct PreferenceView: View {
         VStack {
             Toggle(isOn: $isAutoChangeOn) {
                 Picker(selection: $selectedInterval, label: Text("Change picture: ")) {
-                    /*@START_MENU_TOKEN@*/Text("1").tag(1)/*@END_MENU_TOKEN@*/
-                    /*@START_MENU_TOKEN@*/Text("2").tag(2)/*@END_MENU_TOKEN@*/
+                    ForEach(preferences.allChangeIntervals) { interval in
+                        Text(interval.description)
+                            .tag(interval.rawValue)
+                    }
                 }
                 .frame(width: intervalPickerWidth)
                 .disabled(!isAutoChangeOn)
@@ -57,7 +79,7 @@ struct PreferenceView: View {
 
 struct PreferenceView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferenceView(currentView: .constant(.preference))
+        PreferenceView(preferences: Preferences(), currentView: .constant(.preference))
             .frame(width: 400)
     }
 }

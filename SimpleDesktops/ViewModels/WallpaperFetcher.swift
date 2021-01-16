@@ -5,9 +5,9 @@
 //  Created by Jiaxin Shou on 2021/1/14.
 //
 
+import Foundation
 import SDWebImage
 import SwiftSoup
-import SwiftUI
 
 class WallpaperFetcher: ObservableObject {
     @Published private(set) var image: NSImage? {
