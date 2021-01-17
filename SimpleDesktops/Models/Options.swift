@@ -30,6 +30,17 @@ struct Options: Codable {
             case .everyDay: return "Every day"
             }
         }
+
+        var seconds: TimeInterval {
+            switch self {
+            case .everyMinute: return 60
+            case .everyFiveMinutes: return 60 * 5
+            case .everyFifteenMinutes: return 60 * 15
+            case .everyThirtyMinutes: return 60 * 30
+            case .everyHour: return 60 * 60
+            case .everyDay: return 60 * 60 * 24
+            }
+        }
     }
 
     var autoChange: Bool = true

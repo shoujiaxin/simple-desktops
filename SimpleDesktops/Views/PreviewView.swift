@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct PreviewView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
     @EnvironmentObject var fetcher: WallpaperFetcher
 
     @Binding var currentView: PopoverView.ViewState
@@ -90,7 +88,6 @@ struct PreviewView_Previews: PreviewProvider {
         let fetcher = WallpaperFetcher(in: viewContext)
 
         PreviewView(currentView: .constant(.preview))
-            .environment(\.managedObjectContext, viewContext)
             .environmentObject(fetcher)
             .frame(width: 400)
     }

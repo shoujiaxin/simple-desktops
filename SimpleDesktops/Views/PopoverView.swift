@@ -36,11 +36,10 @@ struct PopoverView: View {
             switch currentView {
             case .preview:
                 PreviewView(currentView: $currentView)
-                    .environment(\.managedObjectContext, viewContext)
                     .environmentObject(fetcher)
 
             case .preference:
-                PreferenceView(preferences: Preferences(), currentView: $currentView)
+                PreferenceView(preferences: preferences, currentView: $currentView)
                     .transition(.move(edge: .bottom))
 
             case .history:

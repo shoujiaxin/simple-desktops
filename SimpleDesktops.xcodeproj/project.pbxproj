@@ -14,6 +14,7 @@
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
 		2994264425B2A42900DEF701 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994264325B2A42900DEF701 /* Options.swift */; };
+		2994265325B455F400DEF701 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994265225B455F400DEF701 /* WallpaperManager.swift */; };
 		29B06BCB25B1947C006EB273 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
 		29B06BD025B1C91B006EB273 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCF25B1C91B006EB273 /* CapsuleButton.swift */; };
 		29B06BD625B1CCF5006EB273 /* ImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BD525B1CCF5006EB273 /* ImageButton.swift */; };
@@ -38,6 +39,7 @@
 		294A4B3E25B01E6600DA8631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
 		2994264325B2A42900DEF701 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
+		2994265225B455F400DEF701 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		29B06BCA25B1947C006EB273 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
 		29B06BCF25B1C91B006EB273 /* CapsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
 		29B06BD525B1CCF5006EB273 /* ImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButton.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				294A4B3925B01E6600DA8631 /* PersistenceController.swift */,
+				2994265225B455F400DEF701 /* WallpaperManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				29D27B6525B16598006674DB /* PreviewView.swift in Sources */,
 				29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */,
 				294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */,
+				2994265325B455F400DEF701 /* WallpaperManager.swift in Sources */,
 				294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */,
 				29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */,
 				2994264425B2A42900DEF701 /* Options.swift in Sources */,

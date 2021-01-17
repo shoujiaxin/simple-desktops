@@ -53,9 +53,15 @@ class WallpaperFetcher: ObservableObject {
         } else {
             fetchURL()
         }
+
+        WallpaperManager.shared.receiveHandler = {
+            self.fetchURL {
+                self.setWallpaper()
+            }
+        }
     }
 
-    func fetchURL() {
+    func fetchURL(completionHandler: @escaping () -> Void = {}) {
         isLoading = true
 
         var links: [String] = []
@@ -75,6 +81,10 @@ class WallpaperFetcher: ObservableObject {
 
             if let link = links.randomElement(), let url = URL(string: link) {
                 self.wallpaper = Wallpaper.withPreviewURL(url, in: self.context)
+            }
+
+            DispatchQueue.main.async {
+                completionHandler()
             }
         }
 
@@ -117,11 +127,7 @@ class WallpaperFetcher: ObservableObject {
         }
 
         download(wallpaper, to: directory.appendingPathComponent("Wallpapers")) { url in
-            if let url = url {
-                for screen in NSScreen.screens {
-                    try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
-                }
-            }
+            WallpaperManager.shared.imageURL = url
         }
     }
 

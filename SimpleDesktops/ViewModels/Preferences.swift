@@ -17,6 +17,10 @@ class Preferences: ObservableObject {
         autosaveCancellable = $options.sink { options in
             options.save()
         }
+
+        if options.autoChange {
+            WallpaperManager.shared.autoChangeInterval = options.changeInterval.seconds
+        }
     }
 
     var autoChange: Bool {
@@ -33,9 +37,11 @@ class Preferences: ObservableObject {
 
     func setAutoChange(_ enable: Bool) {
         options.autoChange = enable
+        WallpaperManager.shared.autoChangeInterval = enable ? options.changeInterval.seconds : nil
     }
 
     func selectChangeInterval(at tag: Int) {
         options.changeInterval = Options.ChangeInterval(rawValue: tag) ?? .everyHour
+        WallpaperManager.shared.autoChangeInterval = options.changeInterval.seconds
     }
 }
