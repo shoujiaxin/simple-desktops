@@ -121,13 +121,18 @@ class WallpaperFetcher: ObservableObject {
 
     func setWallpaper(_ wallpaper: Wallpaper) {
         guard let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String,
-              let directory = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(bundleName)
+              let directory = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(bundleName).appendingPathComponent("Wallpapers")
         else {
             return
         }
 
-        download(wallpaper, to: directory.appendingPathComponent("Wallpapers")) { url in
-            WallpaperManager.shared.imageURL = url
+        let wallpaperURL = directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString)
+        if FileManager.default.fileExists(atPath: wallpaperURL.path) {
+            WallpaperManager.shared.imageURL = wallpaperURL
+        } else {
+            download(wallpaper, to: directory) { url in
+                WallpaperManager.shared.imageURL = url
+            }
         }
     }
 
