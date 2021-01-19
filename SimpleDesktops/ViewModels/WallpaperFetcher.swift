@@ -102,16 +102,20 @@ class WallpaperFetcher: ObservableObject {
     func download(_ wallpaper: Wallpaper, to directory: URL, completionHandler: @escaping (URL?) -> Void = { _ in }) {
         isDownloading = true
 
+        let url = directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString)
+        guard !FileManager.default.fileExists(atPath: url.path) else {
+            isDownloading = false
+            completionHandler(url)
+            return
+        }
+
         SDWebImageDownloader.shared.downloadImage(with: wallpaper.url, options: .highPriority) { receivedSize, expectedSize, _ in
             DispatchQueue.main.async {
                 self.downloadingProgress = Double(receivedSize) / Double(expectedSize)
             }
         } completed: { _, data, _, _ in
-            let url = directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString)
             try? data?.write(to: url)
-
             self.isDownloading = false
-
             completionHandler(data == nil ? nil : url)
         }
     }
@@ -134,13 +138,13 @@ class WallpaperFetcher: ObservableObject {
             return
         }
 
-        let wallpaperURL = directory.appendingPathComponent(wallpaper.name ?? wallpaper.id!.uuidString)
-        if FileManager.default.fileExists(atPath: wallpaperURL.path) {
-            WallpaperManager.shared.imageURL = wallpaperURL
-        } else {
-            download(wallpaper, to: directory) { url in
-                WallpaperManager.shared.imageURL = url
-            }
+        // Create the directory if it does not exist
+        if !FileManager.default.fileExists(atPath: directory.path) {
+            try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        download(wallpaper, to: directory) { url in
+            WallpaperManager.shared.imageURL = url
         }
     }
 
