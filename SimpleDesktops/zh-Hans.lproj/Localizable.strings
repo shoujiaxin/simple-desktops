@@ -1,0 +1,36 @@
+/* 
+  Localizable.strings
+  SimpleDesktops
+
+  Created by Jiaxin Shou on 2021/1/20.
+  
+*/
+
+// Preview view
+"Set as Wallpaper" = "设为壁纸";
+
+// Preference view
+"Change picture: " = "更换壁纸：";
+
+"Done" = "完成";
+
+"Quit" = "退出";
+
+"Every minute" = "每分钟";
+
+"Every 5 minutes" = "每5分钟";
+
+"Every 15 minutes" = "每15分钟";
+
+"Every 30 minutes" = "每30分钟";
+
+"Every hour" = "每小时";
+
+"Every day" = "每天";
+
+// History view
+"Download" = "下载";
+
+"Set as wallpaper" = "设为壁纸";
+
+"Delete" = "删除";

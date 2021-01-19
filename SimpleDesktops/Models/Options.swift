@@ -5,7 +5,7 @@
 //  Created by Jiaxin Shou on 2021/1/16.
 //
 
-import Foundation
+import SwiftUI
 
 struct Options: Codable {
     enum ChangeInterval: Int, CaseIterable, Identifiable, Codable {
@@ -20,7 +20,7 @@ struct Options: Codable {
             rawValue
         }
 
-        var description: String {
+        var description: LocalizedStringKey {
             switch self {
             case .everyMinute: return "Every minute"
             case .everyFiveMinutes: return "Every 5 minutes"

@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct CapsuleButton: View {
-    var title: String
+    var title: LocalizedStringKey
     var size: CGSize
     var action: () -> Void
 
-    init(_ title: String, size: CGSize = CGSize(width: 240, height: 40), action: @escaping () -> Void) {
+    init(_ title: LocalizedStringKey, size: CGSize = CGSize(width: 240, height: 40), action: @escaping () -> Void) {
         self.title = title
         self.size = size
         self.action = action

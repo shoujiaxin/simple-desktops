@@ -13,6 +13,7 @@
 		294A4B3825B01E6600DA8631 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3725B01E6600DA8631 /* Preview Assets.xcassets */; };
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
+		2964992925B7410700C7FDBE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2964992B25B7410700C7FDBE /* Localizable.strings */; };
 		2994264425B2A42900DEF701 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994264325B2A42900DEF701 /* Options.swift */; };
 		2994265325B455F400DEF701 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994265225B455F400DEF701 /* WallpaperManager.swift */; };
 		29B06BCB25B1947C006EB273 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
@@ -38,6 +39,7 @@
 		294A4B3C25B01E6600DA8631 /* SimpleDesktops.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleDesktops.xcdatamodel; sourceTree = "<group>"; };
 		294A4B3E25B01E6600DA8631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
+		2964992A25B7410700C7FDBE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2994264325B2A42900DEF701 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		2994265225B455F400DEF701 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		29B06BCA25B1947C006EB273 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				294A4B3425B01E6600DA8631 /* Assets.xcassets */,
 				294A4B3E25B01E6600DA8631 /* Info.plist */,
 				294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */,
+				2964992B25B7410700C7FDBE /* Localizable.strings */,
 				294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */,
 				2994264225B2A41900DEF701 /* Models */,
 				29E054A325B0379600BACF46 /* Views */,
@@ -199,6 +202,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 294A4B2425B01E6500DA8631;
 			packageReferences = (
@@ -220,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				294A4B3825B01E6600DA8631 /* Preview Assets.xcassets in Resources */,
+				2964992925B7410700C7FDBE /* Localizable.strings in Resources */,
 				294A4B3525B01E6600DA8631 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -250,6 +255,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2964992B25B7410700C7FDBE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2964992A25B7410700C7FDBE /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		294A4B4025B01E6600DA8631 /* Debug */ = {
