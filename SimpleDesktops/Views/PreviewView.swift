@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct PreviewView: View {
     @EnvironmentObject var fetcher: WallpaperFetcher
@@ -53,8 +54,14 @@ struct PreviewView: View {
                         fetcher.cancelDownload()
                     } else if let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
                         fetcher.download(to: directory) { url in
-                            // TODO: send notification
-                            print(url)
+                            if let url = url {
+                                // TODO: click the notification to show the file in Finder
+                                let content = UNMutableNotificationContent()
+                                content.title = "Wallpaper downloaded"
+                                content.body = url.lastPathComponent
+                                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                                UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                            }
                         }
                     }
                 }
