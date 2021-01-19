@@ -51,6 +51,7 @@
 		29E054D225B05BEB00BACF46 /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
 		29E054E625B05F8E00BACF46 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFetcher.swift; sourceTree = "<group>"; };
+		29F4CEA125B750FE003D24CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +262,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				2964992A25B7410700C7FDBE /* zh-Hans */,
+				29F4CEA125B750FE003D24CD /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

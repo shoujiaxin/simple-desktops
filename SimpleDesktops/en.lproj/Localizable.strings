@@ -1,0 +1,36 @@
+/* 
+  Localizable.strings
+  SimpleDesktops
+
+  Created by Jiaxin Shou on 2021/1/20.
+  
+*/
+
+// Preview view
+"Set as Wallpaper";
+
+// Preference view
+"Change picture: ";
+
+"Done";
+
+"Quit";
+
+"Every minute";
+
+"Every 5 minutes";
+
+"Every 15 minutes";
+
+"Every 30 minutes";
+
+"Every hour";
+
+"Every day";
+
+// History view
+"Download";
+
+"Set as wallpaper";
+
+"Delete";
