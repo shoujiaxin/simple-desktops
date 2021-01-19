@@ -46,17 +46,21 @@ struct Options: Codable {
     var autoChange: Bool = true
     var changeInterval: ChangeInterval = .everyHour
 
-    private static let defaultsKey: String = "UserPreferences"
-
     init() {
-        if let data = UserDefaults.standard.value(forKey: Options.defaultsKey) as? Data,
-           let options = try? JSONDecoder().decode(Options.self, from: data)
+        if let data = try? JSONEncoder().encode(self),
+           let dictionary = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
+           let savedData = try? JSONSerialization.data(withJSONObject: UserDefaults.standard.dictionaryWithValues(forKeys: Array(dictionary.keys)), options: .fragmentsAllowed),
+           let options = try? JSONDecoder().decode(Options.self, from: savedData)
         {
             self = options
         }
     }
 
     func save() {
-        UserDefaults.standard.set(try? JSONEncoder().encode(self), forKey: Options.defaultsKey)
+        if let data = try? JSONEncoder().encode(self),
+           let dictionary = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+        {
+            UserDefaults.standard.setValuesForKeys(dictionary)
+        }
     }
 }
