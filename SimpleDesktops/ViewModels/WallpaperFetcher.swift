@@ -44,6 +44,12 @@ class WallpaperFetcher: ObservableObject {
         }
     }
 
+    private var maxPageNumber: Int = UserDefaults.standard.integer(forKey: "sdMaxPageNumber") {
+        willSet {
+            UserDefaults.standard.setValue(newValue, forKey: "sdMaxPageNumber")
+        }
+    }
+
     init(in context: NSManagedObjectContext) {
         self.context = context
 
@@ -59,14 +65,16 @@ class WallpaperFetcher: ObservableObject {
                 self.setWallpaper()
             }
         }
+
+        updateMaxPageNumber()
     }
 
     func fetchURL(completionHandler: @escaping () -> Void = {}) {
         isLoading = true
 
         var links: [String] = []
-        let page = Int.random(in: 1 ... 51)
-        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")! // TODO: update max page
+        let page = Int.random(in: 1 ... maxPageNumber)
+        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, _, error in
             if error != nil {
@@ -164,5 +172,36 @@ class WallpaperFetcher: ObservableObject {
         } completed: { image, _, _, _, _, _ in
             self.image = image
         }
+    }
+
+    private func updateMaxPageNumber() {
+        DispatchQueue.global(qos: .utility).async {
+            while self.isPageAvailable(at: self.maxPageNumber + 1) {
+                self.maxPageNumber += 1
+            }
+        }
+    }
+
+    private func isPageAvailable(at page: Int) -> Bool {
+        let semaphore = DispatchSemaphore(value: 0)
+
+        var isAvailable = false
+        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: url) { data, _, _ in
+            if let data = data,
+               let doc = try? SwiftSoup.parse(String(data: data, encoding: .utf8)!),
+               let imgTags = try? doc.select("img")
+            {
+                isAvailable = imgTags.count > 0
+            }
+
+            semaphore.signal()
+        }
+
+        task.resume()
+        _ = semaphore.wait(timeout: .distantFuture)
+
+        return isAvailable
     }
 }
