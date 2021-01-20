@@ -390,9 +390,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -415,9 +416,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
