@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="200" src="SimpleDesktops/Assets.xcassets/AppIcon.appiconset/AppIcon_512x512@2x.png">
+  <img width="200" src="SimpleDesktops/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png">
 </p>
 
 <p align="center">
