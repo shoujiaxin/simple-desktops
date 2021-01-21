@@ -53,6 +53,9 @@ class WallpaperFetcher: ObservableObject {
     init(in context: NSManagedObjectContext) {
         self.context = context
 
+        // Fix crash when launching for the first time
+        maxPageNumber = max(maxPageNumber, 50)
+
         if let wallpaper = try? context.fetch(Wallpaper.fetchRequest(nil)).first {
             self.wallpaper = wallpaper
             fetchPreviewImage()
