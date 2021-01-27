@@ -61,6 +61,7 @@ struct HistoryView: View {
                             }) {
                                 Text("Download")
                             }
+                            .keyboardShortcut("d")
 
                             // Set as wallpaper button
                             Button(action: {
@@ -77,6 +78,7 @@ struct HistoryView: View {
                             }) {
                                 Text("Delete")
                             }
+                            .keyboardShortcut(.delete)
                         }
                     }
                 }
