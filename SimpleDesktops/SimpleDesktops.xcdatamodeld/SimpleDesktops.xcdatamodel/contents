@@ -3,7 +3,7 @@
     <entity name="Wallpaper" representedClassName="Wallpaper" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="previewUrl" optional="YES" attributeType="URI"/>
+        <attribute name="previewURL" optional="YES" attributeType="URI"/>
         <attribute name="updateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
     </entity>

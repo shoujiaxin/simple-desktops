@@ -168,7 +168,7 @@ class WallpaperFetcher: ObservableObject {
     }
 
     private func fetchPreviewImage() {
-        guard let url = wallpaper?.previewUrl else {
+        guard let url = wallpaper?.previewURL else {
             return
         }
 

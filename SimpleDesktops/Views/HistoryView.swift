@@ -45,7 +45,7 @@ struct HistoryView: View {
                                 .stroke(lineWidth: hoveringItem == wallpaper ? highlighLineWidth : 0)
                                 .foregroundColor(.accentColor)
 
-                            WebImage(url: wallpaper.previewUrl)
+                            WebImage(url: wallpaper.previewURL)
                                 .resizable()
                                 .aspectRatio(historyImageAspectRatio, contentMode: .fill)
                                 .onHover { _ in

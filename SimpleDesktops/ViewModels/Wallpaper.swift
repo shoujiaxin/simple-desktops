@@ -17,23 +17,23 @@ extension Wallpaper {
     }
 
     static func withPreviewURL(_ url: URL, in context: NSManagedObjectContext) -> Wallpaper {
-        let request = fetchRequest(NSPredicate(format: "previewUrl = %@", url.absoluteString))
+        let request = fetchRequest(NSPredicate(format: "previewURL = %@", url.absoluteString))
         if let wallpaper = try? context.fetch(request).first {
             wallpaper.updateTime = Date()
             try? context.save()
             return wallpaper
         }
 
-        return Wallpaper(withPreviewUrl: url, in: context)
+        return Wallpaper(withPreviewURL: url, in: context)
     }
 
-    convenience init(withPreviewUrl url: URL, in context: NSManagedObjectContext) {
+    convenience init(withPreviewURL url: URL, in context: NSManagedObjectContext) {
         self.init(context: context)
         // id
         id = UUID()
 
         // preview url
-        previewUrl = url
+        previewURL = url
 
         // updateTime
         updateTime = Date()
