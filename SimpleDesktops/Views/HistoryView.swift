@@ -9,8 +9,6 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 struct HistoryView: View {
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-
     @EnvironmentObject var fetcher: WallpaperFetcher
 
     @FetchRequest(fetchRequest: Wallpaper.fetchRequest(nil)) var wallpapers: FetchedResults<Wallpaper>

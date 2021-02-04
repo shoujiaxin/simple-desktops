@@ -1,6 +1,6 @@
 //
 //  PersistenceController.swift
-//  SimpleDesktops
+//  Simple Desktops
 //
 //  Created by Jiaxin Shou on 2021/1/14.
 //

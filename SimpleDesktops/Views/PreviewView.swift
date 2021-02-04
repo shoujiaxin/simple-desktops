@@ -70,7 +70,6 @@ struct PreviewView: View {
             .padding(buttonPaddingLength)
 
             ImageView()
-                .environmentObject(fetcher)
                 .aspectRatio(previewImageAspectRatio, contentMode: .fit)
 
             CapsuleButton("Set as Wallpaper") {
