@@ -21,9 +21,9 @@ struct PopoverView: View {
 
     @State private var currentView: ViewState = .preview
 
-    private var viewContext: NSManagedObjectContext!
-    private var fetcher: WallpaperFetcher!
-    private var preferences: Preferences!
+    private let viewContext: NSManagedObjectContext!
+    private let fetcher: WallpaperFetcher!
+    private let preferences: Preferences!
 
     init() {
         viewContext = PersistenceController().container.viewContext

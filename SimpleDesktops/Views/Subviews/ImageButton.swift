@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ImageButton<Content: View>: View {
-    var image: Content
-    var size: CGSize
-    var action: () -> Void
+    private let image: Content
+    private let size: CGSize
+    private let action: () -> Void
 
     init(image: () -> Content, size: CGSize = CGSize(width: 32, height: 32), action: @escaping () -> Void) {
         self.image = image()

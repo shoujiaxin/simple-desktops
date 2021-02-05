@@ -36,7 +36,7 @@ class WallpaperFetcher: ObservableObject {
 
     @Published private(set) var downloadingProgress: Double = 0
 
-    private var context: NSManagedObjectContext
+    private let context: NSManagedObjectContext
 
     private var wallpaper: Wallpaper? {
         didSet {

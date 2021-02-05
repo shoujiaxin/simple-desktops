@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct CapsuleButton: View {
-    var title: LocalizedStringKey
-    var size: CGSize
-    var action: () -> Void
+    private let title: LocalizedStringKey
+    private let size: CGSize
+    private let action: () -> Void
 
     init(_ title: LocalizedStringKey, size: CGSize = CGSize(width: 240, height: 40), action: @escaping () -> Void) {
         self.title = title
