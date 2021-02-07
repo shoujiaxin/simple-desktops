@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Foundation
 
 class Preferences: ObservableObject {
     @Published private var options = Options()

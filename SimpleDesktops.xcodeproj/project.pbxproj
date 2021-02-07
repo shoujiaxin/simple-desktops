@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2913681325D0659C00DD1D2E /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
+		2913682025D0E10300DD1D2E /* SimpleDesktopsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */; };
 		294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */; };
 		294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3225B01E6500DA8631 /* PopoverView.swift */; };
 		294A4B3525B01E6600DA8631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3425B01E6600DA8631 /* Assets.xcassets */; };
@@ -14,22 +16,21 @@
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
 		2964992925B7410700C7FDBE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2964992B25B7410700C7FDBE /* Localizable.strings */; };
+		297E323225D03D9300E18951 /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E323125D03D9300E18951 /* Picture.swift */; };
+		297E324325D04CA900E18951 /* ImageButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E324225D04CA900E18951 /* ImageButtonStyle.swift */; };
+		297E324A25D0530A00E18951 /* CapsuledButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E324925D0530A00E18951 /* CapsuledButtonStyle.swift */; };
+		297E325825D05D9D00E18951 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B7225B16ABE006674DB /* HistoryView.swift */; };
+		298E297E25D22F9B006D3102 /* PictureFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298E297D25D22F9B006D3102 /* PictureFetcher.swift */; };
 		2994264425B2A42900DEF701 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994264325B2A42900DEF701 /* Options.swift */; };
 		2994265325B455F400DEF701 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994265225B455F400DEF701 /* WallpaperManager.swift */; };
-		29B06BCB25B1947C006EB273 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
-		29B06BD025B1C91B006EB273 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCF25B1C91B006EB273 /* CapsuleButton.swift */; };
-		29B06BD625B1CCF5006EB273 /* ImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BD525B1CCF5006EB273 /* ImageButton.swift */; };
 		29BCA45725B2961300C17A73 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BCA45625B2961300C17A73 /* Preferences.swift */; };
 		29D27B6525B16598006674DB /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B6425B16598006674DB /* PreviewView.swift */; };
 		29D27B7025B16A0A006674DB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29D27B6F25B16A0A006674DB /* SDWebImageSwiftUI */; };
-		29D27B7325B16ABE006674DB /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B7225B16ABE006674DB /* HistoryView.swift */; };
-		29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054D225B05BEB00BACF46 /* Wallpaper.swift */; };
-		29E054E725B05F8E00BACF46 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054E625B05F8E00BACF46 /* ImageView.swift */; };
-		29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */; };
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsRequest.swift; sourceTree = "<group>"; };
 		294A4B2D25B01E6500DA8631 /* Simple Desktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Desktops.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsApp.swift; sourceTree = "<group>"; };
 		294A4B3225B01E6500DA8631 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
@@ -40,17 +41,16 @@
 		294A4B3E25B01E6600DA8631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleDesktops.entitlements; sourceTree = "<group>"; };
 		2964992A25B7410700C7FDBE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		297E323125D03D9300E18951 /* Picture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
+		297E324225D04CA900E18951 /* ImageButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonStyle.swift; sourceTree = "<group>"; };
+		297E324925D0530A00E18951 /* CapsuledButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuledButtonStyle.swift; sourceTree = "<group>"; };
+		298E297D25D22F9B006D3102 /* PictureFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureFetcher.swift; sourceTree = "<group>"; };
 		2994264325B2A42900DEF701 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		2994265225B455F400DEF701 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		29B06BCA25B1947C006EB273 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
-		29B06BCF25B1C91B006EB273 /* CapsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
-		29B06BD525B1CCF5006EB273 /* ImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButton.swift; sourceTree = "<group>"; };
 		29BCA45625B2961300C17A73 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		29D27B6425B16598006674DB /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		29D27B7225B16ABE006674DB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		29E054D225B05BEB00BACF46 /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
-		29E054E625B05F8E00BACF46 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
-		29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFetcher.swift; sourceTree = "<group>"; };
 		29F4CEA125B750FE003D24CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +95,7 @@
 				29E054A325B0379600BACF46 /* Views */,
 				29E054D125B05B3700BACF46 /* ViewModels */,
 				29D27B5525B1398A006674DB /* Utilities */,
+				2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */,
 				294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */,
 				294A4B3625B01E6600DA8631 /* Preview Content */,
 			);
@@ -109,22 +110,21 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		297E324125D04C7E00E18951 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				297E324225D04CA900E18951 /* ImageButtonStyle.swift */,
+				297E324925D0530A00E18951 /* CapsuledButtonStyle.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
 		2994264225B2A41900DEF701 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				2994264325B2A42900DEF701 /* Options.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		29B06BCE25B1C8BC006EB273 /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				29B06BCF25B1C91B006EB273 /* CapsuleButton.swift */,
-				29B06BD525B1CCF5006EB273 /* ImageButton.swift */,
-				29E054E625B05F8E00BACF46 /* ImageView.swift */,
-			);
-			path = Subviews;
 			sourceTree = "<group>";
 		};
 		29D27B5525B1398A006674DB /* Utilities */ = {
@@ -143,7 +143,7 @@
 				29D27B6425B16598006674DB /* PreviewView.swift */,
 				29D27B7225B16ABE006674DB /* HistoryView.swift */,
 				29B06BCA25B1947C006EB273 /* PreferenceView.swift */,
-				29B06BCE25B1C8BC006EB273 /* Subviews */,
+				297E324125D04C7E00E18951 /* Modifiers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -151,8 +151,8 @@
 		29E054D125B05B3700BACF46 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				29E054D225B05BEB00BACF46 /* Wallpaper.swift */,
-				29E054ED25B064FC00BACF46 /* WallpaperFetcher.swift */,
+				297E323125D03D9300E18951 /* Picture.swift */,
+				298E297D25D22F9B006D3102 /* PictureFetcher.swift */,
 				29BCA45625B2961300C17A73 /* Preferences.swift */,
 			);
 			path = ViewModels;
@@ -238,20 +238,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */,
+				2913681325D0659C00DD1D2E /* PreferenceView.swift in Sources */,
+				298E297E25D22F9B006D3102 /* PictureFetcher.swift in Sources */,
+				297E325825D05D9D00E18951 /* HistoryView.swift in Sources */,
 				29D27B6525B16598006674DB /* PreviewView.swift in Sources */,
-				29E054EE25B064FC00BACF46 /* WallpaperFetcher.swift in Sources */,
+				297E324A25D0530A00E18951 /* CapsuledButtonStyle.swift in Sources */,
 				294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */,
+				297E324325D04CA900E18951 /* ImageButtonStyle.swift in Sources */,
+				297E323225D03D9300E18951 /* Picture.swift in Sources */,
 				2994265325B455F400DEF701 /* WallpaperManager.swift in Sources */,
 				294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */,
-				29E054D325B05BEB00BACF46 /* Wallpaper.swift in Sources */,
 				2994264425B2A42900DEF701 /* Options.swift in Sources */,
 				294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */,
-				29B06BD625B1CCF5006EB273 /* ImageButton.swift in Sources */,
-				29B06BCB25B1947C006EB273 /* PreferenceView.swift in Sources */,
+				2913682025D0E10300DD1D2E /* SimpleDesktopsRequest.swift in Sources */,
 				29BCA45725B2961300C17A73 /* Preferences.swift in Sources */,
-				29B06BD025B1C91B006EB273 /* CapsuleButton.swift in Sources */,
-				29D27B7325B16ABE006674DB /* HistoryView.swift in Sources */,
-				29E054E725B05F8E00BACF46 /* ImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,10 +392,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -418,10 +418,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;

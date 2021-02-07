@@ -5,36 +5,45 @@
 //  Created by Jiaxin Shou on 2021/1/15.
 //
 
+import SDWebImageSwiftUI
 import SwiftUI
-import UserNotifications
 
 struct PreviewView: View {
-    @EnvironmentObject var fetcher: WallpaperFetcher
-
     @Binding var currentView: PopoverView.ViewState
+
+    @Environment(\.colorScheme) private var colorScheme: ColorScheme
+
+    @EnvironmentObject private var fetcher: PictureFetcher
+
+    @FetchRequest(fetchRequest: Picture.fetchRequest(nil, fetchLimit: 1)) private var pictures: FetchedResults<Picture>
+
+    @State private var buttonHovering: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                // Preference button
-                ImageButton(image: {
-                    Image(systemName: "gearshape")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }) {
-                    withAnimation(.easeInOut) {
-                        currentView = .preference
+                Group {
+                    // Preference button
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            currentView = .preference
+                        }
+                    }) {
+                        Image(systemName: "gearshape")
+                            .font(Font.system(size: buttonIconSize, weight: .bold))
                     }
-                }
 
-                // History button
-                ImageButton(image: {
-                    Image(systemName: "clock")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }) {
-                    withAnimation(.easeInOut) {
-                        currentView = .history
+                    // History button
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            currentView = .history
+                        }
+                    }) {
+                        Image(systemName: "clock")
+                            .font(Font.system(size: buttonIconSize, weight: .bold))
                     }
                 }
+                .buttonStyle(ImageButtonStyle())
 
                 Spacer()
 
@@ -44,57 +53,99 @@ struct PreviewView: View {
                 }
 
                 // Download button
-                ImageButton(image: {
-                    Group {
-                        fetcher.isDownloading ? Image(systemName: "xmark") : Image(systemName: "square.and.arrow.down")
-                    }
-                    .font(Font.system(size: buttonIconSize, weight: .bold))
-                }) {
+                Button(action: {
                     if fetcher.isDownloading {
                         fetcher.cancelDownload()
-                    } else if let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-                        fetcher.download(to: directory) { url in
-                            if let url = url {
-                                // TODO: click the notification to show the file in Finder
-                                let content = UNMutableNotificationContent()
-                                content.title = "Wallpaper downloaded"
-                                content.body = url.lastPathComponent
-                                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-                                UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-                            }
-                        }
+                    } else if let picture = pictures.first {
+                        fetcher.download(picture)
                     }
+                }) {
+                    Image(systemName: fetcher.isDownloading ? "xmark" : "square.and.arrow.down")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
                 }
-                .disabled(fetcher.isLoading)
+                .buttonStyle(ImageButtonStyle())
+                .disabled(fetcher.isFetching)
             }
             .padding(buttonPaddingLength)
 
-            ImageView()
-                .aspectRatio(previewImageAspectRatio, contentMode: .fit)
+            ZStack {
+                WebImage(url: pictures.first?.previewURL)
+                    .onProgress { receivedSize, totalSize in
+                        DispatchQueue.main.async {
+                            let progress = Double(receivedSize) / Double(totalSize)
+                            fetcher.fetchingProgress = progress
 
-            CapsuleButton("Set as Wallpaper") {
-                fetcher.setWallpaper()
+                            if progress > 0.99 {
+                                // `.onSuccess` is called whenever the view appears
+                                // so cannot change the state in `onSuccess`
+                                fetcher.isFetching = false
+                            }
+                        }
+                    }
+                    .resizable()
+                    .aspectRatio(pictureAspectRatio, contentMode: .fit)
+
+                if fetcher.isFetching {
+                    ProgressView(value: fetcher.fetchingProgress)
+                        .progressViewStyle(CircularProgressViewStyle())
+                } else {
+                    fetchButton
+                }
             }
-            .padding(2 * buttonPaddingLength)
-            .disabled(fetcher.isLoading)
+
+            Button(action: {
+                if let picture = pictures.first {
+                    fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
+                        WallpaperManager.shared.setWallpaper(with: url)
+                    }
+                }
+            }) {
+                Text("Set as Wallpaper")
+            }
+            .buttonStyle(CapsuledButtonStyle())
+            .padding(buttonPaddingLength * 2.0)
+            .disabled(fetcher.isFetching)
+        }
+    }
+
+    private var fetchButton: some View {
+        Button(action: {
+            fetcher.fetch()
+        }) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(Font.system(size: buttonIconSize * 2.0, weight: .bold))
+                .frame(width: 48, height: 48, alignment: .center)
+                .foregroundColor(colorScheme == .dark ? .black : .white)
+                .background(RoundedRectangle(cornerRadius: 8.0))
+                .opacity(buttonHovering ? 0.8 : 0.2)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .onHover { hovering in
+            buttonHovering = hovering
+        }
+        .onReceive(WallpaperManager.shared.timerPublisher) { _ in
+            fetcher.fetch { picture in
+                fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
+                    WallpaperManager.shared.setWallpaper(with: url)
+                }
+            }
         }
     }
 
     // MARK: - Draw Constants
 
-    private let previewImageAspectRatio: CGFloat = 1.6
-    private let buttonIconSize: CGFloat = 16
-    private let buttonPaddingLength: CGFloat = 6
-    private let downloadProgressIndicator: CGFloat = 60
+    private let buttonIconSize: CGFloat = 16.0
+    private let buttonPaddingLength: CGFloat = 6.0
+    private let downloadProgressIndicator: CGFloat = 60.0
+    private let pictureAspectRatio: CGFloat = 1.6
 }
 
 struct PreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewContext = PersistenceController().container.viewContext
-        let fetcher = WallpaperFetcher(in: viewContext)
-
+        let viewContext = PersistenceController.preview.container.viewContext
         PreviewView(currentView: .constant(.preview))
-            .environmentObject(fetcher)
+            .environment(\.managedObjectContext, viewContext)
+            .environmentObject(PictureFetcher(context: viewContext))
             .frame(width: 400)
     }
 }

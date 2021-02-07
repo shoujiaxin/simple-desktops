@@ -5,7 +5,6 @@
 //  Created by Jiaxin Shou on 2021/1/14.
 //
 
-import CoreData
 import SwiftUI
 
 struct PopoverView: View {
@@ -21,31 +20,18 @@ struct PopoverView: View {
 
     @State private var currentView: ViewState = .preview
 
-    private let viewContext: NSManagedObjectContext!
-    private let fetcher: WallpaperFetcher!
-    private let preferences: Preferences!
-
-    init() {
-        viewContext = PersistenceController().container.viewContext
-        fetcher = WallpaperFetcher(in: viewContext)
-        preferences = Preferences()
-    }
-
     var body: some View {
         Group {
             switch currentView {
             case .preview:
                 PreviewView(currentView: $currentView)
-                    .environmentObject(fetcher)
 
             case .preference:
-                PreferenceView(preferences: preferences, currentView: $currentView)
+                PreferenceView(currentView: $currentView, preferences: Preferences())
                     .transition(.move(edge: .bottom))
 
             case .history:
                 HistoryView(currentView: $currentView)
-                    .environment(\.managedObjectContext, viewContext)
-                    .environmentObject(fetcher)
                     .transition(.move(edge: .trailing))
             }
         }
@@ -55,11 +41,9 @@ struct PopoverView: View {
 
 struct PopoverView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewContext = PersistenceController().container.viewContext
-        let fetcher = WallpaperFetcher(in: viewContext)
-
+        let viewContext = PersistenceController.preview.container.viewContext
         PopoverView()
             .environment(\.managedObjectContext, viewContext)
-            .environmentObject(fetcher)
+            .environmentObject(PictureFetcher(context: viewContext))
     }
 }

@@ -11,32 +11,40 @@ import Combine
 class WallpaperManager {
     static let shared = WallpaperManager()
 
-    var imageURL: URL? {
-        willSet {
-            if let url = newValue {
-                for screen in NSScreen.screens {
-                    try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
-                }
-            }
-        }
-    }
-
     var autoChangeInterval: TimeInterval? {
         willSet {
             timerCancellable?.cancel()
             if let timeInterval = newValue {
-                timerCancellable = Timer.publish(every: timeInterval, on: .main, in: .common)
-                    .autoconnect()
-                    .sink { _ in
-                        self.receiveHandler()
-                    }
+                timerPublisher = Timer.publish(every: timeInterval, on: .main, in: .common)
+                timerCancellable = timerPublisher.connect()
             }
         }
     }
 
-    var receiveHandler: () -> Void = {}
+    var timerPublisher: Timer.TimerPublisher
 
-    private var timerCancellable: AnyCancellable?
+    var directory: URL {
+        let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+        let url = try! FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(bundleName).appendingPathComponent("Wallpapers")
 
-    private init() {}
+        // Create the directory if it does not exist
+        if !FileManager.default.fileExists(atPath: url.path) {
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        return url
+    }
+
+    func setWallpaper(with url: URL) {
+        // TODO: log
+        for screen in NSScreen.screens {
+            try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+        }
+    }
+
+    private var timerCancellable: Cancellable?
+
+    private init() {
+        timerPublisher = Timer.publish(every: .infinity, on: .main, in: .common)
+    }
 }

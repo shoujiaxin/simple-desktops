@@ -25,13 +25,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var popover: NSPopover!
 
     func applicationDidFinishLaunching(_: Notification) {
+        let viewContext = PersistenceController.shared.container.viewContext
+
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusItem.button?.image = NSImage(systemSymbolName: "photo.on.rectangle", accessibilityDescription: nil)
         statusItem.button?.action = #selector(togglePopover(_:))
 
         popover = NSPopover()
         popover.behavior = NSPopover.Behavior.transient
-        popover.contentViewController = NSHostingController(rootView: PopoverView())
+        popover.contentViewController = NSHostingController(rootView:
+            PopoverView()
+                .environment(\.managedObjectContext, viewContext)
+                .environmentObject(PictureFetcher(context: viewContext))
+        )
     }
 
     @objc private func togglePopover(_ sender: Any?) {

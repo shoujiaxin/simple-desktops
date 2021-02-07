@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Wallpaper" representedClassName="Wallpaper" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    <entity name="Picture" representedClassName="Picture" syncable="YES" codeGenerationType="class">
+        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastFetchedTime_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="previewURL" optional="YES" attributeType="URI"/>
-        <attribute name="updateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="url" optional="YES" attributeType="URI"/>
+        <attribute name="url_" optional="YES" attributeType="URI"/>
     </entity>
     <elements>
-        <element name="Wallpaper" positionX="-45" positionY="0" width="128" height="104"/>
+        <element name="Picture" positionX="-45" positionY="0" width="128" height="104"/>
     </elements>
 </model>

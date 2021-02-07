@@ -9,99 +9,116 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var fetcher: WallpaperFetcher
-
-    @FetchRequest(fetchRequest: Wallpaper.fetchRequest(nil)) var wallpapers: FetchedResults<Wallpaper>
-
     @Binding var currentView: PopoverView.ViewState
 
-    @State private var hoveringItem: Wallpaper?
+    @Environment(\.managedObjectContext) private var viewContext: NSManagedObjectContext
+
+    @EnvironmentObject private var fetcher: PictureFetcher
+
+    @FetchRequest(fetchRequest: Picture.fetchRequest(nil)) private var pictures: FetchedResults<Picture>
+
+    @State private var hoveringItem: Picture?
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                ImageButton(image: {
-                    Image(systemName: "chevron.backward")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }) {
+                Button(action: {
                     withAnimation(.easeInOut) {
                         currentView = .preview
                     }
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
                 }
-                .padding(buttonPaddingLength)
+                .buttonStyle(ImageButtonStyle())
 
                 Spacer()
+
+                if fetcher.isDownloading {
+                    ProgressView(value: fetcher.downloadingProgress)
+                        .frame(width: downloadProgressIndicator)
+
+                    Button(action: {
+                        fetcher.cancelDownload()
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(Font.system(size: buttonIconSize, weight: .bold))
+                    }
+                    .buttonStyle(ImageButtonStyle())
+                }
             }
+            .padding(buttonPaddingLength)
 
             ScrollView {
-                Spacer(minLength: highlighLineWidth)
+                Spacer(minLength: highlighStrokeWidth)
 
-                LazyVGrid(columns: Array(repeating: GridItem(.fixed(historyImageWidth), spacing: historyImageSpacing), count: 2)) {
-                    ForEach(wallpapers) { wallpaper in
-                        ZStack {
-                            Rectangle()
-                                .stroke(lineWidth: hoveringItem == wallpaper ? highlighLineWidth : 0)
-                                .foregroundColor(.accentColor)
-
-                            WebImage(url: wallpaper.previewURL)
-                                .resizable()
-                                .aspectRatio(historyImageAspectRatio, contentMode: .fill)
-                                .onHover { _ in
-                                    self.hoveringItem = wallpaper
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(pictureWidth), spacing: pictureSpacing), count: 2)) {
+                    ForEach(pictures) { picture in
+                        WebImage(url: picture.previewURL)
+                            .resizable()
+                            .aspectRatio(pictureAspectRatio, contentMode: .fit)
+                            .background(
+                                Rectangle()
+                                    .stroke(lineWidth: hoveringItem == picture ? highlighStrokeWidth : 0)
+                                    .foregroundColor(.accentColor)
+                            )
+                            .onHover { hovering in
+                                self.hoveringItem = hovering ? picture : nil
+                            }
+                            .contextMenu {
+                                // Download Button
+                                Button(action: {
+                                    fetcher.download(picture)
+                                }) {
+                                    Text("Download")
                                 }
-                        }
-                        .contextMenu {
-                            // Download button
-                            Button(action: {
-                                if let directory = try? FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-                                    fetcher.download(wallpaper, to: directory)
+                                .keyboardShortcut("d")
+
+                                // Set Wallpaper Button
+                                Button(action: {
+                                    fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
+                                        WallpaperManager.shared.setWallpaper(with: url)
+                                    }
+                                }) {
+                                    Text("Set as wallpaper")
                                 }
-                            }) {
-                                Text("Download")
-                            }
-                            .keyboardShortcut("d")
 
-                            // Set as wallpaper button
-                            Button(action: {
-                                fetcher.setWallpaper(wallpaper)
-                            }) {
-                                Text("Set as wallpaper")
-                            }
+                                Divider()
 
-                            Divider()
-
-                            // Delete button
-                            Button(action: {
-                                fetcher.deleteWallpaper(wallpaper)
-                            }) {
-                                Text("Delete")
+                                // Delete Button
+                                Button(action: {
+                                    viewContext.delete(picture)
+                                    try? viewContext.save()
+                                }) {
+                                    Text("Delete")
+                                }
+                                .keyboardShortcut(.delete)
                             }
-                            .keyboardShortcut(.delete)
-                        }
                     }
                 }
 
-                Spacer(minLength: highlighLineWidth)
+                Spacer(minLength: highlighStrokeWidth)
             }
         }
     }
 
     // MARK: - Draw Constants
 
-    private let historyImageWidth: CGFloat = 176
-    private let historyImageAspectRatio: CGFloat = 1.6
-    private let historyImageSpacing: CGFloat = 16
-    private let buttonIconSize: CGFloat = 16
-    private let buttonPaddingLength: CGFloat = 6
-    private let highlighLineWidth: CGFloat = 6
+    private let buttonIconSize: CGFloat = 16.0
+    private let buttonPaddingLength: CGFloat = 6.0
+    private let downloadProgressIndicator: CGFloat = 60.0
+    private let highlighStrokeWidth: CGFloat = 6.0
+    private let pictureAspectRatio: CGFloat = 1.6
+    private let pictureWidth: CGFloat = 176.0
+    private let pictureSpacing: CGFloat = 16.0
 }
 
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewContext = PersistenceController().container.viewContext
-
+        let viewContext = PersistenceController.preview.container.viewContext
         HistoryView(currentView: .constant(.history))
             .environment(\.managedObjectContext, viewContext)
+            .environmentObject(PictureFetcher(context: viewContext))
             .frame(width: 400, height: 358)
     }
 }

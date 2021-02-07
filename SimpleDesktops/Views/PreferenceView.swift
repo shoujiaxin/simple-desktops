@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct PreferenceView: View {
-    @ObservedObject var preferences: Preferences
-
     @Binding var currentView: PopoverView.ViewState
 
     @Binding private var isAutoChangeOn: Bool
     @Binding private var selectedInterval: Int
 
-    init(preferences: Preferences, currentView: Binding<PopoverView.ViewState>) {
-        _preferences = ObservedObject(initialValue: preferences)
+    @ObservedObject private var preferences: Preferences
 
+    init(currentView: Binding<PopoverView.ViewState>, preferences: Preferences) {
         _currentView = currentView
+
+        _preferences = ObservedObject(wrappedValue: preferences)
 
         _isAutoChangeOn = .init(get: {
             preferences.autoChange
@@ -34,9 +34,6 @@ struct PreferenceView: View {
     }
 
     var body: some View {
-        let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-        let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
-
         VStack {
             Toggle(isOn: $isAutoChangeOn) {
                 Picker(selection: $selectedInterval, label: Text("Change picture: ")) {
@@ -55,15 +52,21 @@ struct PreferenceView: View {
                 .foregroundColor(.secondary)
 
             HStack(spacing: buttonSpacing) {
-                CapsuleButton("Done", size: CGSize(width: 120, height: 40)) {
+                Button(action: {
                     withAnimation(.easeInOut) {
                         currentView = .preview
                     }
+                }) {
+                    Text("Done")
                 }
+                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: 120, height: 40)))
 
-                CapsuleButton("Quit", size: CGSize(width: 120, height: 40)) {
+                Button(action: {
                     NSApp.terminate(nil)
+                }) {
+                    Text("Quit")
                 }
+                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: 120, height: 40)))
             }
             .padding(buttonPadding)
         }
@@ -75,11 +78,14 @@ struct PreferenceView: View {
     private let pickerPadding: CGFloat = 24
     private let buttonPadding: CGFloat = 12
     private let buttonSpacing: CGFloat = 24
+
+    private let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    private let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
 }
 
 struct PreferenceView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferenceView(preferences: Preferences(), currentView: .constant(.preference))
+        PreferenceView(currentView: .constant(.preference), preferences: Preferences())
             .frame(width: 400)
     }
 }
