@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		2913681325D0659C00DD1D2E /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
 		2913682025D0E10300DD1D2E /* SimpleDesktopsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */; };
+		2916D23025D2D0070044AE71 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2916D22F25D2D0070044AE71 /* WidgetKit.framework */; };
+		2916D23225D2D0070044AE71 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2916D23125D2D0070044AE71 /* SwiftUI.framework */; };
+		2916D23525D2D0070044AE71 /* WallpaperWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916D23425D2D0070044AE71 /* WallpaperWidget.swift */; };
+		2916D23725D2D0080044AE71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916D23625D2D0080044AE71 /* Assets.xcassets */; };
+		2916D23C25D2D0080044AE71 /* WallpaperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2916D25025D2E5D50044AE71 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994265225B455F400DEF701 /* WallpaperManager.swift */; };
 		294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */; };
 		294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3225B01E6500DA8631 /* PopoverView.swift */; };
 		294A4B3525B01E6600DA8631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3425B01E6600DA8631 /* Assets.xcassets */; };
@@ -29,8 +35,39 @@
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2916D23A25D2D0080044AE71 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 294A4B2525B01E6500DA8631 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2916D22C25D2D0070044AE71;
+			remoteInfo = WallpaperWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2916D23D25D2D0080044AE71 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2916D23C25D2D0080044AE71 /* WallpaperWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsRequest.swift; sourceTree = "<group>"; };
+		2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WallpaperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2916D22F25D2D0070044AE71 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		2916D23125D2D0070044AE71 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		2916D23425D2D0070044AE71 /* WallpaperWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperWidget.swift; sourceTree = "<group>"; };
+		2916D23625D2D0080044AE71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2916D23825D2D0080044AE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2916D23925D2D0080044AE71 /* WallpaperWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WallpaperWidget.entitlements; sourceTree = "<group>"; };
 		294A4B2D25B01E6500DA8631 /* Simple Desktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Desktops.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsApp.swift; sourceTree = "<group>"; };
 		294A4B3225B01E6500DA8631 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
@@ -55,6 +92,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2916D22A25D2D0070044AE71 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2916D23225D2D0070044AE71 /* SwiftUI.framework in Frameworks */,
+				2916D23025D2D0070044AE71 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		294A4B2A25B01E6500DA8631 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -67,10 +113,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2916D22E25D2D0070044AE71 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2916D22F25D2D0070044AE71 /* WidgetKit.framework */,
+				2916D23125D2D0070044AE71 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2916D23325D2D0070044AE71 /* WallpaperWidget */ = {
+			isa = PBXGroup;
+			children = (
+				2916D23425D2D0070044AE71 /* WallpaperWidget.swift */,
+				2916D23625D2D0080044AE71 /* Assets.xcassets */,
+				2916D23825D2D0080044AE71 /* Info.plist */,
+				2916D23925D2D0080044AE71 /* WallpaperWidget.entitlements */,
+			);
+			path = WallpaperWidget;
+			sourceTree = "<group>";
+		};
 		294A4B2425B01E6500DA8631 = {
 			isa = PBXGroup;
 			children = (
 				294A4B2F25B01E6500DA8631 /* SimpleDesktops */,
+				2916D23325D2D0070044AE71 /* WallpaperWidget */,
+				2916D22E25D2D0070044AE71 /* Frameworks */,
 				294A4B2E25B01E6500DA8631 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				294A4B2D25B01E6500DA8631 /* Simple Desktops.app */,
+				2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,17 +156,17 @@
 			isa = PBXGroup;
 			children = (
 				294A4B3425B01E6600DA8631 /* Assets.xcassets */,
-				294A4B3E25B01E6600DA8631 /* Info.plist */,
-				294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */,
 				2964992B25B7410700C7FDBE /* Localizable.strings */,
+				294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */,
 				294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */,
+				2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */,
 				2994264225B2A41900DEF701 /* Models */,
 				29E054A325B0379600BACF46 /* Views */,
 				29E054D125B05B3700BACF46 /* ViewModels */,
 				29D27B5525B1398A006674DB /* Utilities */,
-				2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */,
-				294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */,
 				294A4B3625B01E6600DA8631 /* Preview Content */,
+				294A4B3E25B01E6600DA8631 /* Info.plist */,
+				294A4B3F25B01E6600DA8631 /* SimpleDesktops.entitlements */,
 			);
 			path = SimpleDesktops;
 			sourceTree = "<group>";
@@ -161,6 +230,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2916D22C25D2D0070044AE71 /* WallpaperWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2916D24025D2D0080044AE71 /* Build configuration list for PBXNativeTarget "WallpaperWidgetExtension" */;
+			buildPhases = (
+				2916D22925D2D0070044AE71 /* Sources */,
+				2916D22A25D2D0070044AE71 /* Frameworks */,
+				2916D22B25D2D0070044AE71 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WallpaperWidgetExtension;
+			productName = WallpaperWidgetExtension;
+			productReference = 2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		294A4B2C25B01E6500DA8631 /* Simple Desktops */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 294A4B4225B01E6600DA8631 /* Build configuration list for PBXNativeTarget "Simple Desktops" */;
@@ -168,10 +254,12 @@
 				294A4B2925B01E6500DA8631 /* Sources */,
 				294A4B2A25B01E6500DA8631 /* Frameworks */,
 				294A4B2B25B01E6500DA8631 /* Resources */,
+				2916D23D25D2D0080044AE71 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2916D23B25D2D0080044AE71 /* PBXTargetDependency */,
 			);
 			name = "Simple Desktops";
 			packageProductDependencies = (
@@ -188,9 +276,12 @@
 		294A4B2525B01E6500DA8631 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1230;
+				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
+					2916D22C25D2D0070044AE71 = {
+						CreatedOnToolsVersion = 12.4;
+					};
 					294A4B2C25B01E6500DA8631 = {
 						CreatedOnToolsVersion = 12.3;
 					};
@@ -215,11 +306,20 @@
 			projectRoot = "";
 			targets = (
 				294A4B2C25B01E6500DA8631 /* Simple Desktops */,
+				2916D22C25D2D0070044AE71 /* WallpaperWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2916D22B25D2D0070044AE71 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2916D23725D2D0080044AE71 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		294A4B2B25B01E6500DA8631 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,6 +333,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2916D22925D2D0070044AE71 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2916D25025D2E5D50044AE71 /* WallpaperManager.swift in Sources */,
+				2916D23525D2D0070044AE71 /* WallpaperWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		294A4B2925B01E6500DA8631 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,6 +366,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		2916D23B25D2D0080044AE71 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2916D22C25D2D0070044AE71 /* WallpaperWidgetExtension */;
+			targetProxy = 2916D23A25D2D0080044AE71 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		2964992B25B7410700C7FDBE /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -270,6 +387,58 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		2916D23E25D2D0080044AE71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WallpaperWidget/WallpaperWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8TA5C5ASM9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = WallpaperWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 0.6.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops.WallpaperWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		2916D23F25D2D0080044AE71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WallpaperWidget/WallpaperWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8TA5C5ASM9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = WallpaperWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 0.6.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops.WallpaperWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		294A4B4025B01E6600DA8631 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -390,12 +559,13 @@
 		294A4B4325B01E6600DA8631 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -406,7 +576,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -416,12 +586,13 @@
 		294A4B4425B01E6600DA8631 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleDesktops/SimpleDesktops.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -432,7 +603,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -442,6 +613,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2916D24025D2D0080044AE71 /* Build configuration list for PBXNativeTarget "WallpaperWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2916D23E25D2D0080044AE71 /* Debug */,
+				2916D23F25D2D0080044AE71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		294A4B2825B01E6500DA8631 /* Build configuration list for PBXProject "SimpleDesktops" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

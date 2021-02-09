@@ -27,21 +27,6 @@ extension Picture {
         }
     }
 
-    @discardableResult
-    static func update(from info: SDPictureInfo, in context: NSManagedObjectContext) -> Picture {
-        let picture = withURL(info.url, in: context)
-        if picture.id_ == nil {
-            picture.id_ = UUID()
-        }
-        picture.lastFetchedTime = Date()
-        picture.name = info.name
-        picture.previewURL = info.previewURL
-
-        try? context.save()
-
-        return picture
-    }
-
     // MARK: - Wrappers For None-Optional Values
 
     public var id: UUID {

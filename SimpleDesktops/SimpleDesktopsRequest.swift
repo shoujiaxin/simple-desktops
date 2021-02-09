@@ -6,7 +6,7 @@
 //
 
 import Combine
-import Foundation
+import CoreData
 import SwiftSoup
 
 struct SDPictureInfo {
@@ -47,8 +47,12 @@ class SimpleDesktopsRequest {
 
     // MARK: Private Members
 
-    private var maxPageNumber: Int = UserDefaults.standard.integer(forKey: "sdMaxPageNumber") {
-        willSet {
+    private var maxPageNumber: Int {
+        get {
+            let oldValue = UserDefaults.standard.integer(forKey: "sdMaxPageNumber")
+            return oldValue > 0 ? oldValue : 52
+        }
+        set {
             UserDefaults.standard.setValue(newValue, forKey: "sdMaxPageNumber")
         }
     }
@@ -58,8 +62,7 @@ class SimpleDesktopsRequest {
     }
 
     private func updateMaxPageNumber() {
-        let page = max(maxPageNumber, 53)
-        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
+        let url = URL(string: "http://simpledesktops.com/browse/\(maxPageNumber)/")!
         URLSession.shared.dataTask(with: url) { data, _, _ in
             if let data = data,
                let html = String(data: data, encoding: .utf8),
@@ -67,7 +70,7 @@ class SimpleDesktopsRequest {
                let imgTag = try? document.select("img"),
                imgTag.count > 0
             {
-                self.maxPageNumber = page + 1
+                self.maxPageNumber += 1
             }
         }.resume()
     }
@@ -95,5 +98,22 @@ class SimpleDesktopsRequest {
         let name = components[(index + 1)...].joined(separator: "-")
 
         return SDPictureInfo(name: name, previewURL: previewURL, url: url)
+    }
+}
+
+extension Picture {
+    @discardableResult
+    static func update(from info: SDPictureInfo, in context: NSManagedObjectContext) -> Picture {
+        let picture = withURL(info.url, in: context)
+        if picture.id_ == nil {
+            picture.id_ = UUID()
+        }
+        picture.lastFetchedTime = Date()
+        picture.name = info.name
+        picture.previewURL = info.previewURL
+
+        try? context.save()
+
+        return picture
     }
 }

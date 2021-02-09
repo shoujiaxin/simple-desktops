@@ -24,8 +24,7 @@ class WallpaperManager {
     var timerPublisher: Timer.TimerPublisher
 
     var directory: URL {
-        let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
-        let url = try! FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(bundleName).appendingPathComponent("Wallpapers")
+        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "8TA5C5ASM9.me.jiaxin.SimpleDesktops")!.appendingPathComponent("Wallpapers")
 
         // Create the directory if it does not exist
         if !FileManager.default.fileExists(atPath: url.path) {
