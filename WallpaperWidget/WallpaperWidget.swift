@@ -53,6 +53,7 @@ struct WallpaperWidgetEntryView: View {
             Image(nsImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .widgetURL(URL(string: "widget-deeplink://\(url.lastPathComponent)")!)
         }
     }
 }

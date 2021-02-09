@@ -40,6 +40,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }
 
+    func application(_: NSApplication, open _: [URL]) {
+        togglePopover(self)
+    }
+
     @objc private func togglePopover(_ sender: Any?) {
         if popover.isShown {
             popover.performClose(sender)
