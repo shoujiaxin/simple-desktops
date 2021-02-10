@@ -70,18 +70,6 @@ struct PreviewView: View {
 
             ZStack {
                 WebImage(url: pictures.first?.previewURL)
-                    .onProgress { receivedSize, totalSize in
-                        DispatchQueue.main.async {
-                            let progress = Double(receivedSize) / Double(totalSize)
-                            fetcher.fetchingProgress = progress
-
-                            if progress > 0.99 {
-                                // `.onSuccess` is called whenever the view appears
-                                // so cannot change the state in `onSuccess`
-                                fetcher.isFetching = false
-                            }
-                        }
-                    }
                     .resizable()
                     .aspectRatio(pictureAspectRatio, contentMode: .fit)
 

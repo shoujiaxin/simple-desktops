@@ -10,10 +10,26 @@ import CoreData
 import SDWebImage
 
 class PictureFetcher: ObservableObject {
-    @Published var isFetching: Bool = false
-    @Published var fetchingProgress: Double = 0
+    @Published private(set) var image: NSImage?
 
-    @Published private(set) var isDownloading: Bool = false
+    @Published private(set) var isFetching: Bool = false {
+        willSet {
+            if isFetching != newValue {
+                fetchingProgress = 0
+            }
+        }
+    }
+
+    @Published private(set) var fetchingProgress: Double = 0
+
+    @Published private(set) var isDownloading: Bool = false {
+        willSet {
+            if isDownloading != newValue {
+                downloadingProgress = 0
+            }
+        }
+    }
+
     @Published private(set) var downloadingProgress: Double = 0
 
     private let context: NSManagedObjectContext
@@ -66,8 +82,19 @@ class PictureFetcher: ObservableObject {
                 // TODO: error handle
             }) { info in
                 if let info = info {
-                    completed(Picture.update(from: info, in: self.context))
-                    // `isFetching` is set to `false` in `PreviewView` after the picture is loaded
+                    let picture = Picture.update(from: info, in: self.context)
+
+                    // Prefetch the preview image
+                    SDWebImageManager.shared.loadImage(with: picture.previewURL, options: .highPriority) { receivedSize, expectedSize, _ in
+                        DispatchQueue.main.async {
+                            self.fetchingProgress = Double(receivedSize) / Double(expectedSize)
+                        }
+                    } completed: { image, _, _, _, _, _ in
+                        self.image = image
+                        self.isFetching = false
+                    }
+
+                    completed(picture)
                 } else {
                     self.isFetching = false
                 }
