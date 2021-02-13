@@ -23,11 +23,11 @@ struct Provider: TimelineProvider {
 
         let fileURLs = try! FileManager.default.contentsOfDirectory(at: WallpaperManager.shared.directory,
                                                                     includingPropertiesForKeys: nil,
-                                                                    options: .skipsHiddenFiles)
+                                                                    options: .skipsHiddenFiles).shuffled()
 
         let currentDate = Date()
         for i in 0 ..< fileURLs.count {
-            let entryDate = Calendar.current.date(byAdding: .minute, value: 10 * i, to: currentDate)!
+            let entryDate = Calendar.current.date(byAdding: .minute, value: 15 * i, to: currentDate)!
             let entry = SimpleEntry(date: entryDate, url: fileURLs[i])
             entries.append(entry)
         }
