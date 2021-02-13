@@ -14,7 +14,10 @@ struct Provider: TimelineProvider {
     }
 
     func getSnapshot(in _: Context, completion: @escaping (SimpleEntry) -> Void) {
-        let entry = SimpleEntry(date: Date(), url: nil)
+        let entry = SimpleEntry(date: Date(),
+                                url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.shared.directory,
+                                                                                  includingPropertiesForKeys: nil,
+                                                                                  options: .skipsHiddenFiles).randomElement())
         completion(entry)
     }
 
@@ -54,6 +57,10 @@ struct WallpaperWidgetEntryView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .widgetURL(URL(string: "widget-deeplink://\(url.lastPathComponent)")!)
+        } else {
+            Image(systemName: "photo.on.rectangle.angled")
+                .font(Font.system(size: 64))
+                .foregroundColor(.secondary)
         }
     }
 }
@@ -73,7 +80,15 @@ struct WallpaperWidget: Widget {
 
 struct WallpaperWidget_Previews: PreviewProvider {
     static var previews: some View {
-        WallpaperWidgetEntryView(entry: SimpleEntry(date: Date(), url: nil))
+        let emptyEntry = SimpleEntry(date: Date(), url: nil)
+        WallpaperWidgetEntryView(entry: emptyEntry)
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+        let demoEntry = SimpleEntry(date: Date(),
+                                    url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.shared.directory,
+                                                                                      includingPropertiesForKeys: nil,
+                                                                                      options: .skipsHiddenFiles).randomElement())
+        WallpaperWidgetEntryView(entry: demoEntry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
