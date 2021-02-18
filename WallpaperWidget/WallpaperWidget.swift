@@ -29,9 +29,9 @@ struct Provider: TimelineProvider {
                                                                     options: .skipsHiddenFiles).shuffled()
 
         let currentDate = Date()
-        for i in 0 ..< fileURLs.count {
-            let entryDate = Calendar.current.date(byAdding: .minute, value: 15 * i, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, url: fileURLs[i])
+        for (index, url) in fileURLs.enumerated() {
+            let entryDate = Calendar.current.date(byAdding: .minute, value: 15 * index, to: currentDate)!
+            let entry = SimpleEntry(date: entryDate, url: url)
             entries.append(entry)
         }
 

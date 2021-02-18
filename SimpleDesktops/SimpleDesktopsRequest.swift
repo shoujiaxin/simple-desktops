@@ -15,31 +15,39 @@ struct SDPictureInfo {
     let previewURL: URL
 
     let url: URL
+
+    init?(name: String?, previewURL: URL?, url: URL?) {
+        guard let name = name,
+              let previewURL = previewURL,
+              let url = url
+        else {
+            return nil
+        }
+
+        self.name = name
+        self.previewURL = previewURL
+        self.url = url
+    }
 }
 
 class SimpleDesktopsRequest {
     static let shared = SimpleDesktopsRequest()
 
     var randomPicturePublisher: AnyPublisher<SDPictureInfo?, URLError> {
-        var links: [String] = []
         let page = Int.random(in: 1 ... maxPageNumber)
         let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { (data, _) -> SDPictureInfo? in
-                guard let html = String(data: data, encoding: .utf8) else {
-                    return nil
-                }
-
                 do {
-                    let imgTags = try SwiftSoup.parse(html).select("img")
-                    try imgTags.forEach { tag in
-                        links.append(try tag.attr("src"))
-                    }
+                    let links = try String(data: data, encoding: .utf8)
+                        .map { try SwiftSoup.parse($0) }?.select("img")
+                        .map { try $0.attr("src") }
+                    return self.parse(from: links?.randomElement())
                 } catch {
                     print(error)
                 }
 
-                return self.parse(from: links.randomElement())
+                return nil
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
@@ -64,10 +72,7 @@ class SimpleDesktopsRequest {
     private func updateMaxPageNumber() {
         let url = URL(string: "http://simpledesktops.com/browse/\(maxPageNumber)/")!
         URLSession.shared.dataTask(with: url) { data, _, _ in
-            if let data = data,
-               let html = String(data: data, encoding: .utf8),
-               let document = try? SwiftSoup.parse(html),
-               let imgTag = try? document.select("img"),
+            if let imgTag = data.flatMap({ String(data: $0, encoding: .utf8) }).flatMap({ try? SwiftSoup.parse($0).select("img") }),
                imgTag.count > 0
             {
                 self.maxPageNumber += 1
@@ -76,26 +81,14 @@ class SimpleDesktopsRequest {
     }
 
     private func parse(from link: String?) -> SDPictureInfo? {
-        guard let link = link,
-              let previewURL = URL(string: link)
-        else {
-            return nil
+        let previewURL = link.flatMap { URL(string: $0) }
+
+        let url = previewURL.map { url -> URL in
+            let lastPathComponent = url.lastPathComponent.split(separator: ".")[..<2].joined(separator: ".")
+            return url.deletingLastPathComponent().appendingPathComponent(lastPathComponent)
         }
 
-        let lastPathComponent = previewURL.lastPathComponent
-        let re = try! NSRegularExpression(pattern: #"^.+\.[a-z]{2,4}\."#, options: .caseInsensitive)
-        guard let range = re.matches(in: lastPathComponent, options: .anchored, range: NSRange(location: 0, length: lastPathComponent.count)).first?.range else {
-            return nil
-        }
-        let url = previewURL
-            .deletingLastPathComponent()
-            .appendingPathComponent(String(lastPathComponent[Range(range, in: lastPathComponent)!].dropLast()))
-
-        let components = url.pathComponents
-        guard let index = components.firstIndex(of: "desktops") else {
-            return nil
-        }
-        let name = components[(index + 1)...].joined(separator: "-")
+        let name = url?.pathComponents.split(separator: "desktops").last?.joined(separator: "-")
 
         return SDPictureInfo(name: name, previewURL: previewURL, url: url)
     }
