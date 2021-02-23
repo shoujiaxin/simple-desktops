@@ -34,3 +34,8 @@
 "Set as wallpaper" = "设为壁纸";
 
 "Delete" = "删除";
+
+// User notification
+"Picture Downloaded" = "图片已下载";
+
+"Wallpaper Changed" = "壁纸已更换";

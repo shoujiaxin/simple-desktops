@@ -44,7 +44,7 @@ class SimpleDesktopsRequest {
                         .map { try $0.attr("src") }
                     return self.parse(from: links?.randomElement())
                 } catch {
-                    print(error)
+                    print(error.localizedDescription)
                 }
 
                 return nil

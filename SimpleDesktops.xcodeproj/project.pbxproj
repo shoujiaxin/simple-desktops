@@ -33,6 +33,7 @@
 		29D27B6525B16598006674DB /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B6425B16598006674DB /* PreviewView.swift */; };
 		29D27B7025B16A0A006674DB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29D27B6F25B16A0A006674DB /* SDWebImageSwiftUI */; };
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
+		29E6185C25E4C6B600801832 /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6185B25E4C6B600801832 /* UserNotification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		29BCA45625B2961300C17A73 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		29D27B6425B16598006674DB /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		29D27B7225B16ABE006674DB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		29E6185B25E4C6B600801832 /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		29F4CEA125B750FE003D24CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -201,6 +203,7 @@
 			children = (
 				294A4B3925B01E6600DA8631 /* PersistenceController.swift */,
 				2994265225B455F400DEF701 /* WallpaperManager.swift */,
+				29E6185B25E4C6B600801832 /* UserNotification.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				29D27B6525B16598006674DB /* PreviewView.swift in Sources */,
 				297E324A25D0530A00E18951 /* CapsuledButtonStyle.swift in Sources */,
 				294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */,
+				29E6185C25E4C6B600801832 /* UserNotification.swift in Sources */,
 				297E324325D04CA900E18951 /* ImageButtonStyle.swift in Sources */,
 				297E323225D03D9300E18951 /* Picture.swift in Sources */,
 				2994265325B455F400DEF701 /* WallpaperManager.swift in Sources */,
@@ -395,7 +399,7 @@
 				CODE_SIGN_ENTITLEMENTS = WallpaperWidget/WallpaperWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = WallpaperWidget/Info.plist;
@@ -421,7 +425,7 @@
 				CODE_SIGN_ENTITLEMENTS = WallpaperWidget/WallpaperWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = WallpaperWidget/Info.plist;
@@ -565,7 +569,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -592,7 +596,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;

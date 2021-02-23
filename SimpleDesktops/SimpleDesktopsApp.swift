@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 @main
 struct SimpleDesktopsApp: App {
@@ -20,7 +21,7 @@ struct SimpleDesktopsApp: App {
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
     var statusItem: NSStatusItem!
     var popover: NSPopover!
 
@@ -38,6 +39,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 .environment(\.managedObjectContext, viewContext)
                 .environmentObject(PictureFetcher(context: viewContext))
         )
+
+        UNUserNotificationCenter.current().delegate = self
     }
 
     func application(_: NSApplication, open _: [URL]) {
@@ -51,5 +54,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.activate(ignoringOtherApps: true)
             popover.show(relativeTo: statusItem.button!.bounds, of: statusItem.button!, preferredEdge: NSRectEdge.minY)
         }
+    }
+
+    // MARK: - UNUserNotificationCenterDelegate
+
+    func userNotificationCenter(_: UNUserNotificationCenter, willPresent _: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Display user notification even while the app is in foreground
+        completionHandler([.banner])
     }
 }
