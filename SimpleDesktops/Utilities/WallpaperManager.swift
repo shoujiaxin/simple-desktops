@@ -36,14 +36,33 @@ class WallpaperManager {
 
     func setWallpaper(with url: URL) {
         // TODO: log
-        for screen in NSScreen.screens {
+        NSScreen.screens.forEach { screen in
             try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+        }
+
+        // Multi workspace
+        if let observer = workspaceChangeObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+        }
+        workspaceChangeObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
+            // Set wallpaper when workspace changed
+            NSScreen.screens.forEach { screen in
+                try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+            }
         }
     }
 
     private var timerCancellable: Cancellable?
 
+    private var workspaceChangeObserver: NSObjectProtocol?
+
     private init() {
         timerPublisher = Timer.publish(every: .infinity, on: .main, in: .common)
+    }
+
+    deinit {
+        if let observer = workspaceChangeObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+        }
     }
 }
