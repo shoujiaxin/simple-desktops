@@ -67,10 +67,13 @@ class PictureFetcher: ObservableObject {
             DispatchQueue.main.async {
                 self.downloadingProgress = Double(receivedSize) / Double(expectedSize)
             }
-        } completed: { _, data, _, _ in
-            try? data?.write(to: url)
-            self.isDownloading = false
-            completed(url)
+        } completed: { _, data, error, finished in
+            self.isDownloading = !finished
+
+            if error == nil {
+                try? data?.write(to: url)
+                completed(url)
+            }
         }
     }
 
@@ -89,9 +92,9 @@ class PictureFetcher: ObservableObject {
                         DispatchQueue.main.async {
                             self.fetchingProgress = Double(receivedSize) / Double(expectedSize)
                         }
-                    } completed: { image, _, _, _, _, _ in
+                    } completed: { image, _, _, _, finished, _ in
                         self.image = image
-                        self.isFetching = false
+                        self.isFetching = !finished
                     }
 
                     completed(picture)
