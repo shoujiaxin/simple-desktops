@@ -14,7 +14,10 @@ struct PopoverView: View {
         case history
 
         var height: CGFloat {
-            self == .preference ? 163 : 358
+            switch self {
+            case .preference: return 163
+            default: return 358
+            }
         }
     }
 

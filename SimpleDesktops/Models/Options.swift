@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct Options: Codable {
-    enum ChangeInterval: Int, CaseIterable, Identifiable, Codable {
-        case everyMinute
-        case everyFiveMinutes
-        case everyFifteenMinutes
-        case everyThirtyMinutes
-        case everyHour
-        case everyDay
-
-        var id: Int {
-            rawValue
-        }
+    enum ChangeInterval: TimeInterval, CaseIterable, Codable {
+        case everyMinute = 60
+        case everyFiveMinutes = 300
+        case everyFifteenMinutes = 900
+        case everyThirtyMinutes = 1800
+        case everyHour = 3600
+        case everyDay = 86400
 
         var description: LocalizedStringKey {
             switch self {
@@ -30,27 +26,15 @@ struct Options: Codable {
             case .everyDay: return "Every day"
             }
         }
-
-        var seconds: TimeInterval {
-            switch self {
-            case .everyMinute: return 60
-            case .everyFiveMinutes: return 60 * 5
-            case .everyFifteenMinutes: return 60 * 15
-            case .everyThirtyMinutes: return 60 * 30
-            case .everyHour: return 60 * 60
-            case .everyDay: return 60 * 60 * 24
-            }
-        }
     }
 
     var autoChange: Bool = true
     var changeInterval: ChangeInterval = .everyHour
 
     init() {
-        if let data = try? JSONEncoder().encode(self),
-           let dictionary = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
-           let savedData = try? JSONSerialization.data(withJSONObject: UserDefaults.standard.dictionaryWithValues(forKeys: Array(dictionary.keys)), options: .fragmentsAllowed),
-           let options = try? JSONDecoder().decode(Options.self, from: savedData)
+        let keys = Mirror(reflecting: self).children.compactMap { $0.label }
+        if let data = try? JSONSerialization.data(withJSONObject: UserDefaults.standard.dictionaryWithValues(forKeys: keys), options: .fragmentsAllowed),
+           let options = try? JSONDecoder().decode(Options.self, from: data)
         {
             self = options
         }

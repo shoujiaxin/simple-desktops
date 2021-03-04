@@ -53,13 +53,13 @@ class PictureFetcher: ObservableObject {
 
     func download(_ picture: Picture,
                   to directory: URL = try! FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false),
-                  completed: @escaping (URL) -> Void = { _ in })
+                  completed: ((URL) -> Void)? = nil)
     {
         isDownloading = true
         let url = directory.appendingPathComponent(picture.name ?? picture.id.uuidString)
         guard !FileManager.default.fileExists(atPath: url.path) else {
             isDownloading = false
-            completed(url)
+            completed?(url)
             return
         }
 
@@ -72,12 +72,12 @@ class PictureFetcher: ObservableObject {
 
             if error == nil {
                 try? data?.write(to: url)
-                completed(url)
+                completed?(url)
             }
         }
     }
 
-    func fetch(completed: @escaping (Picture) -> Void = { _ in }) {
+    func fetch(completed: ((Picture) -> Void)? = nil) {
         isFetching = true
         fetchCancellable?.cancel()
         fetchCancellable = SimpleDesktopsRequest.shared.randomPicturePublisher
@@ -97,7 +97,7 @@ class PictureFetcher: ObservableObject {
                         self.isFetching = !finished
                     }
 
-                    completed(picture)
+                    completed?(picture)
                 } else {
                     self.isFetching = false
                 }

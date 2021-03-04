@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 class Preferences: ObservableObject {
     @Published private var options = Options()
@@ -18,29 +19,31 @@ class Preferences: ObservableObject {
         }
 
         if options.autoChange {
-            WallpaperManager.shared.autoChangeInterval = options.changeInterval.seconds
+            WallpaperManager.shared.autoChangeInterval = options.changeInterval.rawValue
         }
     }
 
     var autoChange: Bool {
-        options.autoChange
+        get {
+            options.autoChange
+        }
+        set {
+            options.autoChange = newValue
+            WallpaperManager.shared.autoChangeInterval = newValue ? options.changeInterval.rawValue : nil
+        }
     }
 
-    var changeInterval: Int {
-        options.changeInterval.rawValue
+    var changeInterval: TimeInterval {
+        get {
+            options.changeInterval.rawValue
+        }
+        set {
+            options.changeInterval = Options.ChangeInterval(rawValue: newValue)!
+            WallpaperManager.shared.autoChangeInterval = options.autoChange ? options.changeInterval.rawValue : nil
+        }
     }
 
     var allChangeIntervals: [Options.ChangeInterval] {
         Options.ChangeInterval.allCases
-    }
-
-    func setAutoChange(_ enable: Bool) {
-        options.autoChange = enable
-        WallpaperManager.shared.autoChangeInterval = enable ? options.changeInterval.seconds : nil
-    }
-
-    func selectChangeInterval(at tag: Int) {
-        options.changeInterval = Options.ChangeInterval(rawValue: tag) ?? .everyHour
-        WallpaperManager.shared.autoChangeInterval = options.changeInterval.seconds
     }
 }

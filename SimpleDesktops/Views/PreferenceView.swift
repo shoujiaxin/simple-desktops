@@ -11,7 +11,7 @@ struct PreferenceView: View {
     @Binding var currentView: PopoverView.ViewState
 
     @Binding private var isAutoChangeOn: Bool
-    @Binding private var selectedInterval: Int
+    @Binding private var selectedInterval: TimeInterval
 
     @ObservedObject private var preferences: Preferences
 
@@ -23,21 +23,21 @@ struct PreferenceView: View {
         _isAutoChangeOn = .init(get: {
             preferences.autoChange
         }, set: { isEnable in
-            preferences.setAutoChange(isEnable)
+            preferences.autoChange = isEnable
         })
 
         _selectedInterval = .init(get: {
             preferences.changeInterval
-        }, set: { selectedTag in
-            preferences.selectChangeInterval(at: selectedTag)
+        }, set: { selected in
+            preferences.changeInterval = selected
         })
     }
 
     var body: some View {
         VStack {
             Toggle(isOn: $isAutoChangeOn) {
-                Picker(selection: $selectedInterval, label: Text("Change picture: ")) {
-                    ForEach(preferences.allChangeIntervals) { interval in
+                Picker("Change picture: ", selection: $selectedInterval) {
+                    ForEach(preferences.allChangeIntervals, id: \.self) { interval in
                         Text(interval.description)
                             .tag(interval.rawValue)
                     }
