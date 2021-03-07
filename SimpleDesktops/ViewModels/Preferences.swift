@@ -19,7 +19,7 @@ class Preferences: ObservableObject {
         }
 
         if options.autoChange {
-            WallpaperManager.shared.autoChangeInterval = options.changeInterval.rawValue
+            WallpaperManager.shared.autoChangeInterval = options.changeInterval
         }
     }
 
@@ -29,21 +29,25 @@ class Preferences: ObservableObject {
         }
         set {
             options.autoChange = newValue
-            WallpaperManager.shared.autoChangeInterval = newValue ? options.changeInterval.rawValue : nil
+            WallpaperManager.shared.autoChangeInterval = newValue ? options.changeInterval : nil
         }
     }
 
-    var changeInterval: TimeInterval {
+    var changeInterval: ChangeInterval {
         get {
-            options.changeInterval.rawValue
+            options.changeInterval
         }
         set {
-            options.changeInterval = Options.ChangeInterval(rawValue: newValue)!
-            WallpaperManager.shared.autoChangeInterval = options.autoChange ? options.changeInterval.rawValue : nil
+            options.changeInterval = newValue
+            WallpaperManager.shared.autoChangeInterval = options.autoChange ? newValue : nil
         }
     }
 
-    var allChangeIntervals: [Options.ChangeInterval] {
-        Options.ChangeInterval.allCases
+    var timeChangeIntervals: [ChangeInterval] {
+        ChangeInterval.allCases.filter { $0.rawValue >= 0 }
+    }
+
+    var eventChangeIntervals: [ChangeInterval] {
+        ChangeInterval.allCases.filter { $0.rawValue < 0 }
     }
 }

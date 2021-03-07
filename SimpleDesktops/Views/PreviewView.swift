@@ -114,7 +114,7 @@ struct PreviewView: View {
         .onHover { hovering in
             buttonHovering = hovering
         }
-        .onReceive(WallpaperManager.shared.timerPublisher) { _ in
+        .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
             fetcher.fetch { picture in
                 fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
                     WallpaperManager.shared.setWallpaper(with: url)

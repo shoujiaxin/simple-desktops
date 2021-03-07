@@ -11,7 +11,7 @@ struct PreferenceView: View {
     @Binding var currentView: PopoverView.ViewState
 
     @Binding private var isAutoChangeOn: Bool
-    @Binding private var selectedInterval: TimeInterval
+    @Binding private var selectedInterval: ChangeInterval
 
     @ObservedObject private var preferences: Preferences
 
@@ -37,9 +37,16 @@ struct PreferenceView: View {
         VStack {
             Toggle(isOn: $isAutoChangeOn) {
                 Picker("Change picture: ", selection: $selectedInterval) {
-                    ForEach(preferences.allChangeIntervals, id: \.self) { interval in
+                    ForEach(preferences.eventChangeIntervals) { interval in
                         Text(interval.description)
-                            .tag(interval.rawValue)
+                            .tag(interval)
+                    }
+
+                    Divider()
+
+                    ForEach(preferences.timeChangeIntervals) { interval in
+                        Text(interval.description)
+                            .tag(interval)
                     }
                 }
                 .frame(width: intervalPickerWidth)
@@ -74,7 +81,7 @@ struct PreferenceView: View {
 
     // MARK: - Draw Constants
 
-    private let intervalPickerWidth: CGFloat = 260
+    private let intervalPickerWidth: CGFloat = 300
     private let pickerPadding: CGFloat = 24
     private let buttonPadding: CGFloat = 12
     private let buttonSpacing: CGFloat = 24

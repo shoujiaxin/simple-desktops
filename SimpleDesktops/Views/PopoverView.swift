@@ -15,13 +15,18 @@ struct PopoverView: View {
 
         var height: CGFloat {
             switch self {
-            case .preference: return 163
-            default: return 358
+            case .preference:
+                return 163
+            case .preview,
+                 .history:
+                return 358
             }
         }
     }
 
     @State private var currentView: ViewState = .preview
+
+    private let preferences = Preferences()
 
     var body: some View {
         Group {
@@ -30,7 +35,7 @@ struct PopoverView: View {
                 PreviewView(currentView: $currentView)
 
             case .preference:
-                PreferenceView(currentView: $currentView, preferences: Preferences())
+                PreferenceView(currentView: $currentView, preferences: preferences)
                     .transition(.move(edge: .bottom))
 
             case .history:

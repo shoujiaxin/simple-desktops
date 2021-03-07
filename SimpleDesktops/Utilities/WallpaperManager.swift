@@ -11,19 +11,41 @@ import Combine
 class WallpaperManager {
     static let shared = WallpaperManager()
 
-    var autoChangeInterval: TimeInterval? {
+    var autoChangePublisher: AnyPublisher<Date, Never>
+
+    /// Time interval for automatic wallpaper change. Set to `nil` to stop.
+    var autoChangeInterval: ChangeInterval? {
         willSet {
             timerCancellable?.cancel()
-            if let timeInterval = newValue {
-                timerPublisher = Timer.publish(every: timeInterval, on: .main, in: .common)
-                timerCancellable = timerPublisher.connect()
+            wakeFromSleepObserver.map {
+                NSWorkspace.shared.notificationCenter.removeObserver($0)
+            }
+            guard let interval = newValue else {
+                return
+            }
+
+            switch interval {
+            case .whenWakingFromSleep:
+                let subject = PassthroughSubject<Date, Never>()
+                wakeFromSleepObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: nil) { _ in
+                    subject.send(Date())
+                }
+                autoChangePublisher = subject.eraseToAnyPublisher()
+            case .everyMinute,
+                 .everyFiveMinutes,
+                 .everyFifteenMinutes,
+                 .everyThirtyMinutes,
+                 .everyHour,
+                 .everyDay:
+                let publihser = Timer.publish(every: interval.seconds!, on: .main, in: .common)
+                autoChangePublisher = publihser.eraseToAnyPublisher()
+                timerCancellable = publihser.connect()
             }
         }
     }
 
-    var timerPublisher: Timer.TimerPublisher
-
-    var directory: URL {
+    /// The directory where wallpaper images are stored.
+    let directory: URL = {
         let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "8TA5C5ASM9.me.jiaxin.SimpleDesktops")!.appendingPathComponent("Wallpapers")
 
         // Create the directory if it does not exist
@@ -32,8 +54,10 @@ class WallpaperManager {
         }
 
         return url
-    }
+    }()
 
+    /// Set wallpaper for all Spaces.
+    /// - Parameter url: A file URL to the image.
     func setWallpaper(with url: URL) {
         // TODO: log
         NSScreen.screens.forEach { screen in
@@ -41,11 +65,11 @@ class WallpaperManager {
         }
 
         // Multi workspace
-        if let observer = workspaceChangeObserver {
-            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+        workspaceChangeObserver.map {
+            NSWorkspace.shared.notificationCenter.removeObserver($0)
         }
         workspaceChangeObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
-            // Set wallpaper when workspace changed
+            // Set wallpaper when Spaces changed
             NSScreen.screens.forEach { screen in
                 try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
             }
@@ -54,15 +78,21 @@ class WallpaperManager {
 
     private var timerCancellable: Cancellable?
 
+    private var wakeFromSleepObserver: NSObjectProtocol?
+
     private var workspaceChangeObserver: NSObjectProtocol?
 
     private init() {
-        timerPublisher = Timer.publish(every: .infinity, on: .main, in: .common)
+        autoChangePublisher = Timer.publish(every: .infinity, on: .main, in: .common).eraseToAnyPublisher()
     }
 
     deinit {
-        if let observer = workspaceChangeObserver {
-            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+        wakeFromSleepObserver.map {
+            NSWorkspace.shared.notificationCenter.removeObserver($0)
+        }
+
+        workspaceChangeObserver.map {
+            NSWorkspace.shared.notificationCenter.removeObserver($0)
         }
     }
 }
