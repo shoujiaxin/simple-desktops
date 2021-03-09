@@ -44,10 +44,10 @@ class Preferences: ObservableObject {
     }
 
     var timeChangeIntervals: [ChangeInterval] {
-        ChangeInterval.allCases.filter { $0.rawValue >= 0 }
+        ChangeInterval.allCases.filter { $0.seconds != nil }
     }
 
     var eventChangeIntervals: [ChangeInterval] {
-        ChangeInterval.allCases.filter { $0.rawValue < 0 }
+        ChangeInterval.allCases.filter { $0.seconds == nil }
     }
 }

@@ -38,14 +38,14 @@ struct PreferenceView: View {
             Toggle(isOn: $isAutoChangeOn) {
                 Picker("Change picture: ", selection: $selectedInterval) {
                     ForEach(preferences.eventChangeIntervals) { interval in
-                        Text(interval.description)
+                        Text(LocalizedStringKey(interval.rawValue))
                             .tag(interval)
                     }
 
                     Divider()
 
                     ForEach(preferences.timeChangeIntervals) { interval in
-                        Text(interval.description)
+                        Text(LocalizedStringKey(interval.rawValue))
                             .tag(interval)
                     }
                 }

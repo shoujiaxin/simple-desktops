@@ -7,28 +7,16 @@
 
 import SwiftUI
 
-enum ChangeInterval: Int, CaseIterable, Identifiable, Codable {
-    case whenWakingFromSleep = -1
-    case everyMinute
-    case everyFiveMinutes
-    case everyFifteenMinutes
-    case everyThirtyMinutes
-    case everyHour
-    case everyDay
+enum ChangeInterval: String, CaseIterable, Identifiable, Codable {
+    case whenWakingFromSleep = "When waking from sleep"
+    case everyMinute = "Every minute"
+    case everyFiveMinutes = "Every 5 minutes"
+    case everyFifteenMinutes = "Every 15 minutes"
+    case everyThirtyMinutes = "Every 30 minutes"
+    case everyHour = "Every hour"
+    case everyDay = "Every day"
 
-    var description: LocalizedStringKey {
-        switch self {
-        case .whenWakingFromSleep: return "When waking from sleep"
-        case .everyMinute: return "Every minute"
-        case .everyFiveMinutes: return "Every 5 minutes"
-        case .everyFifteenMinutes: return "Every 15 minutes"
-        case .everyThirtyMinutes: return "Every 30 minutes"
-        case .everyHour: return "Every hour"
-        case .everyDay: return "Every day"
-        }
-    }
-
-    var id: Int {
+    var id: String {
         return rawValue
     }
 
