@@ -69,7 +69,7 @@ struct HistoryView: View {
                                 // Download Button
                                 Button(action: {
                                     fetcher.download(picture) { url in
-                                        UserNotification.shared.trigger(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
+                                        UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
                                     }
                                 }) {
                                     Text("Download")
@@ -80,7 +80,7 @@ struct HistoryView: View {
                                 Button(action: {
                                     fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
                                         WallpaperManager.shared.setWallpaper(with: url)
-                                        UserNotification.shared.trigger(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
+                                        UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
                                     }
                                 }) {
                                     Text("Set as wallpaper")

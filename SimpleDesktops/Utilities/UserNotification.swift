@@ -10,7 +10,7 @@ import UserNotifications
 struct UserNotification {
     static let shared = UserNotification()
 
-    func trigger(title: String, body: String, attachmentURLs: [URL] = []) {
+    func request(title: String, body: String, attachmentURLs: [URL] = []) {
         let content = UNMutableNotificationContent()
         content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
         content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)

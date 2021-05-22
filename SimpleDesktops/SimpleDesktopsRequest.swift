@@ -37,7 +37,7 @@ class SimpleDesktopsRequest {
         let page = Int.random(in: 1 ... maxPageNumber)
         let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
         return URLSession.shared.dataTaskPublisher(for: url)
-            .map { (data, _) -> SDPictureInfo? in
+            .map { data, _ -> SDPictureInfo? in
                 do {
                     let links = try String(data: data, encoding: .utf8)
                         .map { try SwiftSoup.parse($0) }?.select("img")

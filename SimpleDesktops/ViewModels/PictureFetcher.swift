@@ -10,8 +10,6 @@ import CoreData
 import SDWebImage
 
 class PictureFetcher: ObservableObject {
-    @Published private(set) var image: NSImage?
-
     @Published private(set) var isFetching: Bool = false {
         willSet {
             if isFetching != newValue {
@@ -84,22 +82,22 @@ class PictureFetcher: ObservableObject {
             .sink(receiveCompletion: { _ in
                 // TODO: error handle
             }) { info in
-                if let info = info {
-                    let picture = Picture.update(from: info, in: self.context)
-
-                    // Prefetch the preview image
-                    SDWebImageManager.shared.loadImage(with: picture.previewURL, options: .highPriority) { receivedSize, expectedSize, _ in
-                        DispatchQueue.main.async {
-                            self.fetchingProgress = Double(receivedSize) / Double(expectedSize)
-                        }
-                    } completed: { image, _, _, _, finished, _ in
-                        self.image = image
-                        self.isFetching = !finished
-                    }
-
-                    completed?(picture)
-                } else {
+                guard let info = info else {
                     self.isFetching = false
+                    return
+                }
+
+                // Pre-load the preview image
+                SDWebImageManager.shared.loadImage(with: info.previewURL, options: .highPriority) { receivedSize, expectedSize, _ in
+                    DispatchQueue.main.async {
+                        self.fetchingProgress = Double(receivedSize) / Double(expectedSize)
+                    }
+                } completed: { _, _, _, _, finished, _ in
+                    assert(finished)
+                    self.isFetching = !finished
+
+                    let picture = Picture.update(from: info, in: self.context)
+                    completed?(picture)
                 }
             }
     }
