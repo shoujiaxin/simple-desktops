@@ -30,59 +30,63 @@ struct SDPictureInfo {
     }
 }
 
-class SimpleDesktopsRequest {
-    static let shared = SimpleDesktopsRequest()
-
-    var randomPicturePublisher: AnyPublisher<SDPictureInfo?, URLError> {
-        let page = Int.random(in: 1 ... maxPageNumber)
-        let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .map { data, _ -> SDPictureInfo? in
-                do {
-                    let links = try String(data: data, encoding: .utf8)
-                        .map { try SwiftSoup.parse($0) }?.select("img")
-                        .map { try $0.attr("src") }
-                    return self.parse(from: links?.randomElement())
-                } catch {
-                    // TODO: log
-                    print(error.localizedDescription)
+enum SimpleDesktopsRequest {
+    static func randomPicture() -> Future<SDPictureInfo, Error> {
+        Future { promise in
+            let page = Int.random(in: 1 ... maxPageNumber)
+            let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
+            URLSession.shared.dataTask(with: url) { data, _, error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
                 }
 
-                return nil
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
+                do {
+                    let info = try data
+                        .flatMap { String(data: $0, encoding: .utf8) }
+                        .map { try SwiftSoup.parse($0) }?.select("img")
+                        .map { try $0.attr("src") }
+                        .randomElement()
+                        .flatMap { parsePictureInfo(from: $0) }
 
-    // MARK: Private Members
-
-    private var maxPageNumber: Int {
-        get {
-            let oldValue = UserDefaults.standard.integer(forKey: "sdMaxPageNumber")
-            return oldValue > 0 ? oldValue : 52
+                    if let info = info {
+                        promise(.success(info))
+                    } else {
+                        // TODO: Throw an error
+                    }
+                } catch {
+                    promise(.failure(error))
+                }
+            }.resume()
         }
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: "sdMaxPageNumber")
-        }
     }
 
-    private init() {
-        updateMaxPageNumber()
-    }
+    // MARK: - Private Members
 
-    private func updateMaxPageNumber() {
-        let url = URL(string: "http://simpledesktops.com/browse/\(maxPageNumber)/")!
+    private static var maxPageNumber: Int = {
+        // Get old value from UserDefaults
+        var defaultValue = UserDefaults.standard.integer(forKey: MAX_PAGE_NUMBER_KEY)
+        defaultValue = defaultValue > 0 ? defaultValue : 52
+
+        // Update value
+        // TODO: Force update value manually
+        let url = URL(string: "http://simpledesktops.com/browse/\(defaultValue)/")!
         URLSession.shared.dataTask(with: url) { data, _, _ in
-            if let imgTag = data.flatMap({ String(data: $0, encoding: .utf8) }).flatMap({ try? SwiftSoup.parse($0).select("img") }),
-               imgTag.count > 0
-            {
-                self.maxPageNumber += 1
-            }
+            data
+                .flatMap { String(data: $0, encoding: .utf8) }
+                .flatMap { try? SwiftSoup.parse($0).select("img") }
+                .map { elements in
+                    if elements.count > 0 {
+                        UserDefaults.standard.setValue(defaultValue + 1, forKey: MAX_PAGE_NUMBER_KEY)
+                    }
+                }
         }.resume()
-    }
 
-    private func parse(from link: String?) -> SDPictureInfo? {
-        let previewURL = link.flatMap { URL(string: $0) }
+        return defaultValue
+    }()
+
+    private static func parsePictureInfo(from link: String) -> SDPictureInfo? {
+        let previewURL = URL(string: link)
 
         let url = previewURL.map { url -> URL in
             let lastPathComponent = url.lastPathComponent.split(separator: ".")[..<2].joined(separator: ".")
@@ -93,6 +97,10 @@ class SimpleDesktopsRequest {
 
         return SDPictureInfo(name: name, previewURL: previewURL, url: url)
     }
+
+    // MARK: - Constants
+
+    private static let MAX_PAGE_NUMBER_KEY = "sdMaxPageNumber"
 }
 
 extension Picture {
