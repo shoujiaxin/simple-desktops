@@ -78,15 +78,16 @@ class PictureFetcher: ObservableObject {
     func fetch(completed: ((Picture) -> Void)? = nil) {
         isFetching = true
         fetchCancellable?.cancel()
-        fetchCancellable = SimpleDesktopsRequest.randomPicture()
-            .sink(receiveCompletion: { _ in
-                // TODO: error handle
+        fetchCancellable = SimpleDesktopsRequest.shared.randomPicture
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case let .failure(error):
+                    self.isFetching = false
+                    print(error) // TODO: log
+                case .finished:
+                    print("finished") // TODO: log
+                }
             }) { info in
-//                guard let info = info else {
-//                    self.isFetching = false
-//                    return
-//                }
-
                 // Pre-load the preview image
                 SDWebImageManager.shared.loadImage(with: info.previewURL, options: .highPriority) { receivedSize, expectedSize, _ in
                     DispatchQueue.main.async {

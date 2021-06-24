@@ -15,6 +15,8 @@
 		2916D23725D2D0080044AE71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916D23625D2D0080044AE71 /* Assets.xcassets */; };
 		2916D23C25D2D0080044AE71 /* WallpaperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2916D25025D2E5D50044AE71 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994265225B455F400DEF701 /* WallpaperManager.swift */; };
+		292A9A422684D32400552DBA /* SimpleDesktopsRequestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292A9A412684D32400552DBA /* SimpleDesktopsRequestTest.swift */; };
+		292A9A4A2686F93E00552DBA /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292A9A492686F93E00552DBA /* MockURLProtocol.swift */; };
 		294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */; };
 		294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3225B01E6500DA8631 /* PopoverView.swift */; };
 		294A4B3525B01E6600DA8631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 294A4B3425B01E6600DA8631 /* Assets.xcassets */; };
@@ -46,6 +48,13 @@
 			remoteGlobalIDString = 2916D22C25D2D0070044AE71;
 			remoteInfo = WallpaperWidgetExtension;
 		};
+		292A9A3C2684D2FD00552DBA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 294A4B2525B01E6500DA8631 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 294A4B2C25B01E6500DA8631;
+			remoteInfo = "Simple Desktops";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,6 +80,10 @@
 		2916D23625D2D0080044AE71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2916D23825D2D0080044AE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2916D23925D2D0080044AE71 /* WallpaperWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WallpaperWidget.entitlements; sourceTree = "<group>"; };
+		292A9A372684D2FD00552DBA /* SimpleDesktopsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleDesktopsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		292A9A3B2684D2FD00552DBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		292A9A412684D32400552DBA /* SimpleDesktopsRequestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsRequestTest.swift; sourceTree = "<group>"; };
+		292A9A492686F93E00552DBA /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		294A4B2D25B01E6500DA8631 /* Simple Desktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Desktops.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsApp.swift; sourceTree = "<group>"; };
 		294A4B3225B01E6500DA8631 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
@@ -106,6 +119,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		292A9A342684D2FD00552DBA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		294A4B2A25B01E6500DA8631 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -138,11 +158,30 @@
 			path = WallpaperWidget;
 			sourceTree = "<group>";
 		};
+		292A9A382684D2FD00552DBA /* SimpleDesktopsTests */ = {
+			isa = PBXGroup;
+			children = (
+				292A9A482686F8E700552DBA /* Mock */,
+				292A9A412684D32400552DBA /* SimpleDesktopsRequestTest.swift */,
+				292A9A3B2684D2FD00552DBA /* Info.plist */,
+			);
+			path = SimpleDesktopsTests;
+			sourceTree = "<group>";
+		};
+		292A9A482686F8E700552DBA /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				292A9A492686F93E00552DBA /* MockURLProtocol.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
 		294A4B2425B01E6500DA8631 = {
 			isa = PBXGroup;
 			children = (
 				294A4B2F25B01E6500DA8631 /* SimpleDesktops */,
 				2916D23325D2D0070044AE71 /* WallpaperWidget */,
+				292A9A382684D2FD00552DBA /* SimpleDesktopsTests */,
 				2916D22E25D2D0070044AE71 /* Frameworks */,
 				294A4B2E25B01E6500DA8631 /* Products */,
 			);
@@ -153,6 +192,7 @@
 			children = (
 				294A4B2D25B01E6500DA8631 /* Simple Desktops.app */,
 				2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */,
+				292A9A372684D2FD00552DBA /* SimpleDesktopsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -254,6 +294,24 @@
 			productReference = 2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		292A9A362684D2FD00552DBA /* SimpleDesktopsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 292A9A402684D2FD00552DBA /* Build configuration list for PBXNativeTarget "SimpleDesktopsTests" */;
+			buildPhases = (
+				292A9A332684D2FD00552DBA /* Sources */,
+				292A9A342684D2FD00552DBA /* Frameworks */,
+				292A9A352684D2FD00552DBA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				292A9A3D2684D2FD00552DBA /* PBXTargetDependency */,
+			);
+			name = SimpleDesktopsTests;
+			productName = SimpleDesktopsTests;
+			productReference = 292A9A372684D2FD00552DBA /* SimpleDesktopsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		294A4B2C25B01E6500DA8631 /* Simple Desktops */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 294A4B4225B01E6600DA8631 /* Build configuration list for PBXNativeTarget "Simple Desktops" */;
@@ -283,11 +341,15 @@
 		294A4B2525B01E6500DA8631 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					2916D22C25D2D0070044AE71 = {
 						CreatedOnToolsVersion = 12.4;
+					};
+					292A9A362684D2FD00552DBA = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 294A4B2C25B01E6500DA8631;
 					};
 					294A4B2C25B01E6500DA8631 = {
 						CreatedOnToolsVersion = 12.3;
@@ -314,6 +376,7 @@
 			targets = (
 				294A4B2C25B01E6500DA8631 /* Simple Desktops */,
 				2916D22C25D2D0070044AE71 /* WallpaperWidgetExtension */,
+				292A9A362684D2FD00552DBA /* SimpleDesktopsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -324,6 +387,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2916D23725D2D0080044AE71 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		292A9A352684D2FD00552DBA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +417,15 @@
 				2916D25025D2E5D50044AE71 /* WallpaperManager.swift in Sources */,
 				29AB43E225F5F96700BB484E /* ChangeInterval.swift in Sources */,
 				2916D23525D2D0070044AE71 /* WallpaperWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		292A9A332684D2FD00552DBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				292A9A4A2686F93E00552DBA /* MockURLProtocol.swift in Sources */,
+				292A9A422684D32400552DBA /* SimpleDesktopsRequestTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +460,11 @@
 			isa = PBXTargetDependency;
 			target = 2916D22C25D2D0070044AE71 /* WallpaperWidgetExtension */;
 			targetProxy = 2916D23A25D2D0080044AE71 /* PBXContainerItemProxy */;
+		};
+		292A9A3D2684D2FD00552DBA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 294A4B2C25B01E6500DA8631 /* Simple Desktops */;
+			targetProxy = 292A9A3C2684D2FD00552DBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -446,6 +530,48 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		292A9A3E2684D2FD00552DBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8TA5C5ASM9;
+				INFOPLIST_FILE = SimpleDesktopsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktopsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Simple Desktops.app/Contents/MacOS/Simple Desktops";
+			};
+			name = Debug;
+		};
+		292A9A3F2684D2FD00552DBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8TA5C5ASM9;
+				INFOPLIST_FILE = SimpleDesktopsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktopsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Simple Desktops.app/Contents/MacOS/Simple Desktops";
 			};
 			name = Release;
 		};
@@ -628,6 +754,15 @@
 			buildConfigurations = (
 				2916D23E25D2D0080044AE71 /* Debug */,
 				2916D23F25D2D0080044AE71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		292A9A402684D2FD00552DBA /* Build configuration list for PBXNativeTarget "SimpleDesktopsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				292A9A3E2684D2FD00552DBA /* Debug */,
+				292A9A3F2684D2FD00552DBA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
