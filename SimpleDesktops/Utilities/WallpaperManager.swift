@@ -11,6 +11,18 @@ import Combine
 class WallpaperManager {
     static let shared = WallpaperManager()
 
+    /// The directory where wallpaper images are stored.
+    static let directory: URL = {
+        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "8TA5C5ASM9.me.jiaxin.SimpleDesktops")!.appendingPathComponent("Wallpapers")
+
+        // Create the directory if it does not exist
+        if !FileManager.default.fileExists(atPath: url.path) {
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        return url
+    }()
+
     var autoChangePublisher: AnyPublisher<Date, Never>
 
     /// Time interval for automatic wallpaper change. Set to `nil` to stop.
@@ -43,18 +55,6 @@ class WallpaperManager {
             }
         }
     }
-
-    /// The directory where wallpaper images are stored.
-    let directory: URL = {
-        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "8TA5C5ASM9.me.jiaxin.SimpleDesktops")!.appendingPathComponent("Wallpapers")
-
-        // Create the directory if it does not exist
-        if !FileManager.default.fileExists(atPath: url.path) {
-            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-        }
-
-        return url
-    }()
 
     /// Set wallpaper for all Spaces.
     /// - Parameter url: A file URL to the image.

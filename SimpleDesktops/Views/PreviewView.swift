@@ -85,7 +85,7 @@ struct PreviewView: View {
 
             Button(action: {
                 if let picture = pictures.first {
-                    fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
+                    fetcher.download(picture, to: WallpaperManager.directory) { url in
                         WallpaperManager.shared.setWallpaper(with: url)
                         UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
                     }
@@ -116,7 +116,7 @@ struct PreviewView: View {
         }
         .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
             fetcher.fetch { picture in
-                fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
+                fetcher.download(picture, to: WallpaperManager.directory) { url in
                     WallpaperManager.shared.setWallpaper(with: url)
                     UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
                 }

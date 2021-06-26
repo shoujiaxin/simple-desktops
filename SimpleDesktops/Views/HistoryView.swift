@@ -78,7 +78,7 @@ struct HistoryView: View {
 
                                 // Set Wallpaper Button
                                 Button(action: {
-                                    fetcher.download(picture, to: WallpaperManager.shared.directory) { url in
+                                    fetcher.download(picture, to: WallpaperManager.directory) { url in
                                         WallpaperManager.shared.setWallpaper(with: url)
                                         UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
                                     }

@@ -15,7 +15,7 @@ struct Provider: TimelineProvider {
 
     func getSnapshot(in _: Context, completion: @escaping (SimpleEntry) -> Void) {
         let entry = SimpleEntry(date: Date(),
-                                url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.shared.directory,
+                                url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.directory,
                                                                                   includingPropertiesForKeys: nil,
                                                                                   options: .skipsHiddenFiles).randomElement())
         completion(entry)
@@ -24,7 +24,7 @@ struct Provider: TimelineProvider {
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         var entries: [SimpleEntry] = []
 
-        let fileURLs = try! FileManager.default.contentsOfDirectory(at: WallpaperManager.shared.directory,
+        let fileURLs = try! FileManager.default.contentsOfDirectory(at: WallpaperManager.directory,
                                                                     includingPropertiesForKeys: nil,
                                                                     options: .skipsHiddenFiles).shuffled()
 
@@ -85,7 +85,7 @@ struct WallpaperWidget_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
         let demoEntry = SimpleEntry(date: Date(),
-                                    url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.shared.directory,
+                                    url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.directory,
                                                                                       includingPropertiesForKeys: nil,
                                                                                       options: .skipsHiddenFiles).randomElement())
         WallpaperWidgetEntryView(entry: demoEntry)
