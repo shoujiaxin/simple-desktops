@@ -23,7 +23,7 @@ class SimpleDesktopsRequestTest: XCTestCase {
         cancellable?.cancel()
     }
 
-    func testRandomPicture() throws {
+    func testRandomPictureSuccess() throws {
         MockURLProtocol.requestHandler = { _ in
             let html = """
             <!DOCTYPE html>
@@ -58,7 +58,7 @@ class SimpleDesktopsRequestTest: XCTestCase {
             return (data, response, nil)
         }
 
-        let expectation = expectation(description: "testRandomPicture")
+        let expectation = expectation(description: "testRandomPictureSuccess")
         cancellable = request.randomPicture
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -72,6 +72,28 @@ class SimpleDesktopsRequestTest: XCTestCase {
                 XCTAssertEqual(info.name, "2021-02-04-mirage.png")
                 XCTAssertEqual(info.previewURL, URL(string: "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png.295x184_q100.png")!)
                 XCTAssertEqual(info.url, URL(string: "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png")!)
+            }
+
+        waitForExpectations(timeout: 5)
+    }
+
+    func testRandomPictureError() throws {
+        MockURLProtocol.requestHandler = { _ in
+            (nil, nil, SimpleDesktopsError.soupFailed)
+        }
+
+        let expectation = expectation(description: "testRandomPictureError")
+        cancellable = request.randomPicture
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case let .failure(error):
+                    XCTAssertNotNil(error)
+                case .finished:
+                    break
+                }
+                expectation.fulfill()
+            }) { _ in
+                XCTFail()
             }
 
         waitForExpectations(timeout: 5)
