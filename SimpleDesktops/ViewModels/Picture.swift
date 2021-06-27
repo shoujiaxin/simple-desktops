@@ -9,9 +9,9 @@ import CoreData
 
 extension Picture {
     static func fetchRequest(_ predicate: NSPredicate?, fetchLimit: Int = 0) -> NSFetchRequest<Picture> {
-        let request = NSFetchRequest<Picture>(entityName: "Picture")
+        let request: NSFetchRequest<Picture> = Self.fetchRequest()
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "lastFetchedTime_", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Picture.lastFetchedTime_, ascending: false)]
         request.fetchLimit = fetchLimit
         return request
     }
