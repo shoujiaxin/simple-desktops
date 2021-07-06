@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		2913681325D0659C00DD1D2E /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B06BCA25B1947C006EB273 /* PreferenceView.swift */; };
 		2913682025D0E10300DD1D2E /* SimpleDesktopsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */; };
-		2916D23025D2D0070044AE71 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2916D22F25D2D0070044AE71 /* WidgetKit.framework */; };
-		2916D23225D2D0070044AE71 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2916D23125D2D0070044AE71 /* SwiftUI.framework */; };
 		2916D23525D2D0070044AE71 /* WallpaperWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916D23425D2D0070044AE71 /* WallpaperWidget.swift */; };
 		2916D23725D2D0080044AE71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916D23625D2D0080044AE71 /* Assets.xcassets */; };
 		2916D23C25D2D0080044AE71 /* WallpaperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -74,8 +72,6 @@
 /* Begin PBXFileReference section */
 		2913681E25D0E02100DD1D2E /* SimpleDesktopsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsRequest.swift; sourceTree = "<group>"; };
 		2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WallpaperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		2916D22F25D2D0070044AE71 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
-		2916D23125D2D0070044AE71 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		2916D23425D2D0070044AE71 /* WallpaperWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperWidget.swift; sourceTree = "<group>"; };
 		2916D23625D2D0080044AE71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2916D23825D2D0080044AE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,8 +110,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2916D23225D2D0070044AE71 /* SwiftUI.framework in Frameworks */,
-				2916D23025D2D0070044AE71 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,15 +132,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2916D22E25D2D0070044AE71 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2916D22F25D2D0070044AE71 /* WidgetKit.framework */,
-				2916D23125D2D0070044AE71 /* SwiftUI.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		2916D23325D2D0070044AE71 /* WallpaperWidget */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,7 +167,6 @@
 				294A4B2F25B01E6500DA8631 /* SimpleDesktops */,
 				2916D23325D2D0070044AE71 /* WallpaperWidget */,
 				292A9A382684D2FD00552DBA /* SimpleDesktopsTests */,
-				2916D22E25D2D0070044AE71 /* Frameworks */,
 				294A4B2E25B01E6500DA8631 /* Products */,
 			);
 			sourceTree = "<group>";
