@@ -19,56 +19,12 @@ struct PreviewView: View {
 
     @State private var buttonHovering: Bool = false
 
+    // MARK: Views
+
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Group {
-                    // Preference button
-                    Button(action: {
-                        withAnimation(.easeInOut) {
-                            currentView = .preference
-                        }
-                    }) {
-                        Image(systemName: "gearshape")
-                            .font(Font.system(size: buttonIconSize, weight: .bold))
-                    }
-
-                    // History button
-                    Button(action: {
-                        withAnimation(.easeInOut) {
-                            currentView = .history
-                        }
-                    }) {
-                        Image(systemName: "clock")
-                            .font(Font.system(size: buttonIconSize, weight: .bold))
-                    }
-                }
-                .buttonStyle(ImageButtonStyle())
-
-                Spacer()
-
-                if fetcher.isDownloading {
-                    ProgressView(value: fetcher.downloadingProgress)
-                        .frame(width: downloadProgressIndicator)
-                }
-
-                // Download button
-                Button(action: {
-                    if fetcher.isDownloading {
-                        fetcher.cancelDownload()
-                    } else if let picture = pictures.first {
-                        fetcher.download(picture) { url in
-                            UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
-                        }
-                    }
-                }) {
-                    Image(systemName: fetcher.isDownloading ? "xmark" : "square.and.arrow.down")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }
-                .buttonStyle(ImageButtonStyle())
-                .disabled(fetcher.isFetching)
-            }
-            .padding(buttonPaddingLength)
+            header
+                .padding(buttonPaddingLength)
 
             ZStack {
                 WebImage(url: pictures.first?.previewURL)
@@ -83,14 +39,7 @@ struct PreviewView: View {
                 }
             }
 
-            Button(action: {
-                if let picture = pictures.first {
-                    fetcher.download(picture, to: WallpaperManager.directory) { url in
-                        WallpaperManager.shared.setWallpaper(with: url)
-                        UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
-                    }
-                }
-            }) {
+            Button(action: setWallpaper) {
                 Text("Set as Wallpaper")
             }
             .buttonStyle(CapsuledButtonStyle())
@@ -99,10 +48,42 @@ struct PreviewView: View {
         }
     }
 
+    private var header: some View {
+        HStack {
+            Group {
+                // Preference button
+                Button(action: transitToPreference) {
+                    Image(systemName: "gearshape")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
+                }
+
+                // History button
+                Button(action: transitToHistory) {
+                    Image(systemName: "clock")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
+                }
+            }
+            .buttonStyle(ImageButtonStyle())
+
+            Spacer()
+
+            if fetcher.isDownloading {
+                ProgressView(value: fetcher.downloadingProgress)
+                    .frame(width: downloadProgressIndicator)
+            }
+
+            // Download button
+            Button(action: onDownloadButtonClick) {
+                Image(systemName: fetcher.isDownloading ? "xmark" : "square.and.arrow.down")
+                    .font(Font.system(size: buttonIconSize, weight: .bold))
+            }
+            .buttonStyle(ImageButtonStyle())
+            .disabled(fetcher.isFetching)
+        }
+    }
+
     private var fetchButton: some View {
-        Button(action: {
-            fetcher.fetch()
-        }) {
+        Button(action: { fetcher.fetch() }) {
             Image(systemName: "arrow.triangle.2.circlepath")
                 .font(Font.system(size: buttonIconSize * 2.0, weight: .bold))
                 .frame(width: 48, height: 48, alignment: .center)
@@ -121,6 +102,41 @@ struct PreviewView: View {
                     UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
                 }
             }
+        }
+    }
+
+    // MARK: - Funstions
+
+    private func transitToPreference() {
+        withAnimation(.easeInOut) {
+            currentView = .preference
+        }
+    }
+
+    private func transitToHistory() {
+        withAnimation(.easeInOut) {
+            currentView = .history
+        }
+    }
+
+    private func onDownloadButtonClick() {
+        if fetcher.isDownloading {
+            fetcher.cancelDownload()
+        } else if let picture = pictures.first {
+            fetcher.download(picture) { url in
+                UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
+            }
+        }
+    }
+
+    private func setWallpaper() {
+        guard let picture = pictures.first else {
+            return
+        }
+
+        fetcher.download(picture, to: WallpaperManager.directory) { url in
+            WallpaperManager.shared.setWallpaper(with: url)
+            UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
         }
     }
 

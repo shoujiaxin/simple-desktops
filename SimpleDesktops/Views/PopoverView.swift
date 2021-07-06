@@ -16,10 +16,10 @@ struct PopoverView: View {
         var height: CGFloat {
             switch self {
             case .preference:
-                return 163
+                return smallPopoverHeight
             case .preview,
                  .history:
-                return 358
+                return largePopoverHeight
             }
         }
     }
@@ -43,8 +43,14 @@ struct PopoverView: View {
                     .transition(.move(edge: .trailing))
             }
         }
-        .frame(width: 400, height: currentView.height)
+        .frame(width: Self.popoverWidth, height: currentView.height)
     }
+
+    // MARK: - Constants
+
+    private static let popoverWidth: CGFloat = 400
+    private static let smallPopoverHeight: CGFloat = 163
+    private static let largePopoverHeight: CGFloat = 358
 }
 
 struct PopoverView_Previews: PreviewProvider {
