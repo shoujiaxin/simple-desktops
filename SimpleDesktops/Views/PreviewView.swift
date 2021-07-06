@@ -24,7 +24,7 @@ struct PreviewView: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-                .padding(buttonPaddingLength)
+                .padding(headerPadding)
 
             ZStack {
                 WebImage(url: pictures.first?.previewURL)
@@ -43,7 +43,7 @@ struct PreviewView: View {
                 Text("Set as Wallpaper")
             }
             .buttonStyle(CapsuledButtonStyle())
-            .padding(buttonPaddingLength * 2.0)
+            .padding(setWallpaperButtonPadding)
             .disabled(fetcher.isFetching)
         }
     }
@@ -83,13 +83,13 @@ struct PreviewView: View {
     }
 
     private var fetchButton: some View {
-        Button(action: { fetcher.fetch() }) {
+        Button { fetcher.fetch() } label: {
             Image(systemName: "arrow.triangle.2.circlepath")
-                .font(Font.system(size: buttonIconSize * 2.0, weight: .bold))
-                .frame(width: 48, height: 48, alignment: .center)
+                .font(Font.system(size: fetchButtonIconSize, weight: .bold))
+                .frame(width: fetchButtonFrameSize, height: fetchButtonFrameSize, alignment: .center)
                 .foregroundColor(colorScheme == .dark ? .black : .white)
-                .background(RoundedRectangle(cornerRadius: 8.0))
-                .opacity(buttonHovering ? 0.8 : 0.2)
+                .background(RoundedRectangle(cornerRadius: fetchButtonCornerRadius))
+                .opacity(buttonHovering ? fetchButtonHoveringOpacity : fetchButtonNotHoveringOpacity)
         }
         .buttonStyle(PlainButtonStyle())
         .onHover { hovering in
@@ -142,10 +142,16 @@ struct PreviewView: View {
 
     // MARK: - Constants
 
-    private let buttonIconSize: CGFloat = 16.0
-    private let buttonPaddingLength: CGFloat = 6.0
-    private let downloadProgressIndicator: CGFloat = 60.0
+    private let headerPadding: CGFloat = 6
+    private let buttonIconSize: CGFloat = 16
+    private let setWallpaperButtonPadding: CGFloat = 12
+    private let downloadProgressIndicator: CGFloat = 60
     private let pictureAspectRatio: CGFloat = 1.6
+    private let fetchButtonIconSize: CGFloat = 32
+    private let fetchButtonFrameSize: CGFloat = 48
+    private let fetchButtonCornerRadius: CGFloat = 8
+    private let fetchButtonHoveringOpacity: Double = 0.8
+    private let fetchButtonNotHoveringOpacity: Double = 0.2
 }
 
 struct PreviewView_Previews: PreviewProvider {

@@ -59,24 +59,30 @@ struct PreferenceView: View {
                 .foregroundColor(.secondary)
 
             HStack(spacing: buttonSpacing) {
-                Button(action: {
-                    withAnimation(.easeInOut) {
-                        currentView = .preview
-                    }
-                }) {
+                Button(action: transitToPreview) {
                     Text("Done")
                 }
-                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: 120, height: 40)))
+                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth, height: buttonHeight)))
 
-                Button(action: {
-                    NSApp.terminate(nil)
-                }) {
+                Button(action: quit) {
                     Text("Quit")
                 }
-                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: 120, height: 40)))
+                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth, height: buttonHeight)))
             }
             .padding(buttonPadding)
         }
+    }
+
+    // MARK: - Funstions
+
+    private func transitToPreview() {
+        withAnimation(.easeInOut) {
+            currentView = .preview
+        }
+    }
+
+    private func quit() {
+        NSApp.terminate(nil)
     }
 
     // MARK: - Constants
@@ -85,6 +91,8 @@ struct PreferenceView: View {
     private let pickerPadding: CGFloat = 24
     private let buttonPadding: CGFloat = 12
     private let buttonSpacing: CGFloat = 24
+    private let buttonWidth: CGFloat = 120
+    private let buttonHeight: CGFloat = 40
 
     private let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
     private let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""

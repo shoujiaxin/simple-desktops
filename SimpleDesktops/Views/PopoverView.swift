@@ -43,12 +43,12 @@ struct PopoverView: View {
                     .transition(.move(edge: .trailing))
             }
         }
-        .frame(width: Self.popoverWidth, height: currentView.height)
+        .frame(width: popoverWidth, height: currentView.height)
     }
 
     // MARK: - Constants
 
-    private static let popoverWidth: CGFloat = 400
+    private let popoverWidth: CGFloat = 400
     private static let smallPopoverHeight: CGFloat = 163
     private static let largePopoverHeight: CGFloat = 358
 }

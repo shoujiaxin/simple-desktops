@@ -19,35 +19,12 @@ struct HistoryView: View {
 
     @State private var hoveringItem: Picture?
 
+    // MARK: Views
+
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    withAnimation(.easeInOut) {
-                        currentView = .preview
-                    }
-                }) {
-                    Image(systemName: "chevron.backward")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }
-                .buttonStyle(ImageButtonStyle())
-
-                Spacer()
-
-                if fetcher.isDownloading {
-                    ProgressView(value: fetcher.downloadingProgress)
-                        .frame(width: downloadProgressIndicator)
-
-                    Button(action: {
-                        fetcher.cancelDownload()
-                    }) {
-                        Image(systemName: "xmark")
-                            .font(Font.system(size: buttonIconSize, weight: .bold))
-                    }
-                    .buttonStyle(ImageButtonStyle())
-                }
-            }
-            .padding(buttonPaddingLength)
+            header
+                .padding(buttonPaddingLength)
 
             ScrollView {
                 Spacer(minLength: highlighStrokeWidth)
@@ -67,32 +44,32 @@ struct HistoryView: View {
                             }
                             .contextMenu {
                                 // Download button
-                                Button(action: {
+                                Button {
                                     fetcher.download(picture) { url in
                                         UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
                                     }
-                                }) {
+                                } label: {
                                     Text("Download")
                                 }
                                 .keyboardShortcut("d")
 
                                 // Set wallpaper button
-                                Button(action: {
+                                Button {
                                     fetcher.download(picture, to: WallpaperManager.directory) { url in
                                         WallpaperManager.shared.setWallpaper(with: url)
                                         UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
                                     }
-                                }) {
+                                } label: {
                                     Text("Set as wallpaper")
                                 }
 
                                 Divider()
 
                                 // Delete button
-                                Button(action: {
+                                Button {
                                     viewContext.delete(picture)
                                     try? viewContext.save()
-                                }) {
+                                } label: {
                                     Text("Delete")
                                 }
                                 .keyboardShortcut(.delete)
@@ -105,15 +82,46 @@ struct HistoryView: View {
         }
     }
 
+    private var header: some View {
+        HStack {
+            Button(action: transitToPreview) {
+                Image(systemName: "chevron.backward")
+                    .font(Font.system(size: buttonIconSize, weight: .bold))
+            }
+            .buttonStyle(ImageButtonStyle())
+
+            Spacer()
+
+            if fetcher.isDownloading {
+                ProgressView(value: fetcher.downloadingProgress)
+                    .frame(width: downloadProgressIndicator)
+
+                Button(action: { fetcher.cancelDownload() }) {
+                    Image(systemName: "xmark")
+                        .font(Font.system(size: buttonIconSize, weight: .bold))
+                }
+                .buttonStyle(ImageButtonStyle())
+            }
+        }
+    }
+
+    // MARK: - Funstions
+
+    private func transitToPreview() {
+        withAnimation(.easeInOut) {
+            currentView = .preview
+        }
+    }
+
     // MARK: - Constants
 
-    private let buttonIconSize: CGFloat = 16.0
-    private let buttonPaddingLength: CGFloat = 6.0
-    private let downloadProgressIndicator: CGFloat = 60.0
-    private let highlighStrokeWidth: CGFloat = 6.0
+    private let buttonIconSize: CGFloat = 16
+    private let buttonPaddingLength: CGFloat = 6
+    private let downloadProgressIndicator: CGFloat = 60
+    private let highlighStrokeWidth: CGFloat = 6
     private let pictureAspectRatio: CGFloat = 1.6
-    private let pictureWidth: CGFloat = 176.0
-    private let pictureSpacing: CGFloat = 16.0
+    private let pictureWidth: CGFloat = 176
+    private let pictureSpacing: CGFloat = 16
 }
 
 struct HistoryView_Previews: PreviewProvider {
