@@ -60,7 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         }
     }
 
-    // MARK: UNUserNotificationCenterDelegate
+    // MARK: - UNUserNotificationCenterDelegate
 
     func userNotificationCenter(_: UNUserNotificationCenter, willPresent _: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // Display user notification even while the app is in foreground

@@ -83,9 +83,9 @@ class PictureFetcher: ObservableObject {
                 switch completion {
                 case let .failure(error):
                     self.isFetching = false
-                    print(error) // TODO: log
+                    print(error) // TODO: Log
                 case .finished:
-                    print("finished") // TODO: log
+                    print("finished") // TODO: Log
                 }
             }) { info in
                 // Pre-load the preview image

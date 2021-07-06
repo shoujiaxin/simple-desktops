@@ -59,7 +59,7 @@ class WallpaperManager {
     /// Set wallpaper for all Spaces.
     /// - Parameter url: A file URL to the image.
     func setWallpaper(with url: URL) {
-        // TODO: log
+        // TODO: Log
         NSScreen.screens.forEach { screen in
             try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
         }

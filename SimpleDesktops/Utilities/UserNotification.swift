@@ -24,7 +24,7 @@ struct UserNotification {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                // TODO: log
+                // TODO: Log
                 print(error.localizedDescription)
             }
         }
@@ -33,7 +33,7 @@ struct UserNotification {
     private init() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, error in
             if let error = error {
-                // TODO: log
+                // TODO: Log
                 print(error.localizedDescription)
             }
         }

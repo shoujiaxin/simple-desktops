@@ -66,7 +66,7 @@ struct HistoryView: View {
                                 self.hoveringItem = hovering ? picture : nil
                             }
                             .contextMenu {
-                                // Download Button
+                                // Download button
                                 Button(action: {
                                     fetcher.download(picture) { url in
                                         UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
@@ -76,7 +76,7 @@ struct HistoryView: View {
                                 }
                                 .keyboardShortcut("d")
 
-                                // Set Wallpaper Button
+                                // Set wallpaper button
                                 Button(action: {
                                     fetcher.download(picture, to: WallpaperManager.directory) { url in
                                         WallpaperManager.shared.setWallpaper(with: url)
@@ -88,7 +88,7 @@ struct HistoryView: View {
 
                                 Divider()
 
-                                // Delete Button
+                                // Delete button
                                 Button(action: {
                                     viewContext.delete(picture)
                                     try? viewContext.save()
@@ -105,7 +105,7 @@ struct HistoryView: View {
         }
     }
 
-    // MARK: - Draw Constants
+    // MARK: - Constants
 
     private let buttonIconSize: CGFloat = 16.0
     private let buttonPaddingLength: CGFloat = 6.0

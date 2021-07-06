@@ -85,7 +85,7 @@ struct SimpleDesktopsRequest {
     }
 
     func updateMaxPageNumber() {
-        // TODO: update manually
+        // TODO: Update manually
         let url = URL(string: "http://simpledesktops.com/browse/\(maxPageNumber)/")!
         session.dataTask(with: url) { data, _, _ in
             data
@@ -99,7 +99,7 @@ struct SimpleDesktopsRequest {
         }.resume()
     }
 
-    // MARK: Private Members
+    // MARK: - Private members
 
     private let session: URLSession
 
@@ -121,10 +121,9 @@ struct SimpleDesktopsRequest {
         return SDPictureInfo(name: name, previewURL: previewURL, url: url)
     }
 
-    // MARK: Constants
+    // MARK: - Constants
 
     private static let MAX_PAGE_NUMBER_KEY = "sdMaxPageNumber"
-
     private static let DEFAULT_MAX_PAGE = 52
 }
 

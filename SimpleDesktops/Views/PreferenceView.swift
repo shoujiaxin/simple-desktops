@@ -79,7 +79,7 @@ struct PreferenceView: View {
         }
     }
 
-    // MARK: - Draw Constants
+    // MARK: - Constants
 
     private let intervalPickerWidth: CGFloat = 300
     private let pickerPadding: CGFloat = 24

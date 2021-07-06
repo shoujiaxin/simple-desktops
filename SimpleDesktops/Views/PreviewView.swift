@@ -124,7 +124,7 @@ struct PreviewView: View {
         }
     }
 
-    // MARK: - Draw Constants
+    // MARK: - Constants
 
     private let buttonIconSize: CGFloat = 16.0
     private let buttonPaddingLength: CGFloat = 6.0
