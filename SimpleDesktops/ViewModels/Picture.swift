@@ -27,7 +27,7 @@ extension Picture {
         }
     }
 
-    // MARK: - Wrappers for none-optional values
+    // MARK: - Wrappers for none-optional properties
 
     public var id: UUID {
         get { id_! }

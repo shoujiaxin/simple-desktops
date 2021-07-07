@@ -67,8 +67,10 @@ struct HistoryView: View {
 
                                 // Delete button
                                 Button {
-                                    viewContext.delete(picture)
-                                    try? viewContext.save()
+                                    withAnimation(.easeInOut) {
+                                        viewContext.delete(picture)
+                                        try? viewContext.save()
+                                    }
                                 } label: {
                                     Text("Delete")
                                 }
