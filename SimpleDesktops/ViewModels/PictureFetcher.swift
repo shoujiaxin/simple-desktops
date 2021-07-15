@@ -61,12 +61,12 @@ class PictureFetcher: ObservableObject {
             return
         }
 
-        SDWebImageDownloader.shared.downloadImage(with: picture.url, options: .highPriority) { receivedSize, expectedSize, _ in
+        SDWebImageDownloader.shared.downloadImage(with: picture.url, options: .highPriority) { [weak self] receivedSize, expectedSize, _ in
             DispatchQueue.main.async {
-                self.downloadingProgress = Double(receivedSize) / Double(expectedSize)
+                self?.downloadingProgress = Double(receivedSize) / Double(expectedSize)
             }
-        } completed: { _, data, error, finished in
-            self.isDownloading = !finished
+        } completed: { [weak self] _, data, error, finished in
+            self?.isDownloading = !finished
 
             if error == nil {
                 try? data?.write(to: url)
@@ -79,26 +79,28 @@ class PictureFetcher: ObservableObject {
         isFetching = true
         fetchCancellable?.cancel()
         fetchCancellable = SimpleDesktopsRequest.shared.randomPicture
-            .sink(receiveCompletion: { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case let .failure(error):
-                    self.isFetching = false
+                    self?.isFetching = false
                     print(error) // TODO: Log
                 case .finished:
                     print("finished") // TODO: Log
                 }
-            }) { info in
+            } receiveValue: { [weak self] info in
                 // Pre-load the preview image
                 SDWebImageManager.shared.loadImage(with: info.previewURL, options: .highPriority) { receivedSize, expectedSize, _ in
                     DispatchQueue.main.async {
-                        self.fetchingProgress = Double(receivedSize) / Double(expectedSize)
+                        self?.fetchingProgress = Double(receivedSize) / Double(expectedSize)
                     }
                 } completed: { _, _, _, _, finished, _ in
                     assert(finished)
-                    self.isFetching = !finished
+                    self?.isFetching = !finished
 
-                    let picture = Picture.update(from: info, in: self.context)
-                    completed?(picture)
+                    if let context = self?.context {
+                        let picture = Picture.update(from: info, in: context)
+                        completed?(picture)
+                    }
                 }
             }
     }

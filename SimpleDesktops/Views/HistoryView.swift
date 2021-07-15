@@ -42,6 +42,7 @@ struct HistoryView: View {
                             .onHover { hovering in
                                 self.hoveringItem = hovering ? picture : nil
                             }
+                            // FIXME: Memory leak (don't know why, seems like a bug in SwiftUI when having a contextMenu)
                             .contextMenu {
                                 // Download button
                                 Button {
