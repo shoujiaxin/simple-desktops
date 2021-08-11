@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/shoujiaxin/simple_desktops/releases/latest">
-    <img src="https://img.shields.io/github/downloads/shoujiaxin/simple_desktops/total">
+  <a href="https://github.com/shoujiaxin/simple-desktops/releases/latest">
+    <img src="https://img.shields.io/github/downloads/shoujiaxin/simple-desktops/total">
   </a>
   <img src="https://img.shields.io/badge/swift-5.0%2B-orange">
 </p>
