@@ -1,11 +1,9 @@
-name: Test
+name: Release
 
 on:
   push:
     tags:
       - "v*.*.*"
-
-  workflow_dispatch:
 
 jobs:
   test:
@@ -39,3 +37,23 @@ jobs:
         uses: maierj/fastlane-action@v2.1.0
         with:
           lane: "scan"
+
+  build:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build
+        uses: maierj/fastlane-action@v2.1.0
+        with:
+          lane: "release"
+
+      - name: Get tag name
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Submit to release
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} > token.txt
+          gh auth login --with-token < token.txt
+          gh release create ${{ steps.vars.outputs.tag }} ./.build/SimpleDesktops_${{ steps.vars.outputs.tag }}.dmg

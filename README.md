@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/swift-5.0%2B-orange">
 
   <a href="https://github.com/shoujiaxin/simple-desktops/actions">
-    <img src="https://img.shields.io/github/workflow/status/shoujiaxin/simple-desktops/Test">
+    <img src="https://img.shields.io/github/workflow/status/shoujiaxin/simple-desktops/Release">
   </a>
 </p>
 
