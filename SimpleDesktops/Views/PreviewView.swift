@@ -5,7 +5,7 @@
 //  Created by Jiaxin Shou on 2021/1/15.
 //
 
-import SDWebImageSwiftUI
+import Kingfisher
 import SwiftUI
 
 struct PreviewView: View {
@@ -27,7 +27,7 @@ struct PreviewView: View {
                 .padding(headerPadding)
 
             ZStack {
-                WebImage(url: pictures.first?.previewURL)
+                KFImage(pictures.first?.previewURL)
                     .resizable()
                     .aspectRatio(pictureAspectRatio, contentMode: .fit)
 

@@ -22,6 +22,7 @@
 		294A4B3A25B01E6600DA8631 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3925B01E6600DA8631 /* PersistenceController.swift */; };
 		294A4B3D25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3B25B01E6600DA8631 /* SimpleDesktops.xcdatamodeld */; };
 		2964992925B7410700C7FDBE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2964992B25B7410700C7FDBE /* Localizable.strings */; };
+		297CE0D026FEBD3A009EFB5F /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 297CE0CF26FEBD3A009EFB5F /* Kingfisher */; };
 		297E323225D03D9300E18951 /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E323125D03D9300E18951 /* Picture.swift */; };
 		297E324325D04CA900E18951 /* ImageButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E324225D04CA900E18951 /* ImageButtonStyle.swift */; };
 		297E324A25D0530A00E18951 /* CapsuledButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E324925D0530A00E18951 /* CapsuledButtonStyle.swift */; };
@@ -33,7 +34,6 @@
 		29AB43E225F5F96700BB484E /* ChangeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AB43E025F5F96700BB484E /* ChangeInterval.swift */; };
 		29BCA45725B2961300C17A73 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BCA45625B2961300C17A73 /* Preferences.swift */; };
 		29D27B6525B16598006674DB /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B6425B16598006674DB /* PreviewView.swift */; };
-		29D27B7025B16A0A006674DB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29D27B6F25B16A0A006674DB /* SDWebImageSwiftUI */; };
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
 		29E6185C25E4C6B600801832 /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6185B25E4C6B600801832 /* UserNotification.swift */; };
 /* End PBXBuildFile section */
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29D27B7025B16A0A006674DB /* SDWebImageSwiftUI in Frameworks */,
+				297CE0D026FEBD3A009EFB5F /* Kingfisher in Frameworks */,
 				29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,7 +313,7 @@
 			name = "Simple Desktops";
 			packageProductDependencies = (
 				29E054F125B0671B00BACF46 /* SwiftSoup */,
-				29D27B6F25B16A0A006674DB /* SDWebImageSwiftUI */,
+				297CE0CF26FEBD3A009EFB5F /* Kingfisher */,
 			);
 			productName = SimpleDesktops;
 			productReference = 294A4B2D25B01E6500DA8631 /* Simple Desktops.app */;
@@ -352,7 +352,7 @@
 			mainGroup = 294A4B2425B01E6500DA8631;
 			packageReferences = (
 				29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
-				29D27B6E25B16A0A006674DB /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				297CE0CE26FEBD3A009EFB5F /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 294A4B2E25B01E6500DA8631 /* Products */;
 			projectDirPath = "";
@@ -473,7 +473,7 @@
 				CODE_SIGN_ENTITLEMENTS = WallpaperWidget/WallpaperWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = WallpaperWidget/Info.plist;
@@ -483,7 +483,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.6.1;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops.WallpaperWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -499,7 +499,7 @@
 				CODE_SIGN_ENTITLEMENTS = WallpaperWidget/WallpaperWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = WallpaperWidget/Info.plist;
@@ -509,7 +509,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.6.1;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops.WallpaperWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -685,7 +685,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -696,7 +696,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.6.1;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -712,7 +712,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleDesktops/Preview Content\"";
 				DEVELOPMENT_TEAM = 8TA5C5ASM9;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -723,7 +723,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.6.1;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -772,12 +772,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		29D27B6E25B16A0A006674DB /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+		297CE0CE26FEBD3A009EFB5F /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.0;
+				minimumVersion = 7.0.0;
 			};
 		};
 		29E054F025B0671B00BACF46 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -791,10 +791,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		29D27B6F25B16A0A006674DB /* SDWebImageSwiftUI */ = {
+		297CE0CF26FEBD3A009EFB5F /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 29D27B6E25B16A0A006674DB /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
+			package = 297CE0CE26FEBD3A009EFB5F /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		29E054F125B0671B00BACF46 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;

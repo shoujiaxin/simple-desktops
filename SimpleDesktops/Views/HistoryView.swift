@@ -5,7 +5,7 @@
 //  Created by Jiaxin Shou on 2021/1/15.
 //
 
-import SDWebImageSwiftUI
+import Kingfisher
 import SwiftUI
 
 struct HistoryView: View {
@@ -31,7 +31,7 @@ struct HistoryView: View {
 
                 LazyVGrid(columns: Array(repeating: GridItem(.fixed(pictureWidth), spacing: pictureSpacing), count: 2)) {
                     ForEach(pictures) { picture in
-                        WebImage(url: picture.previewURL)
+                        KFImage(picture.previewURL)
                             .resizable()
                             .aspectRatio(pictureAspectRatio, contentMode: .fit)
                             .background(

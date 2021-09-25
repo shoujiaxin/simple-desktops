@@ -7,7 +7,7 @@
 
 import Combine
 import CoreData
-import SDWebImage
+import Kingfisher
 
 class PictureFetcher: ObservableObject {
     @Published private(set) var isFetching: Bool = false {
@@ -46,7 +46,7 @@ class PictureFetcher: ObservableObject {
     }
 
     func cancelDownload() {
-        SDWebImageDownloader.shared.cancelAllDownloads()
+        KingfisherManager.shared.downloader.cancelAll()
     }
 
     func download(_ picture: Picture,
@@ -61,15 +61,17 @@ class PictureFetcher: ObservableObject {
             return
         }
 
-        SDWebImageDownloader.shared.downloadImage(with: picture.url, options: .highPriority) { [weak self] receivedSize, expectedSize, _ in
+        KingfisherManager.shared.retrieveImage(with: picture.url, options: nil) { [weak self] receivedSize, totalSize in
             DispatchQueue.main.async {
-                self?.downloadingProgress = Double(receivedSize) / Double(expectedSize)
+                self?.downloadingProgress = Double(receivedSize) / Double(totalSize)
             }
-        } completed: { [weak self] _, data, error, finished in
-            self?.isDownloading = !finished
-
-            if error == nil {
-                try? data?.write(to: url)
+        } completionHandler: { [weak self] result in
+            self?.isDownloading = false
+            switch result {
+            case let .failure(error):
+                print(error) // TODO: Log
+            case let .success(imageResult):
+                try? imageResult.image.tiffRepresentation?.write(to: url)
                 completed?(url)
             }
         }
@@ -89,17 +91,20 @@ class PictureFetcher: ObservableObject {
                 }
             } receiveValue: { [weak self] info in
                 // Pre-load the preview image
-                SDWebImageManager.shared.loadImage(with: info.previewURL, options: .highPriority) { receivedSize, expectedSize, _ in
+                KingfisherManager.shared.retrieveImage(with: info.previewURL, options: nil) { receivedSize, totalSize in
                     DispatchQueue.main.async {
-                        self?.fetchingProgress = Double(receivedSize) / Double(expectedSize)
+                        self?.fetchingProgress = Double(receivedSize) / Double(totalSize)
                     }
-                } completed: { _, _, _, _, finished, _ in
-                    assert(finished)
-                    self?.isFetching = !finished
-
-                    if let context = self?.context {
-                        let picture = Picture.update(from: info, in: context)
-                        completed?(picture)
+                } completionHandler: { result in
+                    self?.isFetching = false
+                    switch result {
+                    case let .failure(error):
+                        print(error) // TODO: Log
+                    case .success:
+                        if let context = self?.context {
+                            let picture = Picture.update(from: info, in: context)
+                            completed?(picture)
+                        }
                     }
                 }
             }
