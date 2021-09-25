@@ -47,7 +47,7 @@ struct HistoryView: View {
                                 // Download button
                                 Button {
                                     fetcher.download(picture) { url in
-                                        UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [url])
+                                        UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
                                     }
                                 } label: {
                                     Text("Download")
@@ -58,7 +58,7 @@ struct HistoryView: View {
                                 Button {
                                     fetcher.download(picture, to: WallpaperManager.directory) { url in
                                         WallpaperManager.shared.setWallpaper(with: url)
-                                        UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [url])
+                                        UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
                                     }
                                 } label: {
                                     Text("Set as wallpaper")

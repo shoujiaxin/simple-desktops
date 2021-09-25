@@ -10,11 +10,15 @@ import UserNotifications
 struct UserNotification {
     static let shared = UserNotification()
 
-    func request(title: String, body: String, attachmentURLs: [URL] = []) {
+    func request(title: String, body: String, attachmentURLs: [URL?] = []) {
         let content = UNMutableNotificationContent()
         content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
         content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
         content.attachments = attachmentURLs.compactMap { url -> UNNotificationAttachment? in
+            guard let url = url else {
+                return nil
+            }
+
             // Copy attachment files to temporary directory
             let attachmentURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
             try? Data(contentsOf: url).write(to: attachmentURL)
