@@ -1,5 +1,5 @@
 //
-//  PictureTest.swift
+//  PictureTests.swift
 //  SimpleDesktopsTests
 //
 //  Created by Jiaxin Shou on 2021/9/25.
@@ -9,7 +9,7 @@
 
 import XCTest
 
-class PictureTest: XCTestCase {
+class PictureTests: XCTestCase {
     let context = PersistenceController.preview.container.viewContext
 
     func testFetchPictureWithURL() throws {

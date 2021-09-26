@@ -13,7 +13,7 @@
 		2916D23725D2D0080044AE71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916D23625D2D0080044AE71 /* Assets.xcassets */; };
 		2916D23C25D2D0080044AE71 /* WallpaperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2916D22D25D2D0070044AE71 /* WallpaperWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2916D25025D2E5D50044AE71 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994265225B455F400DEF701 /* WallpaperManager.swift */; };
-		292A9A422684D32400552DBA /* SimpleDesktopsRequestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292A9A412684D32400552DBA /* SimpleDesktopsRequestTest.swift */; };
+		292A9A422684D32400552DBA /* SimpleDesktopsRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292A9A412684D32400552DBA /* SimpleDesktopsRequestTests.swift */; };
 		292A9A4A2686F93E00552DBA /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292A9A492686F93E00552DBA /* MockURLProtocol.swift */; };
 		294A4B3125B01E6500DA8631 /* SimpleDesktopsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */; };
 		294A4B3325B01E6500DA8631 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A4B3225B01E6500DA8631 /* PopoverView.swift */; };
@@ -36,7 +36,7 @@
 		29D27B6525B16598006674DB /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D27B6425B16598006674DB /* PreviewView.swift */; };
 		29E054F225B0671B00BACF46 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 29E054F125B0671B00BACF46 /* SwiftSoup */; };
 		29E6185C25E4C6B600801832 /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6185B25E4C6B600801832 /* UserNotification.swift */; };
-		29FC4BDE26FF673600321AF1 /* PictureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FC4BDD26FF673600321AF1 /* PictureTest.swift */; };
+		29FC4BDE26FF673600321AF1 /* PictureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FC4BDD26FF673600321AF1 /* PictureTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,7 +79,7 @@
 		2916D23925D2D0080044AE71 /* WallpaperWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WallpaperWidget.entitlements; sourceTree = "<group>"; };
 		292A9A372684D2FD00552DBA /* SimpleDesktopsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleDesktopsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		292A9A3B2684D2FD00552DBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		292A9A412684D32400552DBA /* SimpleDesktopsRequestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsRequestTest.swift; sourceTree = "<group>"; };
+		292A9A412684D32400552DBA /* SimpleDesktopsRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsRequestTests.swift; sourceTree = "<group>"; };
 		292A9A492686F93E00552DBA /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		294A4B2D25B01E6500DA8631 /* Simple Desktops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Desktops.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		294A4B3025B01E6500DA8631 /* SimpleDesktopsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDesktopsApp.swift; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 		29D27B7225B16ABE006674DB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		29E6185B25E4C6B600801832 /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		29F4CEA125B750FE003D24CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		29FC4BDD26FF673600321AF1 /* PictureTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureTest.swift; sourceTree = "<group>"; };
+		29FC4BDD26FF673600321AF1 /* PictureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,8 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				292A9A482686F8E700552DBA /* Mock */,
-				29FC4BDD26FF673600321AF1 /* PictureTest.swift */,
-				292A9A412684D32400552DBA /* SimpleDesktopsRequestTest.swift */,
+				29FC4BDD26FF673600321AF1 /* PictureTests.swift */,
+				292A9A412684D32400552DBA /* SimpleDesktopsRequestTests.swift */,
 				292A9A3B2684D2FD00552DBA /* Info.plist */,
 			);
 			path = SimpleDesktopsTests;
@@ -412,8 +412,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				292A9A4A2686F93E00552DBA /* MockURLProtocol.swift in Sources */,
-				29FC4BDE26FF673600321AF1 /* PictureTest.swift in Sources */,
-				292A9A422684D32400552DBA /* SimpleDesktopsRequestTest.swift in Sources */,
+				29FC4BDE26FF673600321AF1 /* PictureTests.swift in Sources */,
+				292A9A422684D32400552DBA /* SimpleDesktopsRequestTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

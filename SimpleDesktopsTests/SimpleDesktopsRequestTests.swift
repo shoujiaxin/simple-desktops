@@ -1,5 +1,5 @@
 //
-//  SimpleDesktopsRequestTest.swift
+//  SimpleDesktopsRequestTests.swift
 //  SimpleDesktopsTests
 //
 //  Created by Jiaxin Shou on 2021/6/24.
@@ -10,12 +10,13 @@
 import Combine
 import XCTest
 
-class SimpleDesktopsRequestTest: XCTestCase {
+class SimpleDesktopsRequestTests: XCTestCase {
     private var request: SimpleDesktopsRequest!
 
     private var cancellable: AnyCancellable?
 
     override func setUp() {
+        super.setUp()
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]
         request = SimpleDesktopsRequest(session: URLSession(configuration: configuration))
