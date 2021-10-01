@@ -70,8 +70,15 @@ class PictureFetcher: ObservableObject {
             case let .failure(error):
                 print(error) // TODO: Log
             case let .success(imageResult):
-                try? imageResult.image.tiffRepresentation?.write(to: url)
-                completed?(url)
+                guard let data = imageResult.image.tiffRepresentation else {
+                    return
+                }
+                do {
+                    try data.write(to: url)
+                    completed?(url)
+                } catch {
+                    print(error) // TODO: Log
+                }
             }
         }
     }
@@ -82,9 +89,9 @@ class PictureFetcher: ObservableObject {
         fetchCancellable = SimpleDesktopsRequest.shared.randomPicture
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
+                self?.isFetching = false
                 switch completion {
                 case let .failure(error):
-                    self?.isFetching = false
                     print(error) // TODO: Log
                 case .finished:
                     print("finished") // TODO: Log

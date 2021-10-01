@@ -46,6 +46,14 @@ struct PreviewView: View {
             .padding(setWallpaperButtonPadding)
             .disabled(fetcher.isFetching)
         }
+        .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
+            fetcher.fetch { picture in
+                fetcher.download(picture, to: WallpaperManager.directory) { url in
+                    WallpaperManager.shared.setWallpaper(with: url)
+                    UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
+                }
+            }
+        }
     }
 
     private var header: some View {
@@ -94,14 +102,6 @@ struct PreviewView: View {
         .buttonStyle(PlainButtonStyle())
         .onHover { hovering in
             buttonHovering = hovering
-        }
-        .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
-            fetcher.fetch { picture in
-                fetcher.download(picture, to: WallpaperManager.directory) { url in
-                    WallpaperManager.shared.setWallpaper(with: url)
-                    UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
-                }
-            }
         }
     }
 
