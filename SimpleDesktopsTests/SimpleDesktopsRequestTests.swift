@@ -99,4 +99,35 @@ class SimpleDesktopsRequestTests: XCTestCase {
 
         waitForExpectations(timeout: 5)
     }
+
+    func testSDPictureInfo() throws {
+        let name = "2020-06-28-Big_Sur_Simple"
+        let previewURL = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png")!
+        let url = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png")!
+
+        XCTAssertNil(SDPictureInfo(name: nil, previewURL: previewURL, url: url))
+        XCTAssertNil(SDPictureInfo(name: name, previewURL: nil, url: url))
+        XCTAssertNil(SDPictureInfo(name: name, previewURL: previewURL, url: nil))
+
+        let info = SDPictureInfo(name: name, previewURL: previewURL, url: url)
+        XCTAssertNotNil(info)
+        XCTAssertEqual(info?.name, name)
+        XCTAssertEqual(info?.previewURL, previewURL)
+        XCTAssertEqual(info?.url, url)
+    }
+
+    func testUpdatePictureWithSDPictureInfo() throws {
+        let name = "2020-06-28-Big_Sur_Simple"
+        let previewURL = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png")!
+        let url = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png")!
+        let info = SDPictureInfo(name: name, previewURL: previewURL, url: url)!
+        let context = PersistenceController.preview.container.viewContext
+
+        let picture = Picture.update(from: info, in: context)
+        XCTAssertNotNil(picture.id_)
+        XCTAssertNotNil(picture.lastFetchedTime_)
+        XCTAssertEqual(picture.name, name)
+        XCTAssertEqual(picture.previewURL, previewURL)
+        XCTAssertEqual(picture.url, url)
+    }
 }
