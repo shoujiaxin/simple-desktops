@@ -26,8 +26,6 @@ struct PopoverView: View {
 
     @State private var currentView: ViewState = .preview
 
-    private let preferences = Preferences()
-
     var body: some View {
         Group {
             switch currentView {
@@ -35,7 +33,7 @@ struct PopoverView: View {
                 PreviewView(currentView: $currentView)
 
             case .preference:
-                PreferenceView(currentView: $currentView, preferences: preferences)
+                PreferenceView(currentView: $currentView)
                     .transition(.move(edge: .bottom))
 
             case .history:

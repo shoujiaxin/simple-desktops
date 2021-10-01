@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Options: Codable {
     var autoChange: Bool = true
+
     var changeInterval: ChangeInterval = .everyHour
 
     init() {

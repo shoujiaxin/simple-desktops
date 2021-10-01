@@ -31,4 +31,12 @@ enum ChangeInterval: String, CaseIterable, Identifiable, Codable {
         case .everyDay: return 24 * 60 * 60
         }
     }
+
+    static var timeChangeIntervals: [Self] {
+        allCases.filter { $0.seconds != nil }
+    }
+
+    static var eventChangeIntervals: [Self] {
+        allCases.filter { $0.seconds == nil }
+    }
 }

@@ -10,47 +10,26 @@ import SwiftUI
 struct PreferenceView: View {
     @Binding var currentView: PopoverView.ViewState
 
-    @Binding private var isAutoChangeOn: Bool
-    @Binding private var selectedInterval: ChangeInterval
-
-    @ObservedObject private var preferences: Preferences
-
-    init(currentView: Binding<PopoverView.ViewState>, preferences: Preferences) {
-        _currentView = currentView
-
-        _preferences = ObservedObject(wrappedValue: preferences)
-
-        _isAutoChangeOn = .init(get: {
-            preferences.autoChange
-        }, set: { isEnable in
-            preferences.autoChange = isEnable
-        })
-
-        _selectedInterval = .init(get: {
-            preferences.changeInterval
-        }, set: { selected in
-            preferences.changeInterval = selected
-        })
-    }
+    @StateObject private var preferences = Preferences()
 
     var body: some View {
         VStack {
-            Toggle(isOn: $isAutoChangeOn) {
-                Picker("Change picture: ", selection: $selectedInterval) {
-                    ForEach(preferences.eventChangeIntervals) { interval in
+            Toggle(isOn: $preferences.autoChange) {
+                Picker("Change picture: ", selection: $preferences.changeInterval) {
+                    ForEach(ChangeInterval.timeChangeIntervals) { interval in
                         Text(LocalizedStringKey(interval.rawValue))
                             .tag(interval)
                     }
 
                     Divider()
 
-                    ForEach(preferences.timeChangeIntervals) { interval in
+                    ForEach(ChangeInterval.eventChangeIntervals) { interval in
                         Text(LocalizedStringKey(interval.rawValue))
                             .tag(interval)
                     }
                 }
                 .frame(width: intervalPickerWidth)
-                .disabled(!isAutoChangeOn)
+                .disabled(!preferences.autoChange)
             }
             .padding(.vertical, pickerPadding)
 
@@ -100,7 +79,7 @@ struct PreferenceView: View {
 
 struct PreferenceView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferenceView(currentView: .constant(.preference), preferences: Preferences())
+        PreferenceView(currentView: .constant(.preference))
             .frame(width: 400)
     }
 }

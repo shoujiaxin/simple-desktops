@@ -9,45 +9,30 @@ import Combine
 import Foundation
 
 class Preferences: ObservableObject {
-    @Published private var options = Options()
-
-    private var autosaveCancellable: AnyCancellable?
-
-    init() {
-        autosaveCancellable = $options.sink { options in
-            options.save()
-        }
-
-        if options.autoChange {
-            WallpaperManager.shared.autoChangeInterval = options.changeInterval
-        }
-    }
-
-    var autoChange: Bool {
-        get {
-            options.autoChange
-        }
-        set {
+    @Published var autoChange: Bool {
+        willSet {
             options.autoChange = newValue
+            options.save()
             WallpaperManager.shared.autoChangeInterval = newValue ? options.changeInterval : nil
         }
     }
 
-    var changeInterval: ChangeInterval {
-        get {
-            options.changeInterval
-        }
-        set {
+    @Published var changeInterval: ChangeInterval {
+        willSet {
             options.changeInterval = newValue
+            options.save()
             WallpaperManager.shared.autoChangeInterval = options.autoChange ? newValue : nil
         }
     }
 
-    var timeChangeIntervals: [ChangeInterval] {
-        ChangeInterval.allCases.filter { $0.seconds != nil }
-    }
+    private var options = Options()
 
-    var eventChangeIntervals: [ChangeInterval] {
-        ChangeInterval.allCases.filter { $0.seconds == nil }
+    init() {
+        autoChange = options.autoChange
+        changeInterval = options.changeInterval
+
+        if options.autoChange {
+            WallpaperManager.shared.autoChangeInterval = options.changeInterval
+        }
     }
 }
