@@ -62,9 +62,8 @@ class PictureFetcher: ObservableObject {
         }
 
         KingfisherManager.shared.retrieveImage(with: picture.url, options: nil) { [weak self] receivedSize, totalSize in
-            DispatchQueue.main.async {
-                self?.downloadingProgress = Double(receivedSize) / Double(totalSize)
-            }
+            assert(Thread.isMainThread)
+            self?.downloadingProgress = Double(receivedSize) / Double(totalSize)
         } completionHandler: { [weak self] result in
             self?.isDownloading = false
             switch result {
@@ -81,6 +80,7 @@ class PictureFetcher: ObservableObject {
         isFetching = true
         fetchCancellable?.cancel()
         fetchCancellable = SimpleDesktopsRequest.shared.randomPicture
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {
                 case let .failure(error):
@@ -92,9 +92,8 @@ class PictureFetcher: ObservableObject {
             } receiveValue: { [weak self] info in
                 // Pre-load the preview image
                 KingfisherManager.shared.retrieveImage(with: info.previewURL, options: nil) { receivedSize, totalSize in
-                    DispatchQueue.main.async {
-                        self?.fetchingProgress = Double(receivedSize) / Double(totalSize)
-                    }
+                    assert(Thread.isMainThread)
+                    self?.fetchingProgress = Double(receivedSize) / Double(totalSize)
                 } completionHandler: { result in
                     self?.isFetching = false
                     switch result {
