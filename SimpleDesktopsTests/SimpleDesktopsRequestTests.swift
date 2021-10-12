@@ -13,7 +13,7 @@ import XCTest
 class SimpleDesktopsRequestTests: XCTestCase {
     private var request: SimpleDesktopsRequest!
 
-    private var cancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
     override func setUp() {
         super.setUp()
@@ -21,47 +21,22 @@ class SimpleDesktopsRequestTests: XCTestCase {
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]
         request = SimpleDesktopsRequest(session: URLSession(configuration: configuration))
+    }
 
-        cancellable?.cancel()
+    override func tearDown() {
+        cancellables.forEach { $0.cancel() }
+        cancellables = []
     }
 
     func testRandomPictureSuccess() throws {
         MockURLProtocol.requestHandler = { _ in
-            let html = """
-            <!DOCTYPE html>
-            <html lang="en">
-              <head>
-                <meta charset="UTF-8" />
-                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Document</title>
-              </head>
-              <body>
-                <div class="edge">
-                  <div class="desktop" height="184px">
-                    <a href="/browse/desktops/2021/feb/04/mirage/">
-                      <img
-                        src="http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png.295x184_q100.png"
-                        title="mirage"
-                        alt="mirage"
-                        width="295px"
-                        height="184px"
-                      />
-                    </a>
-                    <h2><a href="/browse/desktops/2021/feb/04/mirage/">mirage</a></h2>
-                    <span class="creator">By: <a href="">lucy</a></span>
-                  </div>
-                </div>
-              </body>
-            </html>
-            """
-            let data = html.data(using: .utf8)
+            let data = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "SimpleDesktopsRequestTests", withExtension: "html")!)
             let response = HTTPURLResponse(url: URL(string: "http://simpledesktops.com/browse/")!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: nil)
             return (data, response, nil)
         }
 
-        let expectation = expectation(description: "testRandomPictureSuccess")
-        cancellable = request.randomPicture
+        let expectation = expectation(description: "SimpleDesktopsRequestTests.testRandomPictureSuccess")
+        request.randomPicture
             .sink { completion in
                 switch completion {
                 case let .failure(error):
@@ -75,6 +50,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
                 XCTAssertEqual(info.previewURL, URL(string: "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png.295x184_q100.png")!)
                 XCTAssertEqual(info.url, URL(string: "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png")!)
             }
+            .store(in: &cancellables)
 
         waitForExpectations(timeout: 5)
     }
@@ -84,8 +60,8 @@ class SimpleDesktopsRequestTests: XCTestCase {
             (nil, nil, SimpleDesktopsError.soupFailed)
         }
 
-        let expectation = expectation(description: "testRandomPictureError")
-        cancellable = request.randomPicture
+        let expectation = expectation(description: "SimpleDesktopsRequestTests.testRandomPictureError")
+        request.randomPicture
             .sink { completion in
                 switch completion {
                 case let .failure(error):
@@ -97,6 +73,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
             } receiveValue: { _ in
                 XCTFail()
             }
+            .store(in: &cancellables)
 
         waitForExpectations(timeout: 5)
     }

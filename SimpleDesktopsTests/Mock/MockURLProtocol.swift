@@ -10,9 +10,7 @@ import Foundation
 class MockURLProtocol: URLProtocol {
     typealias RequestHandler = (URLRequest) -> (Data?, URLResponse?, Error?)
 
-    static var requestHandler: RequestHandler = { _ in
-        (nil, nil, nil)
-    }
+    static var requestHandler: RequestHandler?
 
     override class func canInit(with _: URLRequest) -> Bool {
         return true
@@ -23,7 +21,11 @@ class MockURLProtocol: URLProtocol {
     }
 
     override func startLoading() {
-        let (data, response, error) = Self.requestHandler(request)
+        guard let requestHandler = Self.requestHandler else {
+            return
+        }
+
+        let (data, response, error) = requestHandler(request)
 
         if let error = error {
             client?.urlProtocol(self, didFailWithError: error)
