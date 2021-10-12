@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Exclude test data files from stats
+SimpleDesktopsTests/TestData/* linguist-vendored
+
+# Exclude fastlane files from stats
+fastlane/* linguist-vendored
