@@ -8,7 +8,7 @@
 import Foundation
 
 class MockURLProtocol: URLProtocol {
-    typealias RequestHandler = (URLRequest) -> (Data?, HTTPURLResponse?, Error?)
+    typealias RequestHandler = (URLRequest) -> (Data?, URLResponse?, Error?)
 
     static var requestHandler: RequestHandler = { _ in
         (nil, nil, nil)
