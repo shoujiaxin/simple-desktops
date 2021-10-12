@@ -10,7 +10,7 @@
 import XCTest
 
 class PictureTests: XCTestCase {
-    let context = PersistenceController.preview.container.viewContext
+    private let context = PersistenceController.preview.container.viewContext
 
     func testFetchPictureWithURL() throws {
         let url = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png")!

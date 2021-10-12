@@ -17,6 +17,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]
         request = SimpleDesktopsRequest(session: URLSession(configuration: configuration))
@@ -61,7 +62,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
 
         let expectation = expectation(description: "testRandomPictureSuccess")
         cancellable = request.randomPicture
-            .sink(receiveCompletion: { completion in
+            .sink { completion in
                 switch completion {
                 case let .failure(error):
                     XCTFail(error.localizedDescription)
@@ -69,7 +70,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
                     break
                 }
                 expectation.fulfill()
-            }) { info in
+            } receiveValue: { info in
                 XCTAssertEqual(info.name, "2021-02-04-mirage.png")
                 XCTAssertEqual(info.previewURL, URL(string: "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png.295x184_q100.png")!)
                 XCTAssertEqual(info.url, URL(string: "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png")!)
@@ -85,7 +86,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
 
         let expectation = expectation(description: "testRandomPictureError")
         cancellable = request.randomPicture
-            .sink(receiveCompletion: { completion in
+            .sink { completion in
                 switch completion {
                 case let .failure(error):
                     XCTAssertNotNil(error)
@@ -93,7 +94,7 @@ class SimpleDesktopsRequestTests: XCTestCase {
                     break
                 }
                 expectation.fulfill()
-            }) { _ in
+            } receiveValue: { _ in
                 XCTFail()
             }
 
