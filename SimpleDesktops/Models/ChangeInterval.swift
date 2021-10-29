@@ -5,7 +5,7 @@
 //  Created by Jiaxin Shou on 2021/3/8.
 //
 
-import SwiftUI
+import Foundation
 
 enum ChangeInterval: String, CaseIterable, Identifiable, Codable {
     case whenWakingFromSleep = "When waking from sleep"
