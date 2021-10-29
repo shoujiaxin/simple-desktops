@@ -310,9 +310,9 @@
 			productReference = 292A9A372684D2FD00552DBA /* SimpleDesktopsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		294A4B2C25B01E6500DA8631 /* Simple Desktops */ = {
+		294A4B2C25B01E6500DA8631 /* SimpleDesktops */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 294A4B4225B01E6600DA8631 /* Build configuration list for PBXNativeTarget "Simple Desktops" */;
+			buildConfigurationList = 294A4B4225B01E6600DA8631 /* Build configuration list for PBXNativeTarget "SimpleDesktops" */;
 			buildPhases = (
 				294A4B2925B01E6500DA8631 /* Sources */,
 				294A4B2A25B01E6500DA8631 /* Frameworks */,
@@ -324,7 +324,7 @@
 			dependencies = (
 				2916D23B25D2D0080044AE71 /* PBXTargetDependency */,
 			);
-			name = "Simple Desktops";
+			name = SimpleDesktops;
 			packageProductDependencies = (
 				29E054F125B0671B00BACF46 /* SwiftSoup */,
 				297CE0CF26FEBD3A009EFB5F /* Kingfisher */,
@@ -372,7 +372,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				294A4B2C25B01E6500DA8631 /* Simple Desktops */,
+				294A4B2C25B01E6500DA8631 /* SimpleDesktops */,
 				2916D22C25D2D0070044AE71 /* WallpaperWidgetExtension */,
 				292A9A362684D2FD00552DBA /* SimpleDesktopsTests */,
 			);
@@ -463,7 +463,7 @@
 		};
 		292A9A3D2684D2FD00552DBA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 294A4B2C25B01E6500DA8631 /* Simple Desktops */;
+			target = 294A4B2C25B01E6500DA8631 /* SimpleDesktops */;
 			targetProxy = 292A9A3C2684D2FD00552DBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -714,7 +714,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Simple Desktops";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -741,7 +741,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = me.jiaxin.SimpleDesktops;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Simple Desktops";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -776,7 +776,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		294A4B4225B01E6600DA8631 /* Build configuration list for PBXNativeTarget "Simple Desktops" */ = {
+		294A4B4225B01E6600DA8631 /* Build configuration list for PBXNativeTarget "SimpleDesktops" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				294A4B4325B01E6600DA8631 /* Debug */,

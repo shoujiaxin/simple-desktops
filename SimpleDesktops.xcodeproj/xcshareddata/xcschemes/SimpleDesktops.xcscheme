@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "294A4B2C25B01E6500DA8631"
                BuildableName = "Simple Desktops.app"
-               BlueprintName = "Simple Desktops"
+               BlueprintName = "SimpleDesktops"
                ReferencedContainer = "container:SimpleDesktops.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,7 +57,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "294A4B2C25B01E6500DA8631"
             BuildableName = "Simple Desktops.app"
-            BlueprintName = "Simple Desktops"
+            BlueprintName = "SimpleDesktops"
             ReferencedContainer = "container:SimpleDesktops.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,7 +74,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "294A4B2C25B01E6500DA8631"
             BuildableName = "Simple Desktops.app"
-            BlueprintName = "Simple Desktops"
+            BlueprintName = "SimpleDesktops"
             ReferencedContainer = "container:SimpleDesktops.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

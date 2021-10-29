@@ -13,9 +13,9 @@ class Fastfile: LaneFile {
         desc("Build & pack a new release")
 
         // Constants
-        let target = "Simple Desktops"
+        let target = "SimpleDesktops"
         let outputDirectory = URL(fileURLWithPath: "./.build", isDirectory: true)
-        let packageName = "SimpleDesktops_v\(getVersionNumber(target: .userDefined(target)))"
+        let packageName = "\(target)_v\(getVersionNumber(target: .userDefined(target)))"
         let packageDirectory = outputDirectory.appendingPathComponent(packageName, isDirectory: true)
 
         // Build app
