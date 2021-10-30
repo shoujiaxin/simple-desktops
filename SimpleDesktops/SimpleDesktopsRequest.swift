@@ -1,24 +1,112 @@
 //
 //  SimpleDesktopsRequest.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/2/8.
 //
 
-import Combine
-import CoreData
+import Foundation
+import Logging
 import SwiftSoup
 
-// MARK: -
+struct SimpleDesktopsRequest {
+    enum RequestError: Error {
+        case badRequest
+        case parseFailed
+    }
 
-struct SDPictureInfo {
-    let name: String
+    /// The shared singleton session object.
+    static let shared: SimpleDesktopsRequest = {
+        let request = SimpleDesktopsRequest(session: .shared)
+        request.updateMaxPageNumber()
+        return request
+    }()
 
-    let previewURL: URL
+    /// Create an instance. It is recommended to use only in unit tests.
+    /// - Parameter session: [URLSession](https://developer.apple.com/documentation/foundation/url_loading_system) used to send request.
+    init(session: URLSession) {
+        self.session = session
+    }
 
-    let url: URL
+    /// Fetch information about a random picture.
+    /// - Returns: Picture information.
+    func random() async throws -> SDPictureInfo {
+        let page = Int.random(in: 1 ... maxPageNumber)
+        let url = Self.baseURL.appendingPathComponent(String(page))
 
-    init?(name: String?, previewURL: URL?, url: URL?) {
+        let (data, response) = try await session.data(from: url)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            logger.error("Bad request")
+            throw RequestError.badRequest
+        }
+
+        let info = try String(data: data, encoding: .utf8)
+            .map { try SwiftSoup.parse($0).select("img") }?
+            .map { try $0.attr("src") }
+            .randomElement()
+            .flatMap(SDPictureInfo.init)
+
+        guard let info = info else {
+            throw RequestError.parseFailed
+        }
+        logger.info("Picture info fetched from Simple Desktops: \(String(describing: info))")
+
+        return info
+    }
+
+    // MARK: - Private members
+
+    /// [URLSession](https://developer.apple.com/documentation/foundation/url_loading_system) used to send request.
+    private let session: URLSession
+
+    private let logger = Logger(for: Self.self)
+
+    /// Max page number saved in UserDefaults. If not found, use the default value.
+    private var maxPageNumber: Int {
+        let value = UserDefaults.standard.integer(forKey: Self.maxPageNumberKey)
+        return value > 0 ? value : Self.defaultMaxPageNumber
+    }
+
+    /// Update the max page number in background task.
+    private func updateMaxPageNumber() {
+        let currentValue = maxPageNumber
+        let url = Self.baseURL.appendingPathComponent(String(currentValue))
+        Task(priority: .background) {
+            do {
+                let (data, _) = try await session.data(from: url)
+                let numberOfImgTags = try String(data: data, encoding: .utf8)
+                    .map { try SwiftSoup.parse($0).select("img") }?.count ?? 0
+                if numberOfImgTags > 0 {
+                    let newValue = currentValue + 1
+                    UserDefaults.standard.setValue(newValue, forKey: Self.maxPageNumberKey)
+                    logger.info("Max page number updated: \(newValue)")
+                } else {
+                    logger.info("Max page number is already up to date: \(currentValue)")
+                }
+            } catch {
+                logger.error("Failed to update max page number, \(error.localizedDescription)")
+            }
+        }
+    }
+
+    // MARK: - Constants
+
+    private static let baseURL = URL(string: "http://simpledesktops.com/browse")!
+    private static let maxPageNumberKey = "sdMaxPageNumber"
+    private static let defaultMaxPageNumber = 52
+}
+
+extension SDPictureInfo {
+    init?(from link: String) {
+        let previewURL = URL(string: link)
+
+        let url = previewURL.map { url -> URL in
+            let lastPathComponent = url.lastPathComponent.split(separator: ".")[..<2].joined(separator: ".")
+            return url.deletingLastPathComponent().appendingPathComponent(lastPathComponent)
+        }
+
+        let name = url?.pathComponents.split(separator: "desktops").last?.joined(separator: "-")
+
         guard let name = name,
               let previewURL = previewURL,
               let url = url
@@ -29,119 +117,5 @@ struct SDPictureInfo {
         self.name = name
         self.previewURL = previewURL
         self.url = url
-    }
-}
-
-// MARK: -
-
-enum SimpleDesktopsError: Error {
-    case badRequest
-    case soupFailed
-}
-
-// MARK: -
-
-struct SimpleDesktopsRequest {
-    static let shared: SimpleDesktopsRequest = {
-        let request = SimpleDesktopsRequest(session: .shared)
-        request.updateMaxPageNumber()
-        return request
-    }()
-
-    init(session: URLSession) {
-        self.session = session
-    }
-
-    var randomPicture: Future<SDPictureInfo, Error> {
-        Future { promise in
-            let page = Int.random(in: 1 ... maxPageNumber)
-            let url = URL(string: "http://simpledesktops.com/browse/\(page)/")!
-            session.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    promise(.failure(error))
-                    return
-                }
-
-                guard let response = response as? HTTPURLResponse,
-                      200 ..< 300 ~= response.statusCode
-                else {
-                    promise(.failure(SimpleDesktopsError.badRequest))
-                    return
-                }
-
-                do {
-                    try data
-                        .flatMap { String(data: $0, encoding: .utf8) }
-                        .flatMap { try SwiftSoup.parse($0) }?.select("img")
-                        .compactMap { try $0.attr("src") }
-                        .randomElement()
-                        .flatMap { parsePictureInfo(from: $0) }
-                        .map { promise(.success($0)) }
-                } catch {
-                    promise(.failure(SimpleDesktopsError.soupFailed))
-                }
-            }.resume()
-        }
-    }
-
-    func updateMaxPageNumber() {
-        // TODO: Update manually
-        let url = URL(string: "http://simpledesktops.com/browse/\(maxPageNumber)/")!
-        session.dataTask(with: url) { data, _, _ in
-            data
-                .flatMap { String(data: $0, encoding: .utf8) }
-                .flatMap { try? SwiftSoup.parse($0).select("img") }
-                .map { elements in
-                    if elements.count > 0 {
-                        UserDefaults.standard.setValue(maxPageNumber + 1, forKey: Self.MAX_PAGE_NUMBER_KEY)
-                    }
-                }
-        }.resume()
-    }
-
-    // MARK: - Private members
-
-    private let session: URLSession
-
-    private var maxPageNumber: Int {
-        let value = UserDefaults.standard.integer(forKey: Self.MAX_PAGE_NUMBER_KEY)
-        return value > 0 ? value : Self.DEFAULT_MAX_PAGE
-    }
-
-    private func parsePictureInfo(from link: String) -> SDPictureInfo? {
-        let previewURL = URL(string: link)
-
-        let url = previewURL.map { url -> URL in
-            let lastPathComponent = url.lastPathComponent.split(separator: ".")[..<2].joined(separator: ".")
-            return url.deletingLastPathComponent().appendingPathComponent(lastPathComponent)
-        }
-
-        let name = url?.pathComponents.split(separator: "desktops").last?.joined(separator: "-")
-
-        return SDPictureInfo(name: name, previewURL: previewURL, url: url)
-    }
-
-    // MARK: - Constants
-
-    private static let MAX_PAGE_NUMBER_KEY = "sdMaxPageNumber"
-    private static let DEFAULT_MAX_PAGE = 52
-}
-
-// MARK: -
-
-extension Picture {
-    @discardableResult
-    static func update(from info: SDPictureInfo, in context: NSManagedObjectContext) -> Picture {
-        let picture = withURL(info.url, in: context)
-        if picture.id_ == nil {
-            picture.id_ = UUID()
-        }
-        picture.lastFetchedTime = Date()
-        picture.name = info.name
-        picture.previewURL = info.previewURL
-
-        try? context.save()
-
-        return picture
     }
 }

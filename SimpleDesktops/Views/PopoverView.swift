@@ -1,6 +1,6 @@
 //
 //  PopoverView.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/1/14.
 //
@@ -56,6 +56,6 @@ struct PopoverView_Previews: PreviewProvider {
         let viewContext = PersistenceController.preview.container.viewContext
         PopoverView()
             .environment(\.managedObjectContext, viewContext)
-            .environmentObject(PictureFetcher(context: viewContext))
+            .environmentObject(PictureService(context: viewContext))
     }
 }

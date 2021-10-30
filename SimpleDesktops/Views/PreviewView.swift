@@ -1,6 +1,6 @@
 //
 //  PreviewView.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/1/15.
 //
@@ -13,13 +13,13 @@ struct PreviewView: View {
 
     @Environment(\.colorScheme) private var colorScheme: ColorScheme
 
-    @EnvironmentObject private var fetcher: PictureFetcher
+    @EnvironmentObject private var service: PictureService
 
     @FetchRequest(fetchRequest: Picture.fetchRequest(nil, fetchLimit: 1)) private var pictures: FetchedResults<Picture>
 
     @State private var buttonHovering: Bool = false
 
-    // MARK: Views
+    // MARK: - Views
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,12 +27,17 @@ struct PreviewView: View {
                 .padding(headerPadding)
 
             ZStack {
-                KFImage(pictures.first?.previewURL)
-                    .resizable()
-                    .aspectRatio(pictureAspectRatio, contentMode: .fit)
+                if let image = service.previewImage {
+                    Image(nsImage: image)
+                        .resizable()
+                        .aspectRatio(pictureAspectRatio, contentMode: .fit)
+                } else {
+                    Rectangle()
+                        .foregroundColor(.clear)
+                }
 
-                if fetcher.isFetching {
-                    ProgressView(value: fetcher.fetchingProgress)
+                if service.isFetching {
+                    ProgressView(value: service.fetchingProgress)
                         .progressViewStyle(CircularProgressViewStyle())
                 } else {
                     fetchButton
@@ -44,60 +49,59 @@ struct PreviewView: View {
             }
             .buttonStyle(CapsuledButtonStyle())
             .padding(setWallpaperButtonPadding)
-            .disabled(fetcher.isFetching)
+            .disabled(service.isFetching || service.isDownloading)
         }
         .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
-            fetcher.fetch { picture in
-                fetcher.download(picture, to: WallpaperManager.directory) { url in
-                    WallpaperManager.shared.setWallpaper(with: url)
-                    UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
-                }
+            Task {
+                await service.fetch()
+                setWallpaper()
             }
         }
     }
 
     private var header: some View {
         HStack {
-            Group {
-                // Preference button
-                Button(action: transitToPreference) {
-                    Image(systemName: "gearshape")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }
-
-                // History button
-                Button(action: transitToHistory) {
-                    Image(systemName: "clock")
-                        .font(Font.system(size: buttonIconSize, weight: .bold))
-                }
+            // Preference button
+            Button(action: transitToPreference) {
+                Image(systemName: "gearshape")
+                    .font(Font.system(size: buttonIconSize, weight: .bold))
             }
-            .buttonStyle(ImageButtonStyle())
+
+            // History button
+            Button(action: transitToHistory) {
+                Image(systemName: "clock")
+                    .font(Font.system(size: buttonIconSize, weight: .bold))
+            }
 
             Spacer()
 
-            if fetcher.isDownloading {
-                ProgressView(value: fetcher.downloadingProgress)
-                    .frame(width: downloadProgressIndicator)
+            if service.isDownloading {
+                ProgressView(value: service.downloadingProgress)
+                    .frame(width: downloadProgressIndicatorWidth)
             }
 
             // Download button
             Button(action: onDownloadButtonClick) {
-                Image(systemName: fetcher.isDownloading ? "xmark" : "square.and.arrow.down")
+                Image(systemName: service.isDownloading ? "xmark" : "square.and.arrow.down")
                     .font(Font.system(size: buttonIconSize, weight: .bold))
             }
-            .buttonStyle(ImageButtonStyle())
-            .disabled(fetcher.isFetching)
+            .disabled(service.isFetching)
         }
+        .buttonStyle(ImageButtonStyle())
     }
 
     private var fetchButton: some View {
-        Button { fetcher.fetch() } label: {
+        Button {
+            Task {
+                await service.fetch()
+            }
+        } label: {
             Image(systemName: "arrow.triangle.2.circlepath")
                 .font(Font.system(size: fetchButtonIconSize, weight: .bold))
                 .frame(width: fetchButtonFrameSize, height: fetchButtonFrameSize, alignment: .center)
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .background(RoundedRectangle(cornerRadius: fetchButtonCornerRadius))
-                .opacity(buttonHovering ? fetchButtonHoveringOpacity : fetchButtonNotHoveringOpacity)
+                .opacity(buttonHovering ? fetchButtonHoveringOpacity : fetchButtonNormalOpacity)
         }
         .buttonStyle(PlainButtonStyle())
         .onHover { hovering in
@@ -120,12 +124,10 @@ struct PreviewView: View {
     }
 
     private func onDownloadButtonClick() {
-        if fetcher.isDownloading {
-            fetcher.cancelDownload()
+        if service.isDownloading {
+            service.cancelDownload()
         } else if let picture = pictures.first {
-            fetcher.download(picture) { url in
-                UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
-            }
+            service.download(picture)
         }
     }
 
@@ -134,7 +136,7 @@ struct PreviewView: View {
             return
         }
 
-        fetcher.download(picture, to: WallpaperManager.directory) { url in
+        service.download(picture, to: WallpaperManager.directory) { url in
             WallpaperManager.shared.setWallpaper(with: url)
             UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
         }
@@ -145,21 +147,19 @@ struct PreviewView: View {
     private let headerPadding: CGFloat = 6
     private let buttonIconSize: CGFloat = 16
     private let setWallpaperButtonPadding: CGFloat = 12
-    private let downloadProgressIndicator: CGFloat = 60
+    private let downloadProgressIndicatorWidth: CGFloat = 60
     private let pictureAspectRatio: CGFloat = 1.6
     private let fetchButtonIconSize: CGFloat = 32
     private let fetchButtonFrameSize: CGFloat = 48
     private let fetchButtonCornerRadius: CGFloat = 8
     private let fetchButtonHoveringOpacity: Double = 0.8
-    private let fetchButtonNotHoveringOpacity: Double = 0.2
+    private let fetchButtonNormalOpacity: Double = 0.2
 }
 
 struct PreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewContext = PersistenceController.preview.container.viewContext
         PreviewView(currentView: .constant(.preview))
-            .environment(\.managedObjectContext, viewContext)
-            .environmentObject(PictureFetcher(context: viewContext))
+            .environmentObject(PictureService(context: PersistenceController.preview.container.viewContext))
             .frame(width: 400)
     }
 }

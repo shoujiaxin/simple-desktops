@@ -1,6 +1,6 @@
 //
 //  PreferenceView.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/1/15.
 //

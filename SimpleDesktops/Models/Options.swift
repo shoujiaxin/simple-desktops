@@ -1,6 +1,6 @@
 //
 //  Options.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/1/16.
 //
@@ -15,7 +15,9 @@ struct Options: Codable {
     /// Time interval for automatic wallpaper change.
     var changeInterval: ChangeInterval = .everyHour
 
-    private static let logger = Logger(label: "\(Bundle.main.bundleIdentifier!).Options")
+    // TODO: Launch when log in
+
+    private static let logger = Logger(for: Self.self)
 
     /// Load options from [UserDefaults](https://developer.apple.com/documentation/foundation/preferences). If there is no data, use the default value.
     /// - Parameter userDefaults: UserDefaults object, default is [UserDefaults.standard](https://developer.apple.com/documentation/foundation/userdefaults).

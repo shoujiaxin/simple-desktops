@@ -1,6 +1,6 @@
 //
 //  ImageButtonStyle.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/2/8.
 //

@@ -1,6 +1,6 @@
 //
 //  HistoryView.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/1/15.
 //
@@ -13,13 +13,13 @@ struct HistoryView: View {
 
     @Environment(\.managedObjectContext) private var viewContext: NSManagedObjectContext
 
-    @EnvironmentObject private var fetcher: PictureFetcher
+    @EnvironmentObject private var service: PictureService
 
     @FetchRequest(fetchRequest: Picture.fetchRequest(nil)) private var pictures: FetchedResults<Picture>
 
     @State private var hoveringItem: Picture?
 
-    // MARK: Views
+    // MARK: - Views
 
     var body: some View {
         VStack(spacing: 0) {
@@ -46,7 +46,7 @@ struct HistoryView: View {
                             .contextMenu {
                                 // Download button
                                 Button {
-                                    fetcher.download(picture) { url in
+                                    service.download(picture) { url in
                                         UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
                                     }
                                 } label: {
@@ -56,7 +56,7 @@ struct HistoryView: View {
 
                                 // Set wallpaper button
                                 Button {
-                                    fetcher.download(picture, to: WallpaperManager.directory) { url in
+                                    service.download(picture, to: WallpaperManager.directory) { url in
                                         WallpaperManager.shared.setWallpaper(with: url)
                                         UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
                                     }
@@ -95,11 +95,11 @@ struct HistoryView: View {
 
             Spacer()
 
-            if fetcher.isDownloading {
-                ProgressView(value: fetcher.downloadingProgress)
+            if service.isDownloading {
+                ProgressView(value: service.downloadingProgress)
                     .frame(width: downloadProgressIndicator)
 
-                Button(action: { fetcher.cancelDownload() }) {
+                Button(action: service.cancelDownload) {
                     Image(systemName: "xmark")
                         .font(Font.system(size: buttonIconSize, weight: .bold))
                 }
@@ -132,7 +132,7 @@ struct HistoryView_Previews: PreviewProvider {
         let viewContext = PersistenceController.preview.container.viewContext
         HistoryView(currentView: .constant(.history))
             .environment(\.managedObjectContext, viewContext)
-            .environmentObject(PictureFetcher(context: viewContext))
+            .environmentObject(PictureService(context: viewContext))
             .frame(width: 400, height: 358)
     }
 }

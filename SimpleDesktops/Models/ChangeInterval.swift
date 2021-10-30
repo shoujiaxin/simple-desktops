@@ -1,6 +1,6 @@
 //
 //  ChangeInterval.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/3/8.
 //

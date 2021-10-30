@@ -1,6 +1,6 @@
 //
 //  SimpleDesktopsApp.swift
-//  Simple Desktops
+//  SimpleDesktops
 //
 //  Created by Jiaxin Shou on 2021/1/14.
 //
@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         popover.contentViewController = NSHostingController(rootView:
             PopoverView()
                 .environment(\.managedObjectContext, viewContext)
-                .environmentObject(PictureFetcher(context: viewContext))
+                .environmentObject(PictureService(context: viewContext))
         )
 
         UNUserNotificationCenter.current().delegate = self
