@@ -20,17 +20,29 @@ struct ImageButtonStyle: ButtonStyle {
 
     struct ImageButton: View {
         let configuration: ButtonStyle.Configuration
+
         let size: CGSize
 
         @Environment(\.isEnabled) private var isEnabled: Bool
 
+        @State private var isHovering: Bool = false
+
         var body: some View {
             configuration.label
-                .frame(width: size.width, height: size.height, alignment: .center)
+                .frame(width: size.width, height: size.height)
                 .contentShape(Rectangle())
+                .background {
+                    RoundedRectangle(cornerRadius: 6)
+                        .opacity(isHovering ? 0.2 : 0)
+                        .transition(.opacity)
+                }
                 .foregroundColor(isEnabled ? .primary : .secondary)
-                .opacity(configuration.isPressed ? 0.8 : 1.0)
-                .scaleEffect(configuration.isPressed ? 0.8 : 1.0)
+                .onHover { isHovering in
+                    withAnimation(.easeInOut) {
+                        self.isHovering = isHovering
+                    }
+                }
+                .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
         }
     }
 }

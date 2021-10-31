@@ -39,11 +39,13 @@ struct PreferenceView: View {
             HStack(spacing: buttonSpacing) {
                 Button(action: transitToPreview) {
                     Text("Done")
+                        .fontWeight(.semibold)
                 }
                 .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth, height: buttonHeight)))
 
                 Button(action: quit) {
                     Text("Quit")
+                        .fontWeight(.semibold)
                 }
                 .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth, height: buttonHeight)))
             }

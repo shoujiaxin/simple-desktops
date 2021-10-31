@@ -41,6 +41,7 @@ struct PreviewView: View {
                 }
             } label: {
                 Text("Set as Wallpaper")
+                    .fontWeight(.semibold)
             }
             .buttonStyle(CapsuledButtonStyle())
             .padding(setWallpaperButtonPadding)

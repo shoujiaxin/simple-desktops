@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CapsuledButtonStyle: ButtonStyle {
     let size: CGSize
+
     let strokeWidth: CGFloat
 
     init(size: CGSize = CGSize(width: 240, height: 40), strokeWidth: CGFloat = 2.0) {
@@ -22,7 +23,9 @@ struct CapsuledButtonStyle: ButtonStyle {
 
     struct CapsuledButton: View {
         let configuration: ButtonStyle.Configuration
+
         let size: CGSize
+
         let strokeWidth: CGFloat
 
         @Environment(\.isEnabled) private var isEnabled: Bool
