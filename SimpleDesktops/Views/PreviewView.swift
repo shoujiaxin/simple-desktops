@@ -25,6 +25,7 @@ struct PreviewView: View {
                 KFImage(picture?.previewURL)
                     .resizable()
                     .aspectRatio(pictureAspectRatio, contentMode: .fit)
+                    .transition(.opacity)
 
                 if service.isFetching {
                     ProgressView(value: service.fetchingProgress)
@@ -35,7 +36,9 @@ struct PreviewView: View {
             }
 
             Button {
-                service.setWallpaper(picture)
+                if let picture = picture {
+                    service.setWallpaper(picture)
+                }
             } label: {
                 Text("Set as Wallpaper")
             }

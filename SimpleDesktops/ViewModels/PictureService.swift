@@ -8,6 +8,7 @@
 import AppKit
 import Kingfisher
 import Logging
+import SwiftUI
 
 class PictureService: ObservableObject {
     @Published private(set) var isFetching: Bool = false {
@@ -65,7 +66,9 @@ class PictureService: ObservableObject {
                 KingfisherManager.shared.cache.store(image, forKey: info.previewURL.absoluteString)
             }
 
-            Picture.update(with: info, in: context)
+            _ = withAnimation(.easeInOut) {
+                Picture.update(with: info, in: context)
+            }
         } catch {
             logger.error("Failed to fetch picture, \(error.localizedDescription)")
         }
@@ -108,11 +111,7 @@ class PictureService: ObservableObject {
         }
     }
 
-    func setWallpaper(_ picture: Picture?) {
-        guard let picture = picture else {
-            return
-        }
-
+    func setWallpaper(_ picture: Picture) {
         download(picture, to: WallpaperManager.directory) { url in
             WallpaperManager.shared.setWallpaper(with: url)
             UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
@@ -121,5 +120,18 @@ class PictureService: ObservableObject {
 
     func cancelDownload() {
         KingfisherManager.shared.downloader.cancelAll()
+    }
+
+    func delete(_ picture: Picture) {
+        do {
+            try withAnimation(.easeInOut) {
+                context.delete(picture)
+                try context.save()
+            }
+
+            logger.info("Picture deleted, \(picture)")
+        } catch {
+            logger.error("Failed to delete picture, \(error.localizedDescription)")
+        }
     }
 }

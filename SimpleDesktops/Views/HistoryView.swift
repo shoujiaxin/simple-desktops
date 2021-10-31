@@ -9,13 +9,11 @@ import Kingfisher
 import SwiftUI
 
 struct HistoryView: View {
-    @Environment(\.managedObjectContext) private var viewContext: NSManagedObjectContext
-
     @EnvironmentObject private var service: PictureService
 
-    @FetchRequest(fetchRequest: Picture.fetchRequest(nil)) private var pictures: FetchedResults<Picture>
-
     @State private var hoveringItem: Picture?
+
+    let pictures: [Picture]
 
     var body: some View {
         ScrollView {
@@ -47,10 +45,7 @@ struct HistoryView: View {
 
                             // Set wallpaper button
                             Button {
-                                service.download(picture, to: WallpaperManager.directory) { url in
-                                    WallpaperManager.shared.setWallpaper(with: url)
-                                    UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
-                                }
+                                service.setWallpaper(picture)
                             } label: {
                                 Text("Set as wallpaper")
                             }
@@ -59,10 +54,7 @@ struct HistoryView: View {
 
                             // Delete button
                             Button {
-                                withAnimation(.easeInOut) {
-                                    viewContext.delete(picture)
-                                    try? viewContext.save()
-                                }
+                                service.delete(picture)
                             } label: {
                                 Text("Delete")
                             }
@@ -86,8 +78,8 @@ struct HistoryView: View {
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {
         let viewContext = PersistenceController.preview.container.viewContext
-        HistoryView()
-            .environment(\.managedObjectContext, viewContext)
+        let pictures = try! viewContext.fetch(Picture.fetchRequest(nil))
+        HistoryView(pictures: pictures)
             .environmentObject(PictureService(context: viewContext))
             .frame(width: 400, height: 314)
     }

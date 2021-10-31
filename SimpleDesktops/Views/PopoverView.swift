@@ -26,7 +26,7 @@ struct PopoverView: View {
 
     @EnvironmentObject private var service: PictureService
 
-    @FetchRequest(fetchRequest: Picture.fetchRequest(nil, fetchLimit: 1)) private var pictures: FetchedResults<Picture>
+    @FetchRequest(fetchRequest: Picture.fetchRequest(nil)) private var pictures: FetchedResults<Picture>
 
     @State private var currentView: ViewState = .preview
 
@@ -44,7 +44,9 @@ struct PopoverView: View {
         .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
             Task {
                 await service.fetch()
-                service.setWallpaper(pictures.first)
+                if let picture = pictures.first {
+                    service.setWallpaper(picture)
+                }
             }
         }
     }
@@ -84,6 +86,17 @@ struct PopoverView: View {
                         .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
                 }
             } else if currentView == .preview {
+                // Delete button
+                Button {
+                    if let picture = pictures.first {
+                        service.delete(picture)
+                    }
+                } label: {
+                    Image(systemName: "trash")
+                        .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
+                }
+                .disabled(service.isFetching)
+
                 // Download button
                 Button {
                     if let picture = pictures.first {
@@ -111,7 +124,7 @@ struct PopoverView: View {
                 .transition(.move(edge: .bottom))
 
         case .history:
-            HistoryView()
+            HistoryView(pictures: pictures.map { $0 })
                 .transition(.move(edge: .trailing))
         }
     }

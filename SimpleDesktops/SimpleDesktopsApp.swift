@@ -16,9 +16,7 @@ struct SimpleDesktopsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Group {
-                // No window
-            }
+            Text("Welcome")
         }
     }
 }
@@ -30,6 +28,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     var popover: NSPopover!
 
     func applicationDidFinishLaunching(_: Notification) {
+        // No window
+        NSApp.windows.forEach { $0.close() }
+
         let viewContext = PersistenceController.shared.container.viewContext
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -45,7 +46,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         )
 
         // Start the timer
-        WallpaperManager.shared.autoChangeInterval = Options().changeInterval
+        let options = Options()
+        WallpaperManager.shared.autoChangeInterval = options.autoChange ? options.changeInterval : nil
 
         UNUserNotificationCenter.current().delegate = self
     }
