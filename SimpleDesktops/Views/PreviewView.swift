@@ -63,8 +63,8 @@ struct PreviewView: View {
                 .opacity(buttonHovering ? fetchButtonHoveringOpacity : fetchButtonNormalOpacity)
         }
         .buttonStyle(PlainButtonStyle())
-        .onHover { hovering in
-            buttonHovering = hovering
+        .onHover { isHovering in
+            buttonHovering = isHovering
         }
     }
 

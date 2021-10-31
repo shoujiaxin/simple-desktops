@@ -29,8 +29,8 @@ struct HistoryView: View {
                                 .stroke(lineWidth: hoveringItem == picture ? highlighStrokeWidth : 0)
                                 .foregroundColor(.accentColor)
                         )
-                        .onHover { hovering in
-                            self.hoveringItem = hovering ? picture : nil
+                        .onHover { isHovering in
+                            self.hoveringItem = isHovering ? picture : nil
                         }
                         .contextMenu {
                             // Download button
