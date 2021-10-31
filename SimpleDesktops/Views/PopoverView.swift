@@ -41,6 +41,12 @@ struct PopoverView: View {
             content()
         }
         .frame(width: popoverWidth, height: currentView.height)
+        .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
+            Task {
+                await service.fetch()
+                service.setWallpaper(pictures.first)
+            }
+        }
     }
 
     private var navigationBar: some View {

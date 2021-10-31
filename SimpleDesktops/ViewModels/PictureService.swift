@@ -108,6 +108,17 @@ class PictureService: ObservableObject {
         }
     }
 
+    func setWallpaper(_ picture: Picture?) {
+        guard let picture = picture else {
+            return
+        }
+
+        download(picture, to: WallpaperManager.directory) { url in
+            WallpaperManager.shared.setWallpaper(with: url)
+            UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
+        }
+    }
+
     func cancelDownload() {
         KingfisherManager.shared.downloader.cancelAll()
     }

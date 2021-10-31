@@ -44,6 +44,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
                 .environmentObject(PictureService(context: viewContext))
         )
 
+        // Start the timer
+        WallpaperManager.shared.autoChangeInterval = Options().changeInterval
+
         UNUserNotificationCenter.current().delegate = self
     }
 

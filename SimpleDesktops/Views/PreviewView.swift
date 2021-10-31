@@ -34,18 +34,14 @@ struct PreviewView: View {
                 }
             }
 
-            Button(action: setWallpaper) {
+            Button {
+                service.setWallpaper(picture)
+            } label: {
                 Text("Set as Wallpaper")
             }
             .buttonStyle(CapsuledButtonStyle())
             .padding(setWallpaperButtonPadding)
             .disabled(service.isFetching || service.isDownloading)
-        }
-        .onReceive(WallpaperManager.shared.autoChangePublisher) { _ in
-            Task {
-                await service.fetch()
-                setWallpaper()
-            }
         }
     }
 
@@ -65,19 +61,6 @@ struct PreviewView: View {
         .buttonStyle(PlainButtonStyle())
         .onHover { hovering in
             buttonHovering = hovering
-        }
-    }
-
-    // MARK: - Funstions
-
-    private func setWallpaper() {
-        guard let picture = picture else {
-            return
-        }
-
-        service.download(picture, to: WallpaperManager.directory) { url in
-            WallpaperManager.shared.setWallpaper(with: url)
-            UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
         }
     }
 
