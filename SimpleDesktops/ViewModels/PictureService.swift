@@ -10,8 +10,6 @@ import Kingfisher
 import Logging
 
 class PictureService: ObservableObject {
-    @Published private(set) var previewImage: NSImage? = nil
-
     @Published private(set) var isFetching: Bool = false {
         willSet {
             if isFetching != newValue {
@@ -39,13 +37,8 @@ class PictureService: ObservableObject {
     init(context: NSManagedObjectContext) {
         self.context = context
 
-        if let url = try? context.fetch(Picture.fetchRequest(nil)).first?.previewURL {
-            KingfisherManager.shared.cache.retrieveImage(forKey: url.absoluteString) { [weak self] result in
-                if case .success(let imageResult) = result {
-                    self?.previewImage = imageResult.image
-                }
-            }
-        } else {
+        // Launch the app for the first time
+        if let pictures = try? context.fetch(Picture.fetchRequest(nil)), pictures.isEmpty {
             Task {
                 await fetch()
             }
@@ -69,7 +62,6 @@ class PictureService: ObservableObject {
             }
 
             if let image = NSImage(data: data) {
-                previewImage = image
                 KingfisherManager.shared.cache.store(image, forKey: info.previewURL.absoluteString)
             }
 
@@ -98,9 +90,9 @@ class PictureService: ObservableObject {
         } completionHandler: { [weak self] result in
             self?.isDownloading = false
             switch result {
-            case .failure(let error):
+            case let .failure(error):
                 self?.logger.error("Failed to download picture, \(error.localizedDescription)")
-            case .success(let imageResult):
+            case let .success(imageResult):
                 guard let data = imageResult.image.tiffRepresentation else {
                     return
                 }

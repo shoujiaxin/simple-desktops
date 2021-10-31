@@ -24,31 +24,120 @@ struct PopoverView: View {
         }
     }
 
+    @EnvironmentObject private var service: PictureService
+
+    @FetchRequest(fetchRequest: Picture.fetchRequest(nil, fetchLimit: 1)) private var pictures: FetchedResults<Picture>
+
     @State private var currentView: ViewState = .preview
 
+    // MARK: - Views
+
     var body: some View {
-        Group {
-            switch currentView {
-            case .preview:
-                PreviewView(currentView: $currentView)
-
-            case .preference:
-                PreferenceView(currentView: $currentView)
-                    .transition(.move(edge: .bottom))
-
-            case .history:
-                HistoryView(currentView: $currentView)
-                    .transition(.move(edge: .trailing))
+        VStack(spacing: 0) {
+            if currentView != .preference {
+                navigationBar
             }
+
+            content()
         }
         .frame(width: popoverWidth, height: currentView.height)
     }
 
+    private var navigationBar: some View {
+        HStack {
+            if currentView == .preview {
+                // Preference button
+                Button(action: transitToPreferenceView) {
+                    Image(systemName: "gearshape")
+                        .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
+                }
+
+                // History button
+                Button(action: transitToHistoryView) {
+                    Image(systemName: "clock")
+                        .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
+                }
+            } else if currentView == .history {
+                // Back to preview button
+                Button(action: transitToPreviewView) {
+                    Image(systemName: "chevron.backward")
+                        .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
+                }
+            }
+
+            Spacer()
+
+            if service.isDownloading {
+                // Download progress indicator
+                ProgressView(value: service.downloadingProgress)
+                    .frame(width: downloadProgressIndicatorWidth)
+
+                // Cancel download button
+                Button(action: service.cancelDownload) {
+                    Image(systemName: "xmark")
+                        .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
+                }
+            } else if currentView == .preview {
+                // Download button
+                Button {
+                    if let picture = pictures.first {
+                        service.download(picture)
+                    }
+                } label: {
+                    Image(systemName: "square.and.arrow.down")
+                        .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
+                }
+                .disabled(service.isFetching)
+            }
+        }
+        .buttonStyle(ImageButtonStyle())
+        .padding(navigationBarPadding)
+    }
+
+    @ViewBuilder
+    private func content() -> some View {
+        switch currentView {
+        case .preview:
+            PreviewView(picture: pictures.first)
+
+        case .preference:
+            PreferenceView(currentView: $currentView)
+                .transition(.move(edge: .bottom))
+
+        case .history:
+            HistoryView()
+                .transition(.move(edge: .trailing))
+        }
+    }
+
+    // MARK: - Functions
+
+    private func transitToPreviewView() {
+        withAnimation(.easeInOut) {
+            currentView = .preview
+        }
+    }
+
+    private func transitToPreferenceView() {
+        withAnimation(.easeInOut) {
+            currentView = .preference
+        }
+    }
+
+    private func transitToHistoryView() {
+        withAnimation(.easeInOut) {
+            currentView = .history
+        }
+    }
+
     // MARK: - Constants
 
-    private let popoverWidth: CGFloat = 400
-    private static let smallPopoverHeight: CGFloat = 163
+    private static let smallPopoverHeight: CGFloat = 155
     private static let largePopoverHeight: CGFloat = 358
+    private let popoverWidth: CGFloat = 400
+    private let navigationBarButtonIconSize: CGFloat = 16
+    private let downloadProgressIndicatorWidth: CGFloat = 60
+    private let navigationBarPadding: CGFloat = 6
 }
 
 struct PopoverView_Previews: PreviewProvider {
