@@ -26,7 +26,8 @@ struct PopoverView: View {
 
     @EnvironmentObject private var service: PictureService
 
-    @FetchRequest(fetchRequest: Picture.fetchRequest(nil)) private var pictures: FetchedResults<Picture>
+    @FetchRequest(fetchRequest: Picture
+        .fetchRequest(nil)) private var pictures: FetchedResults<Picture>
 
     @State private var currentView: ViewState = .preview
 

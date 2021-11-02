@@ -101,7 +101,10 @@ extension SDPictureInfo {
         let previewURL = URL(string: link)
 
         let url = previewURL.map { url -> URL in
-            let lastPathComponent = url.lastPathComponent.split(separator: ".", omittingEmptySubsequences: false)[..<2].joined(separator: ".")
+            let lastPathComponent = url.lastPathComponent.split(
+                separator: ".",
+                omittingEmptySubsequences: false
+            )[..<2].joined(separator: ".")
             return url.deletingLastPathComponent().appendingPathComponent(lastPathComponent)
         }
 

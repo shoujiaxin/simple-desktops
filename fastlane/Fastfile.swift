@@ -16,14 +16,29 @@ class Fastfile: LaneFile {
         let target = "SimpleDesktops"
         let outputDirectory = URL(fileURLWithPath: "./.build", isDirectory: true)
         let packageName = "\(target)_v\(getVersionNumber(target: .userDefined(target)))"
-        let packageDirectory = outputDirectory.appendingPathComponent(packageName, isDirectory: true)
+        let packageDirectory = outputDirectory.appendingPathComponent(
+            packageName,
+            isDirectory: true
+        )
 
         // Build app
-        let appPath = URL(fileURLWithPath: buildMacApp(scheme: .userDefined(target), outputDirectory: outputDirectory.path, codesigningIdentity: "-", exportMethod: "mac-application"))
+        let appPath = URL(fileURLWithPath: buildMacApp(
+            scheme: .userDefined(target),
+            outputDirectory: outputDirectory.path,
+            codesigningIdentity: "-",
+            exportMethod: "mac-application"
+        ))
 
         // Move .app to folder
-        try? FileManager.default.createDirectory(at: packageDirectory, withIntermediateDirectories: false, attributes: nil)
-        try? FileManager.default.moveItem(at: appPath, to: packageDirectory.appendingPathComponent(appPath.lastPathComponent))
+        try? FileManager.default.createDirectory(
+            at: packageDirectory,
+            withIntermediateDirectories: false,
+            attributes: nil
+        )
+        try? FileManager.default.moveItem(
+            at: appPath,
+            to: packageDirectory.appendingPathComponent(appPath.lastPathComponent)
+        )
 
         // Create image
         dmg(path: packageDirectory.path, size: 10)

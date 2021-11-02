@@ -63,7 +63,7 @@ struct CapsuledButton_Previews: PreviewProvider {
     }
 
     static var button: some View {
-        Button(action: {}) {
+        Button {} label: {
             Text("CapsuledButton")
                 .font(.largeTitle)
         }

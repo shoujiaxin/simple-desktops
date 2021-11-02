@@ -21,13 +21,22 @@ struct UserNotification {
                 }
 
                 // Copy attachment files to temporary directory
-                let attachmentURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
+                let attachmentURL = FileManager.default.temporaryDirectory
+                    .appendingPathComponent(url.lastPathComponent)
                 try? Data(contentsOf: url).write(to: attachmentURL)
-                return try? .init(identifier: url.lastPathComponent, url: attachmentURL, options: nil)
+                return try? .init(
+                    identifier: url.lastPathComponent,
+                    url: attachmentURL,
+                    options: nil
+                )
             }
 
             DispatchQueue.main.async {
-                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                let request = UNNotificationRequest(
+                    identifier: UUID().uuidString,
+                    content: content,
+                    trigger: nil
+                )
                 UNUserNotificationCenter.current().add(request) { error in
                     if let error = error {
                         // TODO: Log

@@ -57,7 +57,11 @@ struct PreviewView: View {
         } label: {
             Image(systemName: "arrow.triangle.2.circlepath")
                 .font(Font.system(size: fetchButtonIconSize, weight: .bold))
-                .frame(width: fetchButtonFrameSize, height: fetchButtonFrameSize, alignment: .center)
+                .frame(
+                    width: fetchButtonFrameSize,
+                    height: fetchButtonFrameSize,
+                    alignment: .center
+                )
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .background(RoundedRectangle(cornerRadius: fetchButtonCornerRadius))
                 .opacity(buttonHovering ? fetchButtonHoveringOpacity : fetchButtonNormalOpacity)

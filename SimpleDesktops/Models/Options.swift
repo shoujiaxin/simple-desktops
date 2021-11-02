@@ -24,7 +24,10 @@ struct Options: Codable {
     init(from userDefaults: UserDefaults = .standard) {
         let keys = Mirror(reflecting: self).children.compactMap { $0.label }
         do {
-            let data = try JSONSerialization.data(withJSONObject: userDefaults.dictionaryWithValues(forKeys: keys), options: .fragmentsAllowed)
+            let data = try JSONSerialization.data(
+                withJSONObject: userDefaults.dictionaryWithValues(forKeys: keys),
+                options: .fragmentsAllowed
+            )
             self = try JSONDecoder().decode(Options.self, from: data)
             Self.logger.info("Options loaded")
         } catch {
@@ -37,7 +40,10 @@ struct Options: Codable {
     func save(to userDefaults: UserDefaults = .standard) {
         do {
             let data = try JSONEncoder().encode(self)
-            if let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+            if let dictionary = try JSONSerialization.jsonObject(
+                with: data,
+                options: .allowFragments
+            ) as? [String: Any] {
                 userDefaults.setValuesForKeys(dictionary)
                 Self.logger.info("Options saved")
             }

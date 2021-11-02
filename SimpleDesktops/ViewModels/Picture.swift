@@ -8,16 +8,22 @@
 import CoreData
 
 extension Picture {
-    static func fetchRequest(_ predicate: NSPredicate?, fetchLimit: Int = 0) -> NSFetchRequest<Picture> {
+    static func fetchRequest(_ predicate: NSPredicate?,
+                             fetchLimit: Int = 0) -> NSFetchRequest<Picture> {
         let request = fetchRequest()
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Picture.lastFetchedTime_, ascending: false)]
+        request
+            .sortDescriptors =
+            [NSSortDescriptor(keyPath: \Picture.lastFetchedTime_, ascending: false)]
         request.fetchLimit = fetchLimit
         return request
     }
 
     static func withURL(_ url: URL, in context: NSManagedObjectContext) -> Picture {
-        let request = fetchRequest(NSPredicate(format: "url_ = %@", url.absoluteString), fetchLimit: 1)
+        let request = fetchRequest(
+            NSPredicate(format: "url_ = %@", url.absoluteString),
+            fetchLimit: 1
+        )
         if let picture = try? context.fetch(request).first {
             return picture
         } else {

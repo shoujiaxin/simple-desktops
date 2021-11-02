@@ -34,7 +34,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let viewContext = PersistenceController.shared.container.viewContext
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem.button?.image = NSImage(systemSymbolName: "photo.on.rectangle", accessibilityDescription: nil)
+        statusItem.button?.image = NSImage(
+            systemSymbolName: "photo.on.rectangle",
+            accessibilityDescription: nil
+        )
         statusItem.button?.action = #selector(togglePopover(_:))
 
         popover = NSPopover()
@@ -42,12 +45,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         popover.contentViewController = NSHostingController(rootView:
             PopoverView()
                 .environment(\.managedObjectContext, viewContext)
-                .environmentObject(PictureService(context: viewContext))
-        )
+                .environmentObject(PictureService(context: viewContext)))
 
         // Start the timer
         let options = Options()
-        WallpaperManager.shared.autoChangeInterval = options.autoChange ? options.changeInterval : nil
+        WallpaperManager.shared.autoChangeInterval = options.autoChange ? options
+            .changeInterval : nil
 
         UNUserNotificationCenter.current().delegate = self
     }
@@ -61,13 +64,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             popover.performClose(sender)
         } else {
             NSApp.activate(ignoringOtherApps: true)
-            popover.show(relativeTo: statusItem.button!.bounds, of: statusItem.button!, preferredEdge: NSRectEdge.minY)
+            popover.show(
+                relativeTo: statusItem.button!.bounds,
+                of: statusItem.button!,
+                preferredEdge: NSRectEdge.minY
+            )
         }
     }
 
     // MARK: - UNUserNotificationCenterDelegate
 
-    func userNotificationCenter(_: UNUserNotificationCenter, willPresent _: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(
+        _: UNUserNotificationCenter,
+        willPresent _: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
+            -> Void
+    ) {
         // Display user notification even while the app is in foreground
         completionHandler([.banner])
     }

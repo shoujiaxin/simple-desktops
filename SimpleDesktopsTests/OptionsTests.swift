@@ -48,6 +48,9 @@ class OptionsTests: XCTestCase {
         options.save(to: userDefaults)
 
         XCTAssertTrue(userDefaults.bool(forKey: "autoChange"))
-        XCTAssertEqual(userDefaults.string(forKey: "changeInterval"), ChangeInterval.whenWakingFromSleep.rawValue)
+        XCTAssertEqual(
+            userDefaults.string(forKey: "changeInterval"),
+            ChangeInterval.whenWakingFromSleep.rawValue
+        )
     }
 }

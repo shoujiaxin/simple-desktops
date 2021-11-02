@@ -19,14 +19,16 @@ struct HistoryView: View {
         ScrollView {
             Spacer(minLength: highlighStrokeWidth)
 
-            LazyVGrid(columns: Array(repeating: GridItem(.fixed(pictureWidth), spacing: pictureSpacing), count: 2)) {
+            LazyVGrid(columns: Array(repeating: GridItem(.fixed(pictureWidth),
+                                                         spacing: pictureSpacing), count: 2)) {
                 ForEach(pictures) { picture in
                     KFImage(picture.previewURL)
                         .resizable()
                         .aspectRatio(pictureAspectRatio, contentMode: .fit)
                         .background(
                             Rectangle()
-                                .stroke(lineWidth: hoveringItem == picture ? highlighStrokeWidth : 0)
+                                .stroke(lineWidth: hoveringItem == picture ? highlighStrokeWidth :
+                                    0)
                                 .foregroundColor(.accentColor)
                         )
                         .onHover { isHovering in
@@ -36,7 +38,11 @@ struct HistoryView: View {
                             // Download button
                             Button {
                                 service.download(picture) { url in
-                                    UserNotification.shared.request(title: "Picture Downloaded", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
+                                    UserNotification.shared.request(
+                                        title: "Picture Downloaded",
+                                        body: url.lastPathComponent,
+                                        attachmentURLs: [picture.previewURL]
+                                    )
                                 }
                             } label: {
                                 Text("Download")

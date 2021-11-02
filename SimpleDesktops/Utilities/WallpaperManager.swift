@@ -13,11 +13,19 @@ class WallpaperManager {
 
     /// The directory where wallpaper images are stored.
     static let directory: URL = {
-        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "8TA5C5ASM9.me.jiaxin.SimpleDesktops")!.appendingPathComponent("Wallpapers")
+        let url = FileManager.default
+            .containerURL(
+                forSecurityApplicationGroupIdentifier: "8TA5C5ASM9.me.jiaxin.SimpleDesktops"
+            )!
+            .appendingPathComponent("Wallpapers")
 
         // Create the directory if it does not exist
         if !FileManager.default.fileExists(atPath: url.path) {
-            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            try? FileManager.default.createDirectory(
+                at: url,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
         }
 
         return url
@@ -39,7 +47,11 @@ class WallpaperManager {
             switch interval {
             case .whenWakingFromSleep:
                 let subject = PassthroughSubject<Date, Never>()
-                wakeFromSleepObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: nil) { _ in
+                wakeFromSleepObserver = NSWorkspace.shared.notificationCenter.addObserver(
+                    forName: NSWorkspace.didWakeNotification,
+                    object: nil,
+                    queue: nil
+                ) { _ in
                     subject.send(Date())
                 }
                 autoChangePublisher = subject.eraseToAnyPublisher()
@@ -68,7 +80,11 @@ class WallpaperManager {
         workspaceChangeObserver.map {
             NSWorkspace.shared.notificationCenter.removeObserver($0)
         }
-        workspaceChangeObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { _ in
+        workspaceChangeObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.activeSpaceDidChangeNotification,
+            object: nil,
+            queue: nil
+        ) { _ in
             // Set wallpaper when Spaces changed
             NSScreen.screens.forEach { screen in
                 try? NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
@@ -83,7 +99,8 @@ class WallpaperManager {
     private var workspaceChangeObserver: NSObjectProtocol?
 
     private init() {
-        autoChangePublisher = Timer.publish(every: .infinity, on: .main, in: .common).eraseToAnyPublisher()
+        autoChangePublisher = Timer.publish(every: .infinity, on: .main, in: .common)
+            .eraseToAnyPublisher()
     }
 
     deinit {

@@ -75,9 +75,13 @@ class PictureService: ObservableObject {
     }
 
     func download(_ picture: Picture,
-                  to destination: URL = try! FileManager.default.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: false),
-                  completed: ((URL) -> Void)? = nil)
-    {
+                  to destination: URL = try! FileManager.default.url(
+                      for: .downloadsDirectory,
+                      in: .userDomainMask,
+                      appropriateFor: nil,
+                      create: false
+                  ),
+                  completed: ((URL) -> Void)? = nil) {
         isDownloading = true
 
         let url = destination.appendingPathComponent(picture.name ?? picture.id.uuidString)
@@ -88,33 +92,38 @@ class PictureService: ObservableObject {
             return
         }
 
-        KingfisherManager.shared.downloader.downloadImage(with: picture.url, options: nil) { [weak self] receivedSize, totalSize in
-            self?.downloadingProgress = Double(receivedSize) / Double(totalSize)
-        } completionHandler: { [weak self] result in
-            self?.isDownloading = false
-            switch result {
-            case let .failure(error):
-                self?.logger.error("Failed to download picture, \(error.localizedDescription)")
-            case let .success(imageResult):
-                guard let data = imageResult.image.tiffRepresentation else {
-                    return
-                }
+        KingfisherManager.shared.downloader
+            .downloadImage(with: picture.url, options: nil) { [weak self] receivedSize, totalSize in
+                self?.downloadingProgress = Double(receivedSize) / Double(totalSize)
+            } completionHandler: { [weak self] result in
+                self?.isDownloading = false
+                switch result {
+                case let .failure(error):
+                    self?.logger.error("Failed to download picture, \(error.localizedDescription)")
+                case let .success(imageResult):
+                    guard let data = imageResult.image.tiffRepresentation else {
+                        return
+                    }
 
-                do {
-                    try data.write(to: url)
-                    completed?(url)
-                    self?.logger.info("Picture downloaded to \(url.path)")
-                } catch {
-                    self?.logger.error("Failed to save picture, \(error.localizedDescription)")
+                    do {
+                        try data.write(to: url)
+                        completed?(url)
+                        self?.logger.info("Picture downloaded to \(url.path)")
+                    } catch {
+                        self?.logger.error("Failed to save picture, \(error.localizedDescription)")
+                    }
                 }
             }
-        }
     }
 
     func setWallpaper(_ picture: Picture) {
         download(picture, to: WallpaperManager.directory) { url in
             WallpaperManager.shared.setWallpaper(with: url)
-            UserNotification.shared.request(title: "Wallpaper Changed", body: url.lastPathComponent, attachmentURLs: [picture.previewURL])
+            UserNotification.shared.request(
+                title: "Wallpaper Changed",
+                body: url.lastPathComponent,
+                attachmentURLs: [picture.previewURL]
+            )
         }
     }
 

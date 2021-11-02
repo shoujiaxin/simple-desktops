@@ -41,13 +41,15 @@ struct PreferenceView: View {
                     Text("Done")
                         .fontWeight(.semibold)
                 }
-                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth, height: buttonHeight)))
+                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth,
+                                                              height: buttonHeight)))
 
                 Button(action: quit) {
                     Text("Quit")
                         .fontWeight(.semibold)
                 }
-                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth, height: buttonHeight)))
+                .buttonStyle(CapsuledButtonStyle(size: CGSize(width: buttonWidth,
+                                                              height: buttonHeight)))
             }
         }
         .padding(.vertical, contentVerticalPadding)
@@ -74,7 +76,8 @@ struct PreferenceView: View {
     private let contentSpacing: CGFloat = 20
     private let contentVerticalPadding: CGFloat = 20
 
-    private let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    private let versionNumber = Bundle.main
+        .object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     private let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
 }
 

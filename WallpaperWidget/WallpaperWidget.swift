@@ -15,22 +15,30 @@ struct Provider: TimelineProvider {
 
     func getSnapshot(in _: Context, completion: @escaping (SimpleEntry) -> Void) {
         let entry = SimpleEntry(date: Date(),
-                                url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.directory,
-                                                                                  includingPropertiesForKeys: nil,
-                                                                                  options: .skipsHiddenFiles).randomElement())
+                                url: try? FileManager.default.contentsOfDirectory(
+                                    at: WallpaperManager.directory,
+                                    includingPropertiesForKeys: nil,
+                                    options: .skipsHiddenFiles
+                                ).randomElement())
         completion(entry)
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         var entries: [SimpleEntry] = []
 
-        let fileURLs = try! FileManager.default.contentsOfDirectory(at: WallpaperManager.directory,
-                                                                    includingPropertiesForKeys: nil,
-                                                                    options: .skipsHiddenFiles).shuffled()
+        let fileURLs = try! FileManager.default.contentsOfDirectory(
+            at: WallpaperManager.directory,
+            includingPropertiesForKeys: nil,
+            options: .skipsHiddenFiles
+        ).shuffled()
 
         let currentDate = Date()
         for (index, url) in fileURLs.enumerated() {
-            let entryDate = Calendar.current.date(byAdding: .minute, value: 15 * index, to: currentDate)!
+            let entryDate = Calendar.current.date(
+                byAdding: .minute,
+                value: 15 * index,
+                to: currentDate
+            )!
             let entry = SimpleEntry(date: entryDate, url: url)
             entries.append(entry)
         }
@@ -51,8 +59,7 @@ struct WallpaperWidgetEntryView: View {
 
     var body: some View {
         if let url = entry.url,
-           let image = NSImage(contentsOf: url)
-        {
+           let image = NSImage(contentsOf: url) {
             Image(nsImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -85,9 +92,11 @@ struct WallpaperWidget_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
         let demoEntry = SimpleEntry(date: Date(),
-                                    url: try? FileManager.default.contentsOfDirectory(at: WallpaperManager.directory,
-                                                                                      includingPropertiesForKeys: nil,
-                                                                                      options: .skipsHiddenFiles).randomElement())
+                                    url: try? FileManager.default.contentsOfDirectory(
+                                        at: WallpaperManager.directory,
+                                        includingPropertiesForKeys: nil,
+                                        options: .skipsHiddenFiles
+                                    ).randomElement())
         WallpaperWidgetEntryView(entry: demoEntry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }

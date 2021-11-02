@@ -1,3 +1,7 @@
 --swiftversion 5.0
 
---exclude fastlane/*/*.swift
+--exclude fastlane
+
+--maxwidth 100
+
+--disable wrapMultilineStatementBraces

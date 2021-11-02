@@ -58,7 +58,7 @@ struct ImageButton_Previews: PreviewProvider {
     }
 
     static var button: some View {
-        Button(action: {}) {
+        Button {} label: {
             Image(systemName: "applelogo")
                 .font(.largeTitle)
         }

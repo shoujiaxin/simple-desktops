@@ -18,8 +18,16 @@ struct PersistenceController {
         picture.id = UUID()
         picture.lastFetchedTime = Date()
         picture.name = "2020-06-28-Big_Sur_Simple"
-        picture.previewURL = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png")!
-        picture.url = URL(string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png")!
+        picture
+            .previewURL =
+            URL(
+                string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png"
+            )!
+        picture
+            .url =
+            URL(
+                string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png"
+            )!
         try? viewContext.save()
 
         return result
