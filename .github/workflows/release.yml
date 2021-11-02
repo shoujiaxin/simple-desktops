@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
 
 jobs:
-  test:
+  build:
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
@@ -32,16 +32,6 @@ jobs:
           # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
-
-      - name: Run tests
-        uses: maierj/fastlane-action@v2.1.0
-        with:
-          lane: "scan"
-
-  build:
-    runs-on: macos-11
-    steps:
-      - uses: actions/checkout@v2
 
       - name: Build
         uses: maierj/fastlane-action@v2.1.0

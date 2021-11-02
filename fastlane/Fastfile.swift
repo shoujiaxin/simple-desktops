@@ -22,6 +22,7 @@ class Fastfile: LaneFile {
         )
 
         // Build app
+        xcversion(version: "~> 13.1")
         let appPath = URL(fileURLWithPath: buildMacApp(
             scheme: .userDefined(target),
             outputDirectory: outputDirectory.path,
