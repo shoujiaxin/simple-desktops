@@ -23,6 +23,7 @@ struct PreviewView: View {
         VStack(spacing: 0) {
             ZStack {
                 KFImage(picture?.previewURL)
+                    .onlyFromCache()
                     .resizable()
                     .aspectRatio(pictureAspectRatio, contentMode: .fit)
                     .transition(.opacity)

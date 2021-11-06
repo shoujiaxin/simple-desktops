@@ -62,9 +62,10 @@ class PictureService: ObservableObject {
                 fetchingProgress = 0.3 + 0.7 * Double(data.count) / Double(length)
             }
 
-            if let image = NSImage(data: data) {
-                KingfisherManager.shared.cache.store(image, forKey: info.previewURL.absoluteString)
-            }
+            KingfisherManager.shared.cache.store(
+                NSImage(data: data)!,
+                forKey: info.previewURL.absoluteString
+            )
 
             _ = withAnimation(.easeInOut) {
                 Picture.update(with: info, in: context)
@@ -81,13 +82,15 @@ class PictureService: ObservableObject {
                       appropriateFor: nil,
                       create: false
                   ),
-                  completed: ((URL) -> Void)? = nil) {
+                  completed: ((URL) async -> Void)? = nil) {
         isDownloading = true
 
         let url = destination.appendingPathComponent(picture.name ?? picture.id.uuidString)
         guard !FileManager.default.fileExists(atPath: url.path) else {
             isDownloading = false
-            completed?(url)
+            Task {
+                await completed?(url)
+            }
             logger.info("Picture is already downloaded")
             return
         }
@@ -107,7 +110,9 @@ class PictureService: ObservableObject {
 
                     do {
                         try data.write(to: url)
-                        completed?(url)
+                        Task {
+                            await completed?(url)
+                        }
                         self?.logger.info("Picture downloaded to \(url.path)")
                     } catch {
                         self?.logger.error("Failed to save picture, \(error.localizedDescription)")
@@ -119,7 +124,7 @@ class PictureService: ObservableObject {
     func setWallpaper(_ picture: Picture) {
         download(picture, to: WallpaperManager.directory) { url in
             WallpaperManager.shared.setWallpaper(with: url)
-            UserNotification.shared.request(
+            try? await UserNotification.request(
                 title: "Wallpaper Changed",
                 body: url.lastPathComponent,
                 attachmentURLs: [picture.previewURL]

@@ -5,54 +5,49 @@
 //  Created by Jiaxin Shou on 2021/2/23.
 //
 
+import Kingfisher
 import UserNotifications
 
 struct UserNotification {
-    static let shared = UserNotification()
+    static func request(title: String, body: String, attachmentURLs: [URL?] = []) async throws {
+        // Request authorization
+        guard try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
+        else {
+            return
+        }
 
-    func request(title: String, body: String, attachmentURLs: [URL?] = []) {
-        DispatchQueue.global(qos: .default).async {
-            let content = UNMutableNotificationContent()
-            content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
-            content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
-            content.attachments = attachmentURLs.compactMap { url -> UNNotificationAttachment? in
-                guard let url = url else {
-                    return nil
-                }
-
-                // Copy attachment files to temporary directory
-                let attachmentURL = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(url.lastPathComponent)
-                try? Data(contentsOf: url).write(to: attachmentURL)
-                return try? .init(
-                    identifier: url.lastPathComponent,
-                    url: attachmentURL,
-                    options: nil
-                )
+        let content = UNMutableNotificationContent()
+        content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
+        content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
+        content.attachments = try attachmentURLs.compactMap { url in
+            guard let url = url else {
+                return nil
             }
 
-            DispatchQueue.main.async {
-                let request = UNNotificationRequest(
-                    identifier: UUID().uuidString,
-                    content: content,
-                    trigger: nil
-                )
-                UNUserNotificationCenter.current().add(request) { error in
-                    if let error = error {
-                        // TODO: Log
-                        print(error.localizedDescription)
-                    }
+            // Copy attachment files to temporary directory
+            let attachmentURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(url.lastPathComponent)
+
+            // Retrieve image data from cache
+            KingfisherManager.shared.cache.retrieveImage(forKey: url.absoluteString) { result in
+                if case let .success(imageResult) = result {
+                    try? imageResult.image?.tiffRepresentation?.write(to: attachmentURL)
                 }
             }
-        }
-    }
 
-    private init() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, error in
-            if let error = error {
-                // TODO: Log
-                print(error.localizedDescription)
-            }
+            return try UNNotificationAttachment(
+                identifier: url.lastPathComponent,
+                url: attachmentURL,
+                options: nil
+            )
         }
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil
+        )
+
+        try await UNUserNotificationCenter.current().add(request)
     }
 }

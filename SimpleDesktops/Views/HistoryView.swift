@@ -32,13 +32,13 @@ struct HistoryView: View {
                                 .foregroundColor(.accentColor)
                         )
                         .onHover { isHovering in
-                            self.hoveringItem = isHovering ? picture : nil
+                            hoveringItem = isHovering ? picture : nil
                         }
                         .contextMenu {
                             // Download button
                             Button {
                                 service.download(picture) { url in
-                                    UserNotification.shared.request(
+                                    try? await UserNotification.request(
                                         title: "Picture Downloaded",
                                         body: url.lastPathComponent,
                                         attachmentURLs: [picture.previewURL]

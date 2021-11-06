@@ -101,7 +101,13 @@ struct PopoverView: View {
                 // Download button
                 Button {
                     if let picture = pictures.first {
-                        service.download(picture)
+                        service.download(picture) { url in
+                            try? await UserNotification.request(
+                                title: "Picture Downloaded",
+                                body: url.lastPathComponent,
+                                attachmentURLs: [picture.previewURL]
+                            )
+                        }
                     }
                 } label: {
                     Image(systemName: "square.and.arrow.down")
