@@ -14,21 +14,11 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
 
-        let picture = Picture(context: viewContext)
-        picture.id = UUID()
-        picture.lastFetchedTime = Date()
-        picture.name = "2020-06-28-Big_Sur_Simple"
-        picture
-            .previewURL =
-            URL(
-                string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png"
+        let info =
+            SDPictureInfo(
+                from: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png"
             )!
-        picture
-            .url =
-            URL(
-                string: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png"
-            )!
-        try? viewContext.save()
+        Picture.update(with: info, in: viewContext)
 
         return result
     }()
