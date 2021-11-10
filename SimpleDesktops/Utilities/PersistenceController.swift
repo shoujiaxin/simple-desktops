@@ -18,7 +18,7 @@ struct PersistenceController {
             SDPictureInfo(
                 from: "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png"
             )!
-        Picture.update(with: info, in: viewContext)
+        Picture(context: viewContext).update(with: info)
 
         return result
     }()

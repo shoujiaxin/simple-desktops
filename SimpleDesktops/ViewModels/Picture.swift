@@ -26,11 +26,8 @@ extension Picture {
 
     /// Retrieve the first matched picture with the specified value of the key path.
     /// - Returns: Retrieved object or `nil` if it does not exist.
-    static func retrieveFirst<Value, Key>(
-        with value: Value,
-        for keyPath: KeyPath<Picture, Key>,
-        in context: NSManagedObjectContext
-    ) -> Picture? where Value: CVarArg {
+    static func retrieveFirst<Key>(with value: CVarArg, for keyPath: KeyPath<Picture, Key>,
+                                   in context: NSManagedObjectContext) -> Picture? {
         let request = fetchRequest(
             NSPredicate(format: "%K == %@", NSExpression(forKeyPath: keyPath).keyPath, value),
             fetchLimit: 1
@@ -38,26 +35,18 @@ extension Picture {
         return try? context.fetch(request).first
     }
 
-    /// Update an existing picture, or create one with the given SDPictureInfo if it does not exist. The url of the picture is used as the key for database queries.
-    /// - Parameters:
-    ///   - info: Information of the picture.
-    ///   - context: Managed object context of the persistent container.
-    /// - Returns: The updated object.
-    @discardableResult
-    static func update(with info: SDPictureInfo, in context: NSManagedObjectContext) -> Picture {
-        let picture = retrieveFirst(with: info.url.absoluteString, for: \.url_, in: context) ??
-            Picture(context: context)
-
-        if picture.id_ == nil {
-            picture.id_ = UUID()
-            picture.url_ = info.url
+    /// Update the picture with the given SDPictureInfo.
+    /// - Parameter info: Information of the picture.
+    func update(with info: SDPictureInfo) {
+        if id_ == nil {
+            id_ = UUID()
+            url_ = info.url
         }
-        picture.lastFetchedTime = Date()
-        picture.name = info.name
-        picture.previewURL = info.previewURL
+        lastFetchedTime = Date()
+        name = info.name
+        previewURL = info.previewURL
 
-        try? context.save()
-        return picture
+        try? managedObjectContext?.save()
     }
 
     // MARK: - Wrappers for none-optional properties

@@ -67,8 +67,13 @@ class PictureService: ObservableObject {
                 forKey: info.previewURL.absoluteString
             )
 
-            _ = withAnimation(.easeInOut) {
-                Picture.update(with: info, in: context)
+            withAnimation(.easeInOut) {
+                let picture = Picture.retrieveFirst(
+                    with: info.url.absoluteString,
+                    for: \.url_,
+                    in: context
+                ) ?? Picture(context: context)
+                picture.update(with: info)
             }
         } catch {
             logger.error("Failed to fetch picture, \(error.localizedDescription)")

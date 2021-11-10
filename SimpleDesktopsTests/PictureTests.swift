@@ -45,44 +45,29 @@ class PictureTests: XCTestCase {
         let link =
             "http://static.simpledesktops.com/uploads/desktops/2020/06/28/Big_Sur_Simple.png.625x385_q100.png"
         let info = SDPictureInfo(from: link)!
-        let pictureBefore = Picture.retrieveFirst(
+        let picture = Picture.retrieveFirst(
             with: info.url.absoluteString,
             for: \.url_,
             in: context
         )
 
-        XCTAssertNotNil(pictureBefore?.id_)
-        XCTAssertNotNil(pictureBefore?.lastFetchedTime_)
-        XCTAssertEqual(pictureBefore?.name, info.name)
-        XCTAssertEqual(pictureBefore?.previewURL, info.previewURL)
-        XCTAssertEqual(pictureBefore?.url, info.url)
+        XCTAssertNotNil(picture?.id_)
+        XCTAssertNotNil(picture?.lastFetchedTime_)
+        XCTAssertEqual(picture?.name, info.name)
+        XCTAssertEqual(picture?.previewURL, info.previewURL)
+        XCTAssertEqual(picture?.url, info.url)
 
-        let lastFetchedTime = pictureBefore?.lastFetchedTime
-        let name = pictureBefore?.name
+        let id = picture?.id
+        let lastFetchedTime = picture?.lastFetchedTime
 
-        let newInfo = SDPictureInfo(name: UUID().uuidString, previewURL: info.url, url: info.url)
-        let pictureAfter = Picture.update(with: newInfo, in: context)
+        picture?
+            .update(with: SDPictureInfo(name: UUID().uuidString, previewURL: info.url,
+                                        url: info.url))
 
-        XCTAssertEqual(pictureAfter, pictureBefore)
-        XCTAssertNotNil(pictureAfter.id_)
-        XCTAssertNotEqual(pictureAfter.lastFetchedTime, lastFetchedTime)
-        XCTAssertEqual(pictureAfter.name, newInfo.name)
-        XCTAssertNotEqual(pictureAfter.name, name)
-        XCTAssertEqual(pictureAfter.previewURL, newInfo.previewURL)
-        XCTAssertEqual(pictureAfter.previewURL, info.url)
-        XCTAssertEqual(pictureAfter.url, newInfo.url)
-    }
-
-    func testAdd() throws {
-        let link =
-            "http://static.simpledesktops.com/uploads/desktops/2021/02/04/mirage.png.295x184_q100.png"
-        let info = SDPictureInfo(from: link)!
-        let picture = Picture.update(with: info, in: context)
-
-        XCTAssertNotNil(picture.id_)
-        XCTAssertNotNil(picture.lastFetchedTime_)
-        XCTAssertEqual(picture.name, info.name)
-        XCTAssertEqual(picture.previewURL, info.previewURL)
-        XCTAssertEqual(picture.url, info.url)
+        XCTAssertEqual(picture?.id, id)
+        XCTAssertNotEqual(picture?.lastFetchedTime, lastFetchedTime)
+        XCTAssertNotEqual(picture?.name, info.name)
+        XCTAssertEqual(picture?.previewURL, info.url)
+        XCTAssertEqual(picture?.url, info.url)
     }
 }
