@@ -10,16 +10,13 @@ import Foundation
 
 class Fastfile: LaneFile {
     func releaseLane() {
-        desc("Build & pack a new release")
+        desc("Build & submit a new release")
 
         // Constants
         let target = "SimpleDesktops"
+        let version = getVersionNumber(target: .userDefined(target))
+        let packageName = "\(target)_v\(version)"
         let outputDirectory = URL(fileURLWithPath: "./.build", isDirectory: true)
-        let packageName = "\(target)_v\(getVersionNumber(target: .userDefined(target)))"
-        let packageDirectory = outputDirectory.appendingPathComponent(
-            packageName,
-            isDirectory: true
-        )
 
         // Build app
         xcversion(version: "~> 13.1")
@@ -31,6 +28,10 @@ class Fastfile: LaneFile {
         ))
 
         // Move .app to folder
+        let packageDirectory = outputDirectory.appendingPathComponent(
+            packageName,
+            isDirectory: true
+        )
         try? FileManager.default.createDirectory(
             at: packageDirectory,
             withIntermediateDirectories: false,
@@ -41,7 +42,12 @@ class Fastfile: LaneFile {
             to: packageDirectory.appendingPathComponent(appPath.lastPathComponent)
         )
 
-        // Create image
-        dmg(path: packageDirectory.path, size: 10)
+        // Create DMG image
+        let dmgPath = outputDirectory.appendingPathComponent("\(packageName).dmg")
+        dmg(path: packageDirectory.path, outputPath: .userDefined(dmgPath.path), size: 10)
+
+        // Tag the commit
+        addGitTag(tag: "v\(version)")
+        pushGitTags()
     }
 }

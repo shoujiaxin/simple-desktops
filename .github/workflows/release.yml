@@ -1,9 +1,6 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - "v*.*.*"
+on: workflow_dispatch
 
 jobs:
   build:
@@ -38,12 +35,12 @@ jobs:
         with:
           lane: "release"
 
-      - name: Get tag name
+      - name: Get the version
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: echo ::set-output name=VERSION::$(git describe --tags)
 
       - name: Submit to release
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} > token.txt
           gh auth login --with-token < token.txt
-          gh release create ${{ steps.vars.outputs.tag }} ./.build/SimpleDesktops_${{ steps.vars.outputs.tag }}.dmg
+          gh release create ${{ steps.vars.outputs.VERSION }} ./.build/SimpleDesktops_${{ steps.vars.outputs.VERSION }}.dmg
