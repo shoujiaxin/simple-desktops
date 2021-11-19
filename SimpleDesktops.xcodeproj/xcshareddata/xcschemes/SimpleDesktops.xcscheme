@@ -23,24 +23,6 @@
             </ActionContent>
          </ExecutionAction>
       </PreActions>
-      <PostActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Increment Build Number"
-               scriptText = "cd ${PROJECT_DIR}&#10;agvtool next-version -all&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "294A4B2C25B01E6500DA8631"
-                     BuildableName = "Simple Desktops.app"
-                     BlueprintName = "SimpleDesktops"
-                     ReferencedContainer = "container:SimpleDesktops.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PostActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"

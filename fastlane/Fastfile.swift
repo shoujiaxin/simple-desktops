@@ -9,14 +9,19 @@
 import Foundation
 
 class Fastfile: LaneFile {
-    func releaseLane() {
-        desc("Build & submit a new release")
+    func releaseLane(withOptions options: [String: String]?) {
+        desc("Build & pack a new release")
 
         // Constants
         let target = "SimpleDesktops"
-        let version = getVersionNumber(target: .userDefined(target))
+        let version = options?["version"] ?? getVersionNumber(target: .userDefined(target))
+        let build = options?["build"] ?? getBuildNumber()
         let packageName = "\(target)_v\(version)"
         let outputDirectory = URL(fileURLWithPath: "./.build", isDirectory: true)
+
+        // Bump version
+        incrementVersionNumber(versionNumber: .userDefined(version))
+        incrementBuildNumber(buildNumber: .userDefined(build))
 
         // Build app
         xcversion(version: "~> 13.1")
@@ -27,7 +32,7 @@ class Fastfile: LaneFile {
             exportMethod: "mac-application"
         ))
 
-        // Move .app to folder
+        // Move .app to folder (exclude .dSYM file)
         let packageDirectory = outputDirectory.appendingPathComponent(
             packageName,
             isDirectory: true
@@ -45,9 +50,5 @@ class Fastfile: LaneFile {
         // Create DMG image
         let dmgPath = outputDirectory.appendingPathComponent("\(packageName).dmg")
         dmg(path: packageDirectory.path, outputPath: .userDefined(dmgPath.path), size: 10)
-
-        // Tag the commit
-        addGitTag(tag: "v\(version)")
-        pushGitTags()
     }
 }

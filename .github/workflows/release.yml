@@ -1,12 +1,14 @@
 name: Release
 
-on: workflow_dispatch
+on: [push]
 
 jobs:
   build:
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install the Apple certificate
         env:
@@ -30,17 +32,18 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
+      - name: Get the version
+        id: vars
+        run: echo ::set-output name=VERSION::$(git describe --tags --abbrev=0 | cut -c 2-)
+
       - name: Build
         uses: maierj/fastlane-action@v2.1.0
         with:
           lane: "release"
-
-      - name: Get the version
-        id: vars
-        run: echo ::set-output name=VERSION::$(git describe --tags)
+          options: '{ "version": "${{ steps.vars.outputs.VERSION }}", "build": "${GITHUB_RUN_NUMBER}" }'
 
       - name: Submit to release
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} > token.txt
-          gh auth login --with-token < token.txt
-          gh release create ${{ steps.vars.outputs.VERSION }} ./.build/SimpleDesktops_${{ steps.vars.outputs.VERSION }}.dmg
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./.build/SimpleDesktops_v${{ steps.vars.outputs.VERSION }}.dmg
+          tag_name: v${{ steps.vars.outputs.VERSION }}
