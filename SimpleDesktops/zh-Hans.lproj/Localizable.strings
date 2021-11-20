@@ -6,11 +6,17 @@
   
 */
 
-// Preview view
+// MARK: - Preview view
+
 "Set as Wallpaper" = "设为壁纸";
 
-// Preference view
+// MARK: - Preference view
+
 "Change picture: " = "更换壁纸：";
+
+"Cache size: " = "缓存大小：";
+
+"Clear" = "清理";
 
 "Done" = "完成";
 
@@ -30,14 +36,16 @@
 
 "Every day" = "每天";
 
-// History view
+// MARK: - History view
+
 "Download" = "下载";
 
 "Set as wallpaper" = "设为壁纸";
 
 "Delete" = "删除";
 
-// User notification
+// MARK: - User notification
+
 "Picture Downloaded" = "图片已下载";
 
 "Wallpaper Changed" = "壁纸已更换";

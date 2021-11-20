@@ -6,11 +6,17 @@
   
 */
 
-// Preview view
+// MARK: - Preview view
+
 "Set as Wallpaper";
 
-// Preference view
+// MARK: - Preference view
+
 "Change picture: ";
+
+"Cache size: ";
+
+"Clear";
 
 "Done";
 
@@ -30,14 +36,16 @@
 
 "Every day";
 
-// History view
+// MARK: - History view
+
 "Download";
 
 "Set as wallpaper";
 
 "Delete";
 
-// User notification
+// MARK: - User notification
+
 "Picture Downloaded";
 
 "Wallpaper Changed";

@@ -5,6 +5,7 @@
 //  Created by Jiaxin Shou on 2021/1/15.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct PreferenceView: View {
@@ -12,24 +13,52 @@ struct PreferenceView: View {
 
     @StateObject private var preferences = Preferences()
 
+    @State private var cacheSize: Int64 = 0
+
     var body: some View {
         VStack(spacing: contentSpacing) {
-            Toggle(isOn: $preferences.autoChange) {
-                Picker("Change picture: ", selection: $preferences.changeInterval) {
-                    ForEach(ChangeInterval.timeChangeIntervals) { interval in
-                        Text(LocalizedStringKey(interval.rawValue))
-                            .tag(interval)
-                    }
+            HStack {
+                VStack(alignment: .trailing, spacing: contentSpacing) {
+                    Toggle("Change picture: ", isOn: $preferences.autoChange)
+                        .frame(height: intervalPickerHeight)
 
-                    Divider()
-
-                    ForEach(ChangeInterval.eventChangeIntervals) { interval in
-                        Text(LocalizedStringKey(interval.rawValue))
-                            .tag(interval)
-                    }
+                    Text("Cache size: ")
+                        .frame(height: intervalPickerHeight)
                 }
-                .frame(width: intervalPickerWidth)
-                .disabled(!preferences.autoChange)
+
+                VStack(alignment: .leading, spacing: contentSpacing) {
+                    Picker("", selection: $preferences.changeInterval) {
+                        ForEach(ChangeInterval.timeChangeIntervals) { interval in
+                            Text(LocalizedStringKey(interval.rawValue))
+                                .tag(interval)
+                        }
+
+                        Divider()
+
+                        ForEach(ChangeInterval.eventChangeIntervals) { interval in
+                            Text(LocalizedStringKey(interval.rawValue))
+                                .tag(interval)
+                        }
+                    }
+                    .frame(width: intervalPickerWidth)
+                    .labelsHidden()
+                    .disabled(!preferences.autoChange)
+
+                    HStack {
+                        Text(ByteCountFormatter().string(fromByteCount: cacheSize))
+                            .frame(height: intervalPickerHeight)
+                            .onAppear(perform: getCacheSize)
+
+                        Spacer()
+
+                        Button {
+                            KingfisherManager.shared.cache.clearCache(completion: getCacheSize)
+                        } label: {
+                            Text("Clear")
+                        }
+                    }
+                    .frame(width: intervalPickerWidth)
+                }
             }
 
             Text("Version \(versionNumber) (\(buildNumber))")
@@ -57,6 +86,14 @@ struct PreferenceView: View {
 
     // MARK: - Funstions
 
+    private func getCacheSize() {
+        KingfisherManager.shared.cache.calculateDiskStorageSize { result in
+            if case let .success(size) = result {
+                cacheSize = Int64(size)
+            }
+        }
+    }
+
     private func transitToPreview() {
         withAnimation(.easeInOut) {
             currentView = .preview
@@ -69,7 +106,8 @@ struct PreferenceView: View {
 
     // MARK: - Constants
 
-    private let intervalPickerWidth: CGFloat = 300
+    private let intervalPickerWidth: CGFloat = 180
+    private let intervalPickerHeight: CGFloat = 20
     private let buttonSpacing: CGFloat = 24
     private let buttonWidth: CGFloat = 120
     private let buttonHeight: CGFloat = 40

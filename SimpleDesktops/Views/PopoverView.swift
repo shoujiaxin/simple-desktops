@@ -158,7 +158,7 @@ struct PopoverView: View {
 
     // MARK: - Constants
 
-    private static let smallPopoverHeight: CGFloat = 155
+    private static let smallPopoverHeight: CGFloat = 195
     private static let largePopoverHeight: CGFloat = 358
     private let popoverWidth: CGFloat = 400
     private let navigationBarButtonIconSize: CGFloat = 16
