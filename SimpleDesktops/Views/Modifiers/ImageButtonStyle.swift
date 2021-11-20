@@ -33,7 +33,7 @@ struct ImageButtonStyle: ButtonStyle {
                 .contentShape(Rectangle())
                 .background {
                     RoundedRectangle(cornerRadius: 6)
-                        .opacity(isHovering ? 0.2 : 0)
+                        .opacity(isHovering && isEnabled ? 0.2 : 0)
                         .transition(.opacity)
                 }
                 .foregroundColor(isEnabled ? .primary : .secondary)
