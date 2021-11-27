@@ -24,8 +24,8 @@ struct SimpleDesktopsApp: App {
 // MARK: -
 
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
-    var statusItem: NSStatusItem!
-    var popover: NSPopover!
+    private var statusItem: NSStatusItem!
+    private var popover: NSPopover!
 
     func applicationDidFinishLaunching(_: Notification) {
         // No window

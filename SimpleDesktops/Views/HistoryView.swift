@@ -25,11 +25,9 @@ struct HistoryView: View {
                     KFImage(picture.previewURL)
                         .resizable()
                         .aspectRatio(pictureAspectRatio, contentMode: .fit)
-                        .background(
-                            Rectangle()
-                                .stroke(lineWidth: hoveringItem == picture ? highlighStrokeWidth :
-                                    0)
-                                .foregroundColor(.accentColor)
+                        .border(
+                            Color.accentColor,
+                            width: hoveringItem == picture ? highlighStrokeWidth : 0
                         )
                         .onHover { isHovering in
                             hoveringItem = isHovering ? picture : nil
@@ -75,7 +73,7 @@ struct HistoryView: View {
 
     // MARK: - Constants
 
-    private let highlighStrokeWidth: CGFloat = 6
+    private let highlighStrokeWidth: CGFloat = 3
     private let pictureAspectRatio: CGFloat = 1.6
     private let pictureWidth: CGFloat = 176
     private let pictureSpacing: CGFloat = 16
