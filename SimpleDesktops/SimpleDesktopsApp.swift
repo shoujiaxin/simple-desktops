@@ -15,9 +15,7 @@ struct SimpleDesktopsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup {
-            Text("Welcome")
-        }
+        WindowGroup {}
     }
 }
 

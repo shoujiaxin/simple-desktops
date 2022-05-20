@@ -60,6 +60,7 @@ struct PopoverView: View {
                     Image(systemName: "gearshape")
                         .font(Font.system(size: navigationBarButtonIconSize, weight: .bold))
                 }
+                .keyboardShortcut(",", modifiers: .command)
 
                 // History button
                 Button(action: transitToHistoryView) {
