@@ -61,12 +61,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         if popover.isShown {
             popover.performClose(sender)
         } else {
-            NSApp.activate(ignoringOtherApps: true)
             popover.show(
                 relativeTo: statusItem.button!.bounds,
                 of: statusItem.button!,
                 preferredEdge: NSRectEdge.minY
             )
+            popover.contentViewController?.view.window?.makeKey()
         }
     }
 
