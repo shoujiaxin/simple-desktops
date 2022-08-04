@@ -29,7 +29,8 @@ class Fastfile: LaneFile {
             scheme: .userDefined(target),
             outputDirectory: outputDirectory.path,
             codesigningIdentity: "-",
-            exportMethod: "mac-application"
+            exportMethod: "mac-application",
+            xcodebuildFormatter: "xcpretty"
         ))
 
         // Move .app to folder (exclude .dSYM file)

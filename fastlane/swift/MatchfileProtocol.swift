@@ -1,7 +1,7 @@
 // MatchfileProtocol.swift
-// Copyright (c) 2021 FastlaneTools
+// Copyright (c) 2022 FastlaneTools
 
-public protocol MatchfileProtocol: class {
+public protocol MatchfileProtocol: AnyObject {
     /// Define the profile type, can be appstore, adhoc, development, enterprise, developer_id, mac_installer_distribution
     var type: String { get }
 
@@ -74,6 +74,9 @@ public protocol MatchfileProtocol: class {
     /// ID of the Google Cloud project to use for authentication
     var googleCloudProjectId: String? { get }
 
+    /// Skips confirming to use the system google account
+    var skipGoogleCloudAccountConfirmation: Bool { get }
+
     /// Name of the S3 region
     var s3Region: String? { get }
 
@@ -88,6 +91,9 @@ public protocol MatchfileProtocol: class {
 
     /// Prefix to be used on all objects uploaded to S3
     var s3ObjectPrefix: String? { get }
+
+    /// GitLab Project Path (i.e. 'gitlab-org/gitlab')
+    var gitlabProject: String? { get }
 
     /// Keychain the items should be imported to
     var keychainName: String { get }
@@ -104,11 +110,14 @@ public protocol MatchfileProtocol: class {
     /// Include all matching certificates in the provisioning profile. Works only for the 'development' provisioning profile type
     var includeAllCertificates: Bool { get }
 
-    /// Renew the provisioning profiles if the device count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
+    /// Renew the provisioning profiles if the certificate count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
     var forceForNewCertificates: Bool { get }
 
     /// Disables confirmation prompts during nuke, answering them with yes
     var skipConfirmation: Bool { get }
+
+    /// Remove certs from repository during nuke without revoking them on the developer portal
+    var safeRemoveCerts: Bool { get }
 
     /// Skip generation of a README.md for the created git repository
     var skipDocs: Bool { get }
@@ -166,11 +175,13 @@ public extension MatchfileProtocol {
     var googleCloudBucketName: String? { return nil }
     var googleCloudKeysFile: String? { return nil }
     var googleCloudProjectId: String? { return nil }
+    var skipGoogleCloudAccountConfirmation: Bool { return false }
     var s3Region: String? { return nil }
     var s3AccessKey: String? { return nil }
     var s3SecretAccessKey: String? { return nil }
     var s3Bucket: String? { return nil }
     var s3ObjectPrefix: String? { return nil }
+    var gitlabProject: String? { return nil }
     var keychainName: String { return "login.keychain" }
     var keychainPassword: String? { return nil }
     var force: Bool { return false }
@@ -178,6 +189,7 @@ public extension MatchfileProtocol {
     var includeAllCertificates: Bool { return false }
     var forceForNewCertificates: Bool { return false }
     var skipConfirmation: Bool { return false }
+    var safeRemoveCerts: Bool { return false }
     var skipDocs: Bool { return false }
     var platform: String { return "ios" }
     var deriveCatalystAppIdentifier: Bool { return false }
@@ -192,4 +204,4 @@ public extension MatchfileProtocol {
 
 // Please don't remove the lines below
 // They are used to detect outdated files
-// FastlaneRunnerAPIVersion [0.9.83]
+// FastlaneRunnerAPIVersion [0.9.104]

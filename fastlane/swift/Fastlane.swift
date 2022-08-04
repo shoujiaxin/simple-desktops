@@ -1,5 +1,5 @@
 // Fastlane.swift
-// Copyright (c) 2021 FastlaneTools
+// Copyright (c) 2022 FastlaneTools
 
 import Foundation
 /**
@@ -663,6 +663,7 @@ public func appledoc(input: [String],
    - overwriteScreenshots: Clear all previously uploaded screenshots before uploading the new ones
    - syncScreenshots: Sync screenshots with local ones. This is currently beta optionso set true to 'FASTLANE_ENABLE_BETA_DELIVER_SYNC_SCREENSHOTS' environment variable as well
    - submitForReview: Submit the new version for Review after uploading everything
+   - verifyOnly: Verifies archive with App Store Connect without uploading
    - rejectIfPossible: Rejects the previously submitted build if it's in a state where it's possible
    - automaticRelease: Should the app be automatically released once it's approved? (Can not be used together with `auto_release_date`)
    - autoReleaseDate: Date in milliseconds for automatically releasing on pending approval (Can not be used together with `automatic_release`)
@@ -734,6 +735,7 @@ public func appstore(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault
                      overwriteScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                      syncScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                      submitForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                     verifyOnly: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                      rejectIfPossible: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                      automaticRelease: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                      autoReleaseDate: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
@@ -798,6 +800,7 @@ public func appstore(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault
     let overwriteScreenshotsArg = overwriteScreenshots.asRubyArgument(name: "overwrite_screenshots", type: nil)
     let syncScreenshotsArg = syncScreenshots.asRubyArgument(name: "sync_screenshots", type: nil)
     let submitForReviewArg = submitForReview.asRubyArgument(name: "submit_for_review", type: nil)
+    let verifyOnlyArg = verifyOnly.asRubyArgument(name: "verify_only", type: nil)
     let rejectIfPossibleArg = rejectIfPossible.asRubyArgument(name: "reject_if_possible", type: nil)
     let automaticReleaseArg = automaticRelease.asRubyArgument(name: "automatic_release", type: nil)
     let autoReleaseDateArg = autoReleaseDate.asRubyArgument(name: "auto_release_date", type: nil)
@@ -861,6 +864,7 @@ public func appstore(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault
                                           overwriteScreenshotsArg,
                                           syncScreenshotsArg,
                                           submitForReviewArg,
+                                          verifyOnlyArg,
                                           rejectIfPossibleArg,
                                           automaticReleaseArg,
                                           autoReleaseDateArg,
@@ -1111,7 +1115,7 @@ public func backupXcarchive(xcarchive: String,
  Automatically add a badge to your app icon
 
  - parameters:
-   - dark: Adds a dark flavored badge ontop of your icon
+   - dark: Adds a dark flavored badge on top of your icon
    - custom: Add your custom overlay/badge image
    - noBadge: Hides the beta badge
    - shield: Add a shield to your app icon from shields.io
@@ -1313,15 +1317,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
    - xcargs: Pass additional arguments to xcodebuild for the build phase. Be sure to quote the setting names and values e.g. OTHER_LDFLAGS="-ObjC -lstdc++"
    - xcconfig: Use an extra XCCONFIG file to build your app
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
-   - disableXcpretty: Disable xcpretty formatting of build output
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - disableXcpretty: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Disable xcpretty formatting of build output
    - xcprettyTestFormat: Use the test (RSpec style) format for build output
    - xcprettyFormatter: A custom xcpretty formatter to use
    - xcprettyReportJunit: Have xcpretty create a JUnit-style XML report at the provided path
    - xcprettyReportHtml: Have xcpretty create a simple HTML report at the provided path
    - xcprettyReportJson: Have xcpretty create a JSON compilation database at the provided path
-   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - xcprettyUtf: Have xcpretty use unicode encoding when reporting builds
+   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - skipProfileDetection: Do not try to build a profile mapping from the xcodeproj. Match or a manually provided mapping should be used
+   - xcodebuildCommand: Allows for override of the default `xcodebuild` command
    - clonedSourcePackagesPath: Sets a custom path for Swift Package Manager dependencies
    - skipPackageDependenciesResolution: Skips resolution of Swift Package Manager dependencies
    - disablePackageAutomaticUpdates: Prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
@@ -1365,15 +1371,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
                                         xcargs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                         xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                         suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        xcodebuildFormatter: String = "xcbeautify",
                                         disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                         xcprettyTestFormat: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                         xcprettyFormatter: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                         xcprettyReportJunit: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                         xcprettyReportHtml: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                         xcprettyReportJson: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                                        analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                         xcprettyUtf: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                         skipProfileDetection: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        xcodebuildCommand: String = "xcodebuild",
                                         clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                         skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                         disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -1413,15 +1421,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
     let xcargsArg = xcargs.asRubyArgument(name: "xcargs", type: nil)
     let xcconfigArg = xcconfig.asRubyArgument(name: "xcconfig", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let xcprettyTestFormatArg = xcprettyTestFormat.asRubyArgument(name: "xcpretty_test_format", type: nil)
     let xcprettyFormatterArg = xcprettyFormatter.asRubyArgument(name: "xcpretty_formatter", type: nil)
     let xcprettyReportJunitArg = xcprettyReportJunit.asRubyArgument(name: "xcpretty_report_junit", type: nil)
     let xcprettyReportHtmlArg = xcprettyReportHtml.asRubyArgument(name: "xcpretty_report_html", type: nil)
     let xcprettyReportJsonArg = xcprettyReportJson.asRubyArgument(name: "xcpretty_report_json", type: nil)
-    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let xcprettyUtfArg = xcprettyUtf.asRubyArgument(name: "xcpretty_utf", type: nil)
+    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let skipProfileDetectionArg = skipProfileDetection.asRubyArgument(name: "skip_profile_detection", type: nil)
+    let xcodebuildCommandArg = RubyCommand.Argument(name: "xcodebuild_command", value: xcodebuildCommand, type: nil)
     let clonedSourcePackagesPathArg = clonedSourcePackagesPath.asRubyArgument(name: "cloned_source_packages_path", type: nil)
     let skipPackageDependenciesResolutionArg = skipPackageDependenciesResolution.asRubyArgument(name: "skip_package_dependencies_resolution", type: nil)
     let disablePackageAutomaticUpdatesArg = disablePackageAutomaticUpdates.asRubyArgument(name: "disable_package_automatic_updates", type: nil)
@@ -1460,15 +1470,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
                                           xcargsArg,
                                           xcconfigArg,
                                           suppressXcodeOutputArg,
+                                          xcodebuildFormatterArg,
                                           disableXcprettyArg,
                                           xcprettyTestFormatArg,
                                           xcprettyFormatterArg,
                                           xcprettyReportJunitArg,
                                           xcprettyReportHtmlArg,
                                           xcprettyReportJsonArg,
-                                          analyzeBuildTimeArg,
                                           xcprettyUtfArg,
+                                          analyzeBuildTimeArg,
                                           skipProfileDetectionArg,
+                                          xcodebuildCommandArg,
                                           clonedSourcePackagesPathArg,
                                           skipPackageDependenciesResolutionArg,
                                           disablePackageAutomaticUpdatesArg,
@@ -1515,15 +1527,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
    - xcargs: Pass additional arguments to xcodebuild for the build phase. Be sure to quote the setting names and values e.g. OTHER_LDFLAGS="-ObjC -lstdc++"
    - xcconfig: Use an extra XCCONFIG file to build your app
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
-   - disableXcpretty: Disable xcpretty formatting of build output
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - disableXcpretty: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Disable xcpretty formatting of build output
    - xcprettyTestFormat: Use the test (RSpec style) format for build output
    - xcprettyFormatter: A custom xcpretty formatter to use
    - xcprettyReportJunit: Have xcpretty create a JUnit-style XML report at the provided path
    - xcprettyReportHtml: Have xcpretty create a simple HTML report at the provided path
    - xcprettyReportJson: Have xcpretty create a JSON compilation database at the provided path
-   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - xcprettyUtf: Have xcpretty use unicode encoding when reporting builds
+   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - skipProfileDetection: Do not try to build a profile mapping from the xcodeproj. Match or a manually provided mapping should be used
+   - xcodebuildCommand: Allows for override of the default `xcodebuild` command
    - clonedSourcePackagesPath: Sets a custom path for Swift Package Manager dependencies
    - skipPackageDependenciesResolution: Skips resolution of Swift Package Manager dependencies
    - disablePackageAutomaticUpdates: Prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
@@ -1564,15 +1578,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
                                            xcargs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                           xcodebuildFormatter: String = "xcbeautify",
                                            disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            xcprettyTestFormat: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            xcprettyFormatter: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcprettyReportJunit: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcprettyReportHtml: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcprettyReportJson: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                                           analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            xcprettyUtf: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                           analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            skipProfileDetection: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                           xcodebuildCommand: String = "xcodebuild",
                                            clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                            disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -1609,15 +1625,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
     let xcargsArg = xcargs.asRubyArgument(name: "xcargs", type: nil)
     let xcconfigArg = xcconfig.asRubyArgument(name: "xcconfig", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let xcprettyTestFormatArg = xcprettyTestFormat.asRubyArgument(name: "xcpretty_test_format", type: nil)
     let xcprettyFormatterArg = xcprettyFormatter.asRubyArgument(name: "xcpretty_formatter", type: nil)
     let xcprettyReportJunitArg = xcprettyReportJunit.asRubyArgument(name: "xcpretty_report_junit", type: nil)
     let xcprettyReportHtmlArg = xcprettyReportHtml.asRubyArgument(name: "xcpretty_report_html", type: nil)
     let xcprettyReportJsonArg = xcprettyReportJson.asRubyArgument(name: "xcpretty_report_json", type: nil)
-    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let xcprettyUtfArg = xcprettyUtf.asRubyArgument(name: "xcpretty_utf", type: nil)
+    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let skipProfileDetectionArg = skipProfileDetection.asRubyArgument(name: "skip_profile_detection", type: nil)
+    let xcodebuildCommandArg = RubyCommand.Argument(name: "xcodebuild_command", value: xcodebuildCommand, type: nil)
     let clonedSourcePackagesPathArg = clonedSourcePackagesPath.asRubyArgument(name: "cloned_source_packages_path", type: nil)
     let skipPackageDependenciesResolutionArg = skipPackageDependenciesResolution.asRubyArgument(name: "skip_package_dependencies_resolution", type: nil)
     let disablePackageAutomaticUpdatesArg = disablePackageAutomaticUpdates.asRubyArgument(name: "disable_package_automatic_updates", type: nil)
@@ -1653,15 +1671,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
                                           xcargsArg,
                                           xcconfigArg,
                                           suppressXcodeOutputArg,
+                                          xcodebuildFormatterArg,
                                           disableXcprettyArg,
                                           xcprettyTestFormatArg,
                                           xcprettyFormatterArg,
                                           xcprettyReportJunitArg,
                                           xcprettyReportHtmlArg,
                                           xcprettyReportJsonArg,
-                                          analyzeBuildTimeArg,
                                           xcprettyUtfArg,
+                                          analyzeBuildTimeArg,
                                           skipProfileDetectionArg,
+                                          xcodebuildCommandArg,
                                           clonedSourcePackagesPathArg,
                                           skipPackageDependenciesResolutionArg,
                                           disablePackageAutomaticUpdatesArg,
@@ -1709,15 +1729,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
    - xcargs: Pass additional arguments to xcodebuild for the build phase. Be sure to quote the setting names and values e.g. OTHER_LDFLAGS="-ObjC -lstdc++"
    - xcconfig: Use an extra XCCONFIG file to build your app
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
-   - disableXcpretty: Disable xcpretty formatting of build output
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - disableXcpretty: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Disable xcpretty formatting of build output
    - xcprettyTestFormat: Use the test (RSpec style) format for build output
    - xcprettyFormatter: A custom xcpretty formatter to use
    - xcprettyReportJunit: Have xcpretty create a JUnit-style XML report at the provided path
    - xcprettyReportHtml: Have xcpretty create a simple HTML report at the provided path
    - xcprettyReportJson: Have xcpretty create a JSON compilation database at the provided path
-   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - xcprettyUtf: Have xcpretty use unicode encoding when reporting builds
+   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - skipProfileDetection: Do not try to build a profile mapping from the xcodeproj. Match or a manually provided mapping should be used
+   - xcodebuildCommand: Allows for override of the default `xcodebuild` command
    - clonedSourcePackagesPath: Sets a custom path for Swift Package Manager dependencies
    - skipPackageDependenciesResolution: Skips resolution of Swift Package Manager dependencies
    - disablePackageAutomaticUpdates: Prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
@@ -1759,15 +1781,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
                                            xcargs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                           xcodebuildFormatter: String = "xcbeautify",
                                            disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            xcprettyTestFormat: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            xcprettyFormatter: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcprettyReportJunit: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcprettyReportHtml: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            xcprettyReportJson: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                                           analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            xcprettyUtf: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                           analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                            skipProfileDetection: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                           xcodebuildCommand: String = "xcodebuild",
                                            clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                            skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                            disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -1805,15 +1829,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
     let xcargsArg = xcargs.asRubyArgument(name: "xcargs", type: nil)
     let xcconfigArg = xcconfig.asRubyArgument(name: "xcconfig", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let xcprettyTestFormatArg = xcprettyTestFormat.asRubyArgument(name: "xcpretty_test_format", type: nil)
     let xcprettyFormatterArg = xcprettyFormatter.asRubyArgument(name: "xcpretty_formatter", type: nil)
     let xcprettyReportJunitArg = xcprettyReportJunit.asRubyArgument(name: "xcpretty_report_junit", type: nil)
     let xcprettyReportHtmlArg = xcprettyReportHtml.asRubyArgument(name: "xcpretty_report_html", type: nil)
     let xcprettyReportJsonArg = xcprettyReportJson.asRubyArgument(name: "xcpretty_report_json", type: nil)
-    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let xcprettyUtfArg = xcprettyUtf.asRubyArgument(name: "xcpretty_utf", type: nil)
+    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let skipProfileDetectionArg = skipProfileDetection.asRubyArgument(name: "skip_profile_detection", type: nil)
+    let xcodebuildCommandArg = RubyCommand.Argument(name: "xcodebuild_command", value: xcodebuildCommand, type: nil)
     let clonedSourcePackagesPathArg = clonedSourcePackagesPath.asRubyArgument(name: "cloned_source_packages_path", type: nil)
     let skipPackageDependenciesResolutionArg = skipPackageDependenciesResolution.asRubyArgument(name: "skip_package_dependencies_resolution", type: nil)
     let disablePackageAutomaticUpdatesArg = disablePackageAutomaticUpdates.asRubyArgument(name: "disable_package_automatic_updates", type: nil)
@@ -1850,15 +1876,17 @@ public func buildAndroidApp(task: OptionalConfigValue<String?> = .fastlaneDefaul
                                           xcargsArg,
                                           xcconfigArg,
                                           suppressXcodeOutputArg,
+                                          xcodebuildFormatterArg,
                                           disableXcprettyArg,
                                           xcprettyTestFormatArg,
                                           xcprettyFormatterArg,
                                           xcprettyReportJunitArg,
                                           xcprettyReportHtmlArg,
                                           xcprettyReportJsonArg,
-                                          analyzeBuildTimeArg,
                                           xcprettyUtfArg,
+                                          analyzeBuildTimeArg,
                                           skipProfileDetectionArg,
+                                          xcodebuildCommandArg,
                                           clonedSourcePackagesPathArg,
                                           skipPackageDependenciesResolutionArg,
                                           disablePackageAutomaticUpdatesArg,
@@ -2085,7 +2113,7 @@ public func captureAndroidScreenshots(androidHome: OptionalConfigValue<String?> 
    - eraseSimulator: Enabling this option will automatically erase the simulator before running the application
    - headless: Enabling this option will prevent displaying the simulator window
    - overrideStatusBar: Enabling this option will automatically override the status bar to show 9:41 AM, full battery, and full reception (Adjust 'SNAPSHOT_SIMULATOR_WAIT_FOR_BOOT_TIMEOUT' environment variable if override status bar is not working. Might be because simulator is not fully booted. Defaults to 10 seconds)
-   - overrideStatusBarArguments: Fully customize the status bar by setting each option here. See `xcrun simctl status_bar --help`
+   - overrideStatusBarArguments: Fully customize the status bar by setting each option here. Requires `override_status_bar` to be set to `true`. See `xcrun simctl status_bar --help`
    - localizeSimulator: Enabling this option will configure the Simulator's system language
    - darkMode: Enabling this option will configure the Simulator to be in dark mode (false for light, true for dark)
    - appIdentifier: The bundle identifier of the app to uninstall (only needed when enabling reinstall_app)
@@ -2096,7 +2124,6 @@ public func captureAndroidScreenshots(androidHome: OptionalConfigValue<String?> 
    - clean: Should the project be cleaned before building it?
    - testWithoutBuilding: Test without building, requires a derived data path
    - configuration: The configuration to use when building the app. Defaults to 'Release'
-   - xcprettyArgs: Additional xcpretty arguments
    - sdk: The SDK that should be used for building the application
    - scheme: The scheme you want to use, this must be the scheme for the UI Tests
    - numberOfRetries: The number of times a test can fail before snapshot should stop retrying
@@ -2113,6 +2140,8 @@ public func captureAndroidScreenshots(androidHome: OptionalConfigValue<String?> 
    - testplan: The testplan associated with the scheme that should be used for testing
    - onlyTesting: Array of strings matching Test Bundle/Test Suite/Test Cases to run
    - skipTesting: Array of strings matching Test Bundle/Test Suite/Test Cases to skip
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - xcprettyArgs: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Additional xcpretty arguments
    - disableXcpretty: Disable xcpretty formatting of build
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
    - useSystemScm: Lets xcodebuild use system's scm configuration
@@ -2145,7 +2174,6 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
                                   clean: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                   testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                   configuration: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                                  xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                   sdk: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                   scheme: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                   numberOfRetries: Int = 1,
@@ -2162,6 +2190,8 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
                                   testplan: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                   onlyTesting: Any? = nil,
                                   skipTesting: Any? = nil,
+                                  xcodebuildFormatter: String = "xcbeautify",
+                                  xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                   disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                   suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                   useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(false))
@@ -2194,7 +2224,6 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
     let cleanArg = clean.asRubyArgument(name: "clean", type: nil)
     let testWithoutBuildingArg = testWithoutBuilding.asRubyArgument(name: "test_without_building", type: nil)
     let configurationArg = configuration.asRubyArgument(name: "configuration", type: nil)
-    let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let sdkArg = sdk.asRubyArgument(name: "sdk", type: nil)
     let schemeArg = scheme.asRubyArgument(name: "scheme", type: nil)
     let numberOfRetriesArg = RubyCommand.Argument(name: "number_of_retries", value: numberOfRetries, type: nil)
@@ -2211,6 +2240,8 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
     let testplanArg = testplan.asRubyArgument(name: "testplan", type: nil)
     let onlyTestingArg = RubyCommand.Argument(name: "only_testing", value: onlyTesting, type: nil)
     let skipTestingArg = RubyCommand.Argument(name: "skip_testing", value: skipTesting, type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
+    let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
     let useSystemScmArg = useSystemScm.asRubyArgument(name: "use_system_scm", type: nil)
@@ -2242,7 +2273,6 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
                                           cleanArg,
                                           testWithoutBuildingArg,
                                           configurationArg,
-                                          xcprettyArgsArg,
                                           sdkArg,
                                           schemeArg,
                                           numberOfRetriesArg,
@@ -2259,6 +2289,8 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
                                           testplanArg,
                                           onlyTestingArg,
                                           skipTestingArg,
+                                          xcodebuildFormatterArg,
+                                          xcprettyArgsArg,
                                           disableXcprettyArg,
                                           suppressXcodeOutputArg,
                                           useSystemScmArg]
@@ -2290,7 +2322,7 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
    - eraseSimulator: Enabling this option will automatically erase the simulator before running the application
    - headless: Enabling this option will prevent displaying the simulator window
    - overrideStatusBar: Enabling this option will automatically override the status bar to show 9:41 AM, full battery, and full reception (Adjust 'SNAPSHOT_SIMULATOR_WAIT_FOR_BOOT_TIMEOUT' environment variable if override status bar is not working. Might be because simulator is not fully booted. Defaults to 10 seconds)
-   - overrideStatusBarArguments: Fully customize the status bar by setting each option here. See `xcrun simctl status_bar --help`
+   - overrideStatusBarArguments: Fully customize the status bar by setting each option here. Requires `override_status_bar` to be set to `true`. See `xcrun simctl status_bar --help`
    - localizeSimulator: Enabling this option will configure the Simulator's system language
    - darkMode: Enabling this option will configure the Simulator to be in dark mode (false for light, true for dark)
    - appIdentifier: The bundle identifier of the app to uninstall (only needed when enabling reinstall_app)
@@ -2301,7 +2333,6 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
    - clean: Should the project be cleaned before building it?
    - testWithoutBuilding: Test without building, requires a derived data path
    - configuration: The configuration to use when building the app. Defaults to 'Release'
-   - xcprettyArgs: Additional xcpretty arguments
    - sdk: The SDK that should be used for building the application
    - scheme: The scheme you want to use, this must be the scheme for the UI Tests
    - numberOfRetries: The number of times a test can fail before snapshot should stop retrying
@@ -2318,6 +2349,8 @@ public func captureIosScreenshots(workspace: OptionalConfigValue<String?> = .fas
    - testplan: The testplan associated with the scheme that should be used for testing
    - onlyTesting: Array of strings matching Test Bundle/Test Suite/Test Cases to run
    - skipTesting: Array of strings matching Test Bundle/Test Suite/Test Cases to skip
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - xcprettyArgs: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Additional xcpretty arguments
    - disableXcpretty: Disable xcpretty formatting of build
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
    - useSystemScm: Lets xcodebuild use system's scm configuration
@@ -2350,7 +2383,6 @@ public func captureScreenshots(workspace: OptionalConfigValue<String?> = .fastla
                                clean: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                configuration: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                               xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                sdk: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                scheme: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                numberOfRetries: Int = 1,
@@ -2367,6 +2399,8 @@ public func captureScreenshots(workspace: OptionalConfigValue<String?> = .fastla
                                testplan: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                onlyTesting: Any? = nil,
                                skipTesting: Any? = nil,
+                               xcodebuildFormatter: String = "xcbeautify",
+                               xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                                useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(false))
@@ -2399,7 +2433,6 @@ public func captureScreenshots(workspace: OptionalConfigValue<String?> = .fastla
     let cleanArg = clean.asRubyArgument(name: "clean", type: nil)
     let testWithoutBuildingArg = testWithoutBuilding.asRubyArgument(name: "test_without_building", type: nil)
     let configurationArg = configuration.asRubyArgument(name: "configuration", type: nil)
-    let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let sdkArg = sdk.asRubyArgument(name: "sdk", type: nil)
     let schemeArg = scheme.asRubyArgument(name: "scheme", type: nil)
     let numberOfRetriesArg = RubyCommand.Argument(name: "number_of_retries", value: numberOfRetries, type: nil)
@@ -2416,6 +2449,8 @@ public func captureScreenshots(workspace: OptionalConfigValue<String?> = .fastla
     let testplanArg = testplan.asRubyArgument(name: "testplan", type: nil)
     let onlyTestingArg = RubyCommand.Argument(name: "only_testing", value: onlyTesting, type: nil)
     let skipTestingArg = RubyCommand.Argument(name: "skip_testing", value: skipTesting, type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
+    let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
     let useSystemScmArg = useSystemScm.asRubyArgument(name: "use_system_scm", type: nil)
@@ -2447,7 +2482,6 @@ public func captureScreenshots(workspace: OptionalConfigValue<String?> = .fastla
                                           cleanArg,
                                           testWithoutBuildingArg,
                                           configurationArg,
-                                          xcprettyArgsArg,
                                           sdkArg,
                                           schemeArg,
                                           numberOfRetriesArg,
@@ -2464,6 +2498,8 @@ public func captureScreenshots(workspace: OptionalConfigValue<String?> = .fastla
                                           testplanArg,
                                           onlyTestingArg,
                                           skipTestingArg,
+                                          xcodebuildFormatterArg,
+                                          xcprettyArgsArg,
                                           disableXcprettyArg,
                                           suppressXcodeOutputArg,
                                           useSystemScmArg]
@@ -2669,7 +2705,7 @@ public func cert(development: OptionalConfigValue<Bool> = .fastlaneDefault(false
    - matchLightweightTag: Whether or not to match a lightweight tag when searching for the last one
    - quiet: Whether or not to disable changelog output
    - includeMerges: **DEPRECATED!** Use `:merge_commit_filtering` instead - Whether or not to include any commits that are merges
-   - mergeCommitFiltering: Controls inclusion of merge commits when collecting the changelog. Valid values: `:include_merges`, `:exclude_merges`, `:only_include_merges`
+   - mergeCommitFiltering: Controls inclusion of merge commits when collecting the changelog. Valid values: 'include_merges', 'exclude_merges', 'only_include_merges'
 
  - returns: Returns a String containing your formatted git commits
 
@@ -3518,6 +3554,8 @@ public func createXcframework(frameworks: OptionalConfigValue<[String]?> = .fast
    - dangerId: The identifier of this Danger instance
    - dangerfile: The location of your Dangerfile
    - githubApiToken: GitHub API token for danger
+   - githubEnterpriseHost: GitHub host URL for GitHub Enterprise
+   - githubEnterpriseApiBaseUrl: GitHub API base URL for GitHub Enterprise
    - failOnErrors: Should always fail the build process, defaults to false
    - newComment: Makes Danger post a new comment instead of editing its previous one
    - removePreviousComments: Makes Danger remove all previous comment and create a new one in the end of the list
@@ -3534,6 +3572,8 @@ public func danger(useBundleExec: OptionalConfigValue<Bool> = .fastlaneDefault(t
                    dangerId: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                    dangerfile: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                    githubApiToken: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                   githubEnterpriseHost: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                   githubEnterpriseApiBaseUrl: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                    failOnErrors: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                    newComment: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                    removePreviousComments: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -3547,6 +3587,8 @@ public func danger(useBundleExec: OptionalConfigValue<Bool> = .fastlaneDefault(t
     let dangerIdArg = dangerId.asRubyArgument(name: "danger_id", type: nil)
     let dangerfileArg = dangerfile.asRubyArgument(name: "dangerfile", type: nil)
     let githubApiTokenArg = githubApiToken.asRubyArgument(name: "github_api_token", type: nil)
+    let githubEnterpriseHostArg = githubEnterpriseHost.asRubyArgument(name: "github_enterprise_host", type: nil)
+    let githubEnterpriseApiBaseUrlArg = githubEnterpriseApiBaseUrl.asRubyArgument(name: "github_enterprise_api_base_url", type: nil)
     let failOnErrorsArg = failOnErrors.asRubyArgument(name: "fail_on_errors", type: nil)
     let newCommentArg = newComment.asRubyArgument(name: "new_comment", type: nil)
     let removePreviousCommentsArg = removePreviousComments.asRubyArgument(name: "remove_previous_comments", type: nil)
@@ -3559,6 +3601,8 @@ public func danger(useBundleExec: OptionalConfigValue<Bool> = .fastlaneDefault(t
                                           dangerIdArg,
                                           dangerfileArg,
                                           githubApiTokenArg,
+                                          githubEnterpriseHostArg,
+                                          githubEnterpriseApiBaseUrlArg,
                                           failOnErrorsArg,
                                           newCommentArg,
                                           removePreviousCommentsArg,
@@ -3639,6 +3683,7 @@ public func deleteKeychain(name: OptionalConfigValue<String?> = .fastlaneDefault
    - overwriteScreenshots: Clear all previously uploaded screenshots before uploading the new ones
    - syncScreenshots: Sync screenshots with local ones. This is currently beta optionso set true to 'FASTLANE_ENABLE_BETA_DELIVER_SYNC_SCREENSHOTS' environment variable as well
    - submitForReview: Submit the new version for Review after uploading everything
+   - verifyOnly: Verifies archive with App Store Connect without uploading
    - rejectIfPossible: Rejects the previously submitted build if it's in a state where it's possible
    - automaticRelease: Should the app be automatically released once it's approved? (Can not be used together with `auto_release_date`)
    - autoReleaseDate: Date in milliseconds for automatically releasing on pending approval (Can not be used together with `automatic_release`)
@@ -3710,6 +3755,7 @@ public func deliver(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault(
                     overwriteScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(deliverfile.overwriteScreenshots),
                     syncScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(deliverfile.syncScreenshots),
                     submitForReview: OptionalConfigValue<Bool> = .fastlaneDefault(deliverfile.submitForReview),
+                    verifyOnly: OptionalConfigValue<Bool> = .fastlaneDefault(deliverfile.verifyOnly),
                     rejectIfPossible: OptionalConfigValue<Bool> = .fastlaneDefault(deliverfile.rejectIfPossible),
                     automaticRelease: OptionalConfigValue<Bool?> = .fastlaneDefault(deliverfile.automaticRelease),
                     autoReleaseDate: OptionalConfigValue<Int?> = .fastlaneDefault(deliverfile.autoReleaseDate),
@@ -3774,6 +3820,7 @@ public func deliver(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault(
     let overwriteScreenshotsArg = overwriteScreenshots.asRubyArgument(name: "overwrite_screenshots", type: nil)
     let syncScreenshotsArg = syncScreenshots.asRubyArgument(name: "sync_screenshots", type: nil)
     let submitForReviewArg = submitForReview.asRubyArgument(name: "submit_for_review", type: nil)
+    let verifyOnlyArg = verifyOnly.asRubyArgument(name: "verify_only", type: nil)
     let rejectIfPossibleArg = rejectIfPossible.asRubyArgument(name: "reject_if_possible", type: nil)
     let automaticReleaseArg = automaticRelease.asRubyArgument(name: "automatic_release", type: nil)
     let autoReleaseDateArg = autoReleaseDate.asRubyArgument(name: "auto_release_date", type: nil)
@@ -3837,6 +3884,7 @@ public func deliver(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault(
                                           overwriteScreenshotsArg,
                                           syncScreenshotsArg,
                                           submitForReviewArg,
+                                          verifyOnlyArg,
                                           rejectIfPossibleArg,
                                           automaticReleaseArg,
                                           autoReleaseDateArg,
@@ -4311,7 +4359,7 @@ public func ensureNoDebugCode(text: String,
 
  If building your app requires a specific version of Xcode, you can invoke this command before using gym.
  For example, to ensure that a beta version of Xcode is not accidentally selected to build, which would make uploading to TestFlight fail.
- You can either manually provide a specific version using `version: ` or you make use of the `.xcode-version` file.
+ You can either manually provide a specific version using `version:` or you make use of the `.xcode-version` file.
  Using the `strict` parameter, you can either verify the full set of version numbers strictly (i.e. `11.3.1`) or only a subset of them (i.e. `11.3` or `11`).
  */
 public func ensureXcodeVersion(version: OptionalConfigValue<String?> = .fastlaneDefault(nil),
@@ -4993,6 +5041,7 @@ public func getManagedPlayStorePublishingRights(jsonKey: OptionalConfigValue<Str
  Ensure a valid push profile is active, creating a new one if needed (via _pem_)
 
  - parameters:
+   - platform: Set certificate's platform. Used for creation of production & development certificates. Supported platforms: ios, macos
    - development: Renew the development push certificate instead of the production one
    - websitePush: Create a Website Push certificate
    - generateP12: Generate a p12 file additionally to a PEM file
@@ -5020,7 +5069,8 @@ public func getManagedPlayStorePublishingRights(jsonKey: OptionalConfigValue<Str
  ```|
  >|
  */
-public func getPushCertificate(development: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+public func getPushCertificate(platform: String = "ios",
+                               development: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                websitePush: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                generateP12: OptionalConfigValue<Bool> = .fastlaneDefault(true),
                                activeDaysLimit: Int = 30,
@@ -5035,6 +5085,7 @@ public func getPushCertificate(development: OptionalConfigValue<Bool> = .fastlan
                                outputPath: String = ".",
                                newProfile: ((String) -> Void)? = nil)
 {
+    let platformArg = RubyCommand.Argument(name: "platform", value: platform, type: nil)
     let developmentArg = development.asRubyArgument(name: "development", type: nil)
     let websitePushArg = websitePush.asRubyArgument(name: "website_push", type: nil)
     let generateP12Arg = generateP12.asRubyArgument(name: "generate_p12", type: nil)
@@ -5049,7 +5100,8 @@ public func getPushCertificate(development: OptionalConfigValue<Bool> = .fastlan
     let pemNameArg = pemName.asRubyArgument(name: "pem_name", type: nil)
     let outputPathArg = RubyCommand.Argument(name: "output_path", value: outputPath, type: nil)
     let newProfileArg = RubyCommand.Argument(name: "new_profile", value: newProfile, type: .stringClosure)
-    let array: [RubyCommand.Argument?] = [developmentArg,
+    let array: [RubyCommand.Argument?] = [platformArg,
+                                          developmentArg,
                                           websitePushArg,
                                           generateP12Arg,
                                           activeDaysLimitArg,
@@ -5074,11 +5126,11 @@ public func getPushCertificate(development: OptionalConfigValue<Bool> = .fastlan
  Get the version number of your project
 
  - parameters:
-   - xcodeproj: Path to the Xcode project to read version number from, or its containing directory, optional. If ommitted, or if a directory is passed instead, it will use the first Xcode project found within the given directory, or the project root directory if none is passed
+   - xcodeproj: Path to the Xcode project to read version number from, or its containing directory, optional. If omitted, or if a directory is passed instead, it will use the first Xcode project found within the given directory, or the project root directory if none is passed
    - target: Target name, optional. Will be needed if you have more than one non-test target to avoid being prompted to select one
    - configuration: Configuration name, optional. Will be needed if you have altered the configurations from the default or your version number depends on the configuration selected
 
- This action will return the current version number set on your project.
+ This action will return the current version number set on your project. It first looks in the plist and then for '$(MARKETING_VERSION)' in the build settings.
  */
 @discardableResult public func getVersionNumber(xcodeproj: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                                 target: OptionalConfigValue<String?> = .fastlaneDefault(nil),
@@ -5512,15 +5564,17 @@ public func gradle(task: OptionalConfigValue<String?> = .fastlaneDefault(nil),
    - xcargs: Pass additional arguments to xcodebuild for the build phase. Be sure to quote the setting names and values e.g. OTHER_LDFLAGS="-ObjC -lstdc++"
    - xcconfig: Use an extra XCCONFIG file to build your app
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
-   - disableXcpretty: Disable xcpretty formatting of build output
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - disableXcpretty: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Disable xcpretty formatting of build output
    - xcprettyTestFormat: Use the test (RSpec style) format for build output
    - xcprettyFormatter: A custom xcpretty formatter to use
    - xcprettyReportJunit: Have xcpretty create a JUnit-style XML report at the provided path
    - xcprettyReportHtml: Have xcpretty create a simple HTML report at the provided path
    - xcprettyReportJson: Have xcpretty create a JSON compilation database at the provided path
-   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - xcprettyUtf: Have xcpretty use unicode encoding when reporting builds
+   - analyzeBuildTime: Analyze the project build time and store the output in 'culprits.txt' file
    - skipProfileDetection: Do not try to build a profile mapping from the xcodeproj. Match or a manually provided mapping should be used
+   - xcodebuildCommand: Allows for override of the default `xcodebuild` command
    - clonedSourcePackagesPath: Sets a custom path for Swift Package Manager dependencies
    - skipPackageDependenciesResolution: Skips resolution of Swift Package Manager dependencies
    - disablePackageAutomaticUpdates: Prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
@@ -5564,15 +5618,17 @@ public func gradle(task: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                    xcargs: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.xcargs),
                                    xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.xcconfig),
                                    suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(gymfile.suppressXcodeOutput),
+                                   xcodebuildFormatter: String = gymfile.xcodebuildFormatter,
                                    disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(gymfile.disableXcpretty),
                                    xcprettyTestFormat: OptionalConfigValue<Bool?> = .fastlaneDefault(gymfile.xcprettyTestFormat),
                                    xcprettyFormatter: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.xcprettyFormatter),
                                    xcprettyReportJunit: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.xcprettyReportJunit),
                                    xcprettyReportHtml: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.xcprettyReportHtml),
                                    xcprettyReportJson: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.xcprettyReportJson),
-                                   analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(gymfile.analyzeBuildTime),
                                    xcprettyUtf: OptionalConfigValue<Bool?> = .fastlaneDefault(gymfile.xcprettyUtf),
+                                   analyzeBuildTime: OptionalConfigValue<Bool?> = .fastlaneDefault(gymfile.analyzeBuildTime),
                                    skipProfileDetection: OptionalConfigValue<Bool> = .fastlaneDefault(gymfile.skipProfileDetection),
+                                   xcodebuildCommand: String = gymfile.xcodebuildCommand,
                                    clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(gymfile.clonedSourcePackagesPath),
                                    skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(gymfile.skipPackageDependenciesResolution),
                                    disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(gymfile.disablePackageAutomaticUpdates),
@@ -5612,15 +5668,17 @@ public func gradle(task: OptionalConfigValue<String?> = .fastlaneDefault(nil),
     let xcargsArg = xcargs.asRubyArgument(name: "xcargs", type: nil)
     let xcconfigArg = xcconfig.asRubyArgument(name: "xcconfig", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let xcprettyTestFormatArg = xcprettyTestFormat.asRubyArgument(name: "xcpretty_test_format", type: nil)
     let xcprettyFormatterArg = xcprettyFormatter.asRubyArgument(name: "xcpretty_formatter", type: nil)
     let xcprettyReportJunitArg = xcprettyReportJunit.asRubyArgument(name: "xcpretty_report_junit", type: nil)
     let xcprettyReportHtmlArg = xcprettyReportHtml.asRubyArgument(name: "xcpretty_report_html", type: nil)
     let xcprettyReportJsonArg = xcprettyReportJson.asRubyArgument(name: "xcpretty_report_json", type: nil)
-    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let xcprettyUtfArg = xcprettyUtf.asRubyArgument(name: "xcpretty_utf", type: nil)
+    let analyzeBuildTimeArg = analyzeBuildTime.asRubyArgument(name: "analyze_build_time", type: nil)
     let skipProfileDetectionArg = skipProfileDetection.asRubyArgument(name: "skip_profile_detection", type: nil)
+    let xcodebuildCommandArg = RubyCommand.Argument(name: "xcodebuild_command", value: xcodebuildCommand, type: nil)
     let clonedSourcePackagesPathArg = clonedSourcePackagesPath.asRubyArgument(name: "cloned_source_packages_path", type: nil)
     let skipPackageDependenciesResolutionArg = skipPackageDependenciesResolution.asRubyArgument(name: "skip_package_dependencies_resolution", type: nil)
     let disablePackageAutomaticUpdatesArg = disablePackageAutomaticUpdates.asRubyArgument(name: "disable_package_automatic_updates", type: nil)
@@ -5659,15 +5717,17 @@ public func gradle(task: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                           xcargsArg,
                                           xcconfigArg,
                                           suppressXcodeOutputArg,
+                                          xcodebuildFormatterArg,
                                           disableXcprettyArg,
                                           xcprettyTestFormatArg,
                                           xcprettyFormatterArg,
                                           xcprettyReportJunitArg,
                                           xcprettyReportHtmlArg,
                                           xcprettyReportJsonArg,
-                                          analyzeBuildTimeArg,
                                           xcprettyUtfArg,
+                                          analyzeBuildTimeArg,
                                           skipProfileDetectionArg,
+                                          xcodebuildCommandArg,
                                           clonedSourcePackagesPathArg,
                                           skipPackageDependenciesResolutionArg,
                                           disablePackageAutomaticUpdatesArg,
@@ -6589,18 +6649,21 @@ public func makeChangelogFromJenkins(fallbackChangelog: String = "",
    - googleCloudBucketName: Name of the Google Cloud Storage bucket to use
    - googleCloudKeysFile: Path to the gc_keys.json file
    - googleCloudProjectId: ID of the Google Cloud project to use for authentication
+   - skipGoogleCloudAccountConfirmation: Skips confirming to use the system google account
    - s3Region: Name of the S3 region
    - s3AccessKey: S3 access key
    - s3SecretAccessKey: S3 secret access key
    - s3Bucket: Name of the S3 bucket
    - s3ObjectPrefix: Prefix to be used on all objects uploaded to S3
+   - gitlabProject: GitLab Project Path (i.e. 'gitlab-org/gitlab')
    - keychainName: Keychain the items should be imported to
    - keychainPassword: This might be required the first time you access certificates on a new mac. For the login/default keychain this is your macOS account password
    - force: Renew the provisioning profiles every time you run match
    - forceForNewDevices: Renew the provisioning profiles if the device count on the developer portal has changed. Ignored for profile types 'appstore' and 'developer_id'
    - includeAllCertificates: Include all matching certificates in the provisioning profile. Works only for the 'development' provisioning profile type
-   - forceForNewCertificates: Renew the provisioning profiles if the device count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
+   - forceForNewCertificates: Renew the provisioning profiles if the certificate count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
    - skipConfirmation: Disables confirmation prompts during nuke, answering them with yes
+   - safeRemoveCerts: Remove certs from repository during nuke without revoking them on the developer portal
    - skipDocs: Skip generation of a README.md for the created git repository
    - platform: Set the provisioning profile's platform to work with (i.e. ios, tvos, macos, catalyst)
    - deriveCatalystAppIdentifier: Enable this if you have the Mac Catalyst capability enabled and your project was created with Xcode 11.3 or earlier. Prepends 'maccatalyst.' to the app identifier for the provisioning profile mapping
@@ -6638,11 +6701,13 @@ public func match(type: String = matchfile.type,
                   googleCloudBucketName: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.googleCloudBucketName),
                   googleCloudKeysFile: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.googleCloudKeysFile),
                   googleCloudProjectId: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.googleCloudProjectId),
+                  skipGoogleCloudAccountConfirmation: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.skipGoogleCloudAccountConfirmation),
                   s3Region: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.s3Region),
                   s3AccessKey: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.s3AccessKey),
                   s3SecretAccessKey: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.s3SecretAccessKey),
                   s3Bucket: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.s3Bucket),
                   s3ObjectPrefix: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.s3ObjectPrefix),
+                  gitlabProject: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.gitlabProject),
                   keychainName: String = matchfile.keychainName,
                   keychainPassword: OptionalConfigValue<String?> = .fastlaneDefault(matchfile.keychainPassword),
                   force: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.force),
@@ -6650,6 +6715,7 @@ public func match(type: String = matchfile.type,
                   includeAllCertificates: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.includeAllCertificates),
                   forceForNewCertificates: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.forceForNewCertificates),
                   skipConfirmation: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.skipConfirmation),
+                  safeRemoveCerts: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.safeRemoveCerts),
                   skipDocs: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.skipDocs),
                   platform: String = matchfile.platform,
                   deriveCatalystAppIdentifier: OptionalConfigValue<Bool> = .fastlaneDefault(matchfile.deriveCatalystAppIdentifier),
@@ -6685,11 +6751,13 @@ public func match(type: String = matchfile.type,
     let googleCloudBucketNameArg = googleCloudBucketName.asRubyArgument(name: "google_cloud_bucket_name", type: nil)
     let googleCloudKeysFileArg = googleCloudKeysFile.asRubyArgument(name: "google_cloud_keys_file", type: nil)
     let googleCloudProjectIdArg = googleCloudProjectId.asRubyArgument(name: "google_cloud_project_id", type: nil)
+    let skipGoogleCloudAccountConfirmationArg = skipGoogleCloudAccountConfirmation.asRubyArgument(name: "skip_google_cloud_account_confirmation", type: nil)
     let s3RegionArg = s3Region.asRubyArgument(name: "s3_region", type: nil)
     let s3AccessKeyArg = s3AccessKey.asRubyArgument(name: "s3_access_key", type: nil)
     let s3SecretAccessKeyArg = s3SecretAccessKey.asRubyArgument(name: "s3_secret_access_key", type: nil)
     let s3BucketArg = s3Bucket.asRubyArgument(name: "s3_bucket", type: nil)
     let s3ObjectPrefixArg = s3ObjectPrefix.asRubyArgument(name: "s3_object_prefix", type: nil)
+    let gitlabProjectArg = gitlabProject.asRubyArgument(name: "gitlab_project", type: nil)
     let keychainNameArg = RubyCommand.Argument(name: "keychain_name", value: keychainName, type: nil)
     let keychainPasswordArg = keychainPassword.asRubyArgument(name: "keychain_password", type: nil)
     let forceArg = force.asRubyArgument(name: "force", type: nil)
@@ -6697,6 +6765,7 @@ public func match(type: String = matchfile.type,
     let includeAllCertificatesArg = includeAllCertificates.asRubyArgument(name: "include_all_certificates", type: nil)
     let forceForNewCertificatesArg = forceForNewCertificates.asRubyArgument(name: "force_for_new_certificates", type: nil)
     let skipConfirmationArg = skipConfirmation.asRubyArgument(name: "skip_confirmation", type: nil)
+    let safeRemoveCertsArg = safeRemoveCerts.asRubyArgument(name: "safe_remove_certs", type: nil)
     let skipDocsArg = skipDocs.asRubyArgument(name: "skip_docs", type: nil)
     let platformArg = RubyCommand.Argument(name: "platform", value: platform, type: nil)
     let deriveCatalystAppIdentifierArg = deriveCatalystAppIdentifier.asRubyArgument(name: "derive_catalyst_app_identifier", type: nil)
@@ -6731,11 +6800,13 @@ public func match(type: String = matchfile.type,
                                           googleCloudBucketNameArg,
                                           googleCloudKeysFileArg,
                                           googleCloudProjectIdArg,
+                                          skipGoogleCloudAccountConfirmationArg,
                                           s3RegionArg,
                                           s3AccessKeyArg,
                                           s3SecretAccessKeyArg,
                                           s3BucketArg,
                                           s3ObjectPrefixArg,
+                                          gitlabProjectArg,
                                           keychainNameArg,
                                           keychainPasswordArg,
                                           forceArg,
@@ -6743,6 +6814,7 @@ public func match(type: String = matchfile.type,
                                           includeAllCertificatesArg,
                                           forceForNewCertificatesArg,
                                           skipConfirmationArg,
+                                          safeRemoveCertsArg,
                                           skipDocsArg,
                                           platformArg,
                                           deriveCatalystAppIdentifierArg,
@@ -6788,18 +6860,21 @@ public func match(type: String = matchfile.type,
    - googleCloudBucketName: Name of the Google Cloud Storage bucket to use
    - googleCloudKeysFile: Path to the gc_keys.json file
    - googleCloudProjectId: ID of the Google Cloud project to use for authentication
+   - skipGoogleCloudAccountConfirmation: Skips confirming to use the system google account
    - s3Region: Name of the S3 region
    - s3AccessKey: S3 access key
    - s3SecretAccessKey: S3 secret access key
    - s3Bucket: Name of the S3 bucket
    - s3ObjectPrefix: Prefix to be used on all objects uploaded to S3
+   - gitlabProject: GitLab Project Path (i.e. 'gitlab-org/gitlab')
    - keychainName: Keychain the items should be imported to
    - keychainPassword: This might be required the first time you access certificates on a new mac. For the login/default keychain this is your macOS account password
    - force: Renew the provisioning profiles every time you run match
    - forceForNewDevices: Renew the provisioning profiles if the device count on the developer portal has changed. Ignored for profile types 'appstore' and 'developer_id'
    - includeAllCertificates: Include all matching certificates in the provisioning profile. Works only for the 'development' provisioning profile type
-   - forceForNewCertificates: Renew the provisioning profiles if the device count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
+   - forceForNewCertificates: Renew the provisioning profiles if the certificate count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
    - skipConfirmation: Disables confirmation prompts during nuke, answering them with yes
+   - safeRemoveCerts: Remove certs from repository during nuke without revoking them on the developer portal
    - skipDocs: Skip generation of a README.md for the created git repository
    - platform: Set the provisioning profile's platform to work with (i.e. ios, tvos, macos, catalyst)
    - deriveCatalystAppIdentifier: Enable this if you have the Mac Catalyst capability enabled and your project was created with Xcode 11.3 or earlier. Prepends 'maccatalyst.' to the app identifier for the provisioning profile mapping
@@ -6841,11 +6916,13 @@ public func matchNuke(type: String = "development",
                       googleCloudBucketName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       googleCloudKeysFile: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       googleCloudProjectId: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                      skipGoogleCloudAccountConfirmation: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                       s3Region: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       s3AccessKey: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       s3SecretAccessKey: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       s3Bucket: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       s3ObjectPrefix: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                      gitlabProject: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       keychainName: String = "login.keychain",
                       keychainPassword: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                       force: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -6853,6 +6930,7 @@ public func matchNuke(type: String = "development",
                       includeAllCertificates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                       forceForNewCertificates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                       skipConfirmation: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                      safeRemoveCerts: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                       skipDocs: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                       platform: String = "ios",
                       deriveCatalystAppIdentifier: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -6888,11 +6966,13 @@ public func matchNuke(type: String = "development",
     let googleCloudBucketNameArg = googleCloudBucketName.asRubyArgument(name: "google_cloud_bucket_name", type: nil)
     let googleCloudKeysFileArg = googleCloudKeysFile.asRubyArgument(name: "google_cloud_keys_file", type: nil)
     let googleCloudProjectIdArg = googleCloudProjectId.asRubyArgument(name: "google_cloud_project_id", type: nil)
+    let skipGoogleCloudAccountConfirmationArg = skipGoogleCloudAccountConfirmation.asRubyArgument(name: "skip_google_cloud_account_confirmation", type: nil)
     let s3RegionArg = s3Region.asRubyArgument(name: "s3_region", type: nil)
     let s3AccessKeyArg = s3AccessKey.asRubyArgument(name: "s3_access_key", type: nil)
     let s3SecretAccessKeyArg = s3SecretAccessKey.asRubyArgument(name: "s3_secret_access_key", type: nil)
     let s3BucketArg = s3Bucket.asRubyArgument(name: "s3_bucket", type: nil)
     let s3ObjectPrefixArg = s3ObjectPrefix.asRubyArgument(name: "s3_object_prefix", type: nil)
+    let gitlabProjectArg = gitlabProject.asRubyArgument(name: "gitlab_project", type: nil)
     let keychainNameArg = RubyCommand.Argument(name: "keychain_name", value: keychainName, type: nil)
     let keychainPasswordArg = keychainPassword.asRubyArgument(name: "keychain_password", type: nil)
     let forceArg = force.asRubyArgument(name: "force", type: nil)
@@ -6900,6 +6980,7 @@ public func matchNuke(type: String = "development",
     let includeAllCertificatesArg = includeAllCertificates.asRubyArgument(name: "include_all_certificates", type: nil)
     let forceForNewCertificatesArg = forceForNewCertificates.asRubyArgument(name: "force_for_new_certificates", type: nil)
     let skipConfirmationArg = skipConfirmation.asRubyArgument(name: "skip_confirmation", type: nil)
+    let safeRemoveCertsArg = safeRemoveCerts.asRubyArgument(name: "safe_remove_certs", type: nil)
     let skipDocsArg = skipDocs.asRubyArgument(name: "skip_docs", type: nil)
     let platformArg = RubyCommand.Argument(name: "platform", value: platform, type: nil)
     let deriveCatalystAppIdentifierArg = deriveCatalystAppIdentifier.asRubyArgument(name: "derive_catalyst_app_identifier", type: nil)
@@ -6934,11 +7015,13 @@ public func matchNuke(type: String = "development",
                                           googleCloudBucketNameArg,
                                           googleCloudKeysFileArg,
                                           googleCloudProjectIdArg,
+                                          skipGoogleCloudAccountConfirmationArg,
                                           s3RegionArg,
                                           s3AccessKeyArg,
                                           s3SecretAccessKeyArg,
                                           s3BucketArg,
                                           s3ObjectPrefixArg,
+                                          gitlabProjectArg,
                                           keychainNameArg,
                                           keychainPasswordArg,
                                           forceArg,
@@ -6946,6 +7029,7 @@ public func matchNuke(type: String = "development",
                                           includeAllCertificatesArg,
                                           forceForNewCertificatesArg,
                                           skipConfirmationArg,
+                                          safeRemoveCertsArg,
                                           skipDocsArg,
                                           platformArg,
                                           deriveCatalystAppIdentifierArg,
@@ -7098,6 +7182,7 @@ public func nexusUpload(file: String,
    - package: Path to package to notarize, e.g. .app bundle or disk image
    - useNotarytool: Whether to `xcrun notarytool` or `xcrun altool`
    - tryEarlyStapling: Whether to try early stapling while the notarization request is in progress
+   - skipStapling: Do not staple the notarization ticket to the artifact; useful for single file executables and ZIP archives
    - bundleId: Bundle identifier to uniquely identify the package
    - username: Apple ID username
    - ascProvider: Provider short name for accounts associated with multiple providers
@@ -7109,6 +7194,7 @@ public func nexusUpload(file: String,
 public func notarize(package: String,
                      useNotarytool: OptionalConfigValue<Bool> = .fastlaneDefault(true),
                      tryEarlyStapling: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                     skipStapling: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                      bundleId: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                      username: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                      ascProvider: OptionalConfigValue<String?> = .fastlaneDefault(nil),
@@ -7120,6 +7206,7 @@ public func notarize(package: String,
     let packageArg = RubyCommand.Argument(name: "package", value: package, type: nil)
     let useNotarytoolArg = useNotarytool.asRubyArgument(name: "use_notarytool", type: nil)
     let tryEarlyStaplingArg = tryEarlyStapling.asRubyArgument(name: "try_early_stapling", type: nil)
+    let skipStaplingArg = skipStapling.asRubyArgument(name: "skip_stapling", type: nil)
     let bundleIdArg = bundleId.asRubyArgument(name: "bundle_id", type: nil)
     let usernameArg = username.asRubyArgument(name: "username", type: nil)
     let ascProviderArg = ascProvider.asRubyArgument(name: "asc_provider", type: nil)
@@ -7130,6 +7217,7 @@ public func notarize(package: String,
     let array: [RubyCommand.Argument?] = [packageArg,
                                           useNotarytoolArg,
                                           tryEarlyStaplingArg,
+                                          skipStaplingArg,
                                           bundleIdArg,
                                           usernameArg,
                                           ascProviderArg,
@@ -7391,6 +7479,7 @@ public func optOutUsage() {
  Alias for the `get_push_certificate` action
 
  - parameters:
+   - platform: Set certificate's platform. Used for creation of production & development certificates. Supported platforms: ios, macos
    - development: Renew the development push certificate instead of the production one
    - websitePush: Create a Website Push certificate
    - generateP12: Generate a p12 file additionally to a PEM file
@@ -7418,7 +7507,8 @@ public func optOutUsage() {
  ```|
  >|
  */
-public func pem(development: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+public func pem(platform: String = "ios",
+                development: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                 websitePush: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                 generateP12: OptionalConfigValue<Bool> = .fastlaneDefault(true),
                 activeDaysLimit: Int = 30,
@@ -7433,6 +7523,7 @@ public func pem(development: OptionalConfigValue<Bool> = .fastlaneDefault(false)
                 outputPath: String = ".",
                 newProfile: ((String) -> Void)? = nil)
 {
+    let platformArg = RubyCommand.Argument(name: "platform", value: platform, type: nil)
     let developmentArg = development.asRubyArgument(name: "development", type: nil)
     let websitePushArg = websitePush.asRubyArgument(name: "website_push", type: nil)
     let generateP12Arg = generateP12.asRubyArgument(name: "generate_p12", type: nil)
@@ -7447,7 +7538,8 @@ public func pem(development: OptionalConfigValue<Bool> = .fastlaneDefault(false)
     let pemNameArg = pemName.asRubyArgument(name: "pem_name", type: nil)
     let outputPathArg = RubyCommand.Argument(name: "output_path", value: outputPath, type: nil)
     let newProfileArg = RubyCommand.Argument(name: "new_profile", value: newProfile, type: .stringClosure)
-    let array: [RubyCommand.Argument?] = [developmentArg,
+    let array: [RubyCommand.Argument?] = [platformArg,
+                                          developmentArg,
                                           websitePushArg,
                                           generateP12Arg,
                                           activeDaysLimitArg,
@@ -7510,6 +7602,7 @@ public func pem(development: OptionalConfigValue<Bool> = .fastlaneDefault(false)
    - waitProcessingTimeoutDuration: Timeout duration in seconds to wait for App Store Connect processing. If set, after exceeding timeout duration, this will `force stop` to wait for App Store Connect processing and exit with exception
    - waitForUploadedBuild: **DEPRECATED!** No longer needed with the transition over to the App Store Connect API - Use version info from uploaded ipa file to determine what build to use for distribution. If set to false, latest processing or any latest build will be used
    - rejectBuildWaitingForReview: Expire previous if it's 'waiting for review'
+   - submitBetaReview: Send the build for a beta review
 
  More details can be found on https://docs.fastlane.tools/actions/pilot/.
  This integration will only do the TestFlight upload.
@@ -7551,7 +7644,8 @@ public func pilot(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault(ni
                   waitProcessingInterval: Int = 30,
                   waitProcessingTimeoutDuration: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
                   waitForUploadedBuild: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                  rejectBuildWaitingForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false))
+                  rejectBuildWaitingForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                  submitBetaReview: OptionalConfigValue<Bool> = .fastlaneDefault(true))
 {
     let apiKeyPathArg = apiKeyPath.asRubyArgument(name: "api_key_path", type: nil)
     let apiKeyArg = apiKey.asRubyArgument(name: "api_key", type: nil)
@@ -7591,6 +7685,7 @@ public func pilot(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault(ni
     let waitProcessingTimeoutDurationArg = waitProcessingTimeoutDuration.asRubyArgument(name: "wait_processing_timeout_duration", type: nil)
     let waitForUploadedBuildArg = waitForUploadedBuild.asRubyArgument(name: "wait_for_uploaded_build", type: nil)
     let rejectBuildWaitingForReviewArg = rejectBuildWaitingForReview.asRubyArgument(name: "reject_build_waiting_for_review", type: nil)
+    let submitBetaReviewArg = submitBetaReview.asRubyArgument(name: "submit_beta_review", type: nil)
     let array: [RubyCommand.Argument?] = [apiKeyPathArg,
                                           apiKeyArg,
                                           usernameArg,
@@ -7628,7 +7723,8 @@ public func pilot(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefault(ni
                                           waitProcessingIntervalArg,
                                           waitProcessingTimeoutDurationArg,
                                           waitForUploadedBuildArg,
-                                          rejectBuildWaitingForReviewArg]
+                                          rejectBuildWaitingForReviewArg,
+                                          submitBetaReviewArg]
     let args: [RubyCommand.Argument] = array
         .filter { $0?.value != nil }
         .compactMap { $0 }
@@ -8176,7 +8272,7 @@ public func puts(message: OptionalConfigValue<String?> = .fastlaneDefault(nil)) 
  This can be useful when basing your release process on the version string only stored in one place - in the podspec.
  As one of the first steps you'd read the podspec and its version and the rest of the workflow can use that version string (when e.g. creating a new git tag or a GitHub Release).
  */
-@discardableResult public func readPodspec(path: String) -> [String: String] {
+@discardableResult public func readPodspec(path: String) -> [String: Any] {
     let pathArg = RubyCommand.Argument(name: "path", value: path, type: nil)
     let array: [RubyCommand.Argument?] = [pathArg]
     let args: [RubyCommand.Argument] = array
@@ -8508,8 +8604,8 @@ public func rubyVersion() {
    - project: Path to the project file
    - packagePath: Path to the Swift Package
    - scheme: The project's scheme. Make sure it's marked as `Shared`
-   - device: The name of the simulator type you want to run tests on (e.g. 'iPhone 6')
-   - devices: Array of devices to run the tests on (e.g. ['iPhone 6', 'iPad Air'])
+   - device: The name of the simulator type you want to run tests on (e.g. 'iPhone 6' or 'iPhone SE (2nd generation) (14.5)')
+   - devices: Array of devices to run the tests on (e.g. ['iPhone 6', 'iPad Air', 'iPhone SE (2nd generation) (14.5)'])
    - skipDetectDevices: Should skip auto detecting of devices if none were specified
    - ensureDevicesFound: Should fail if devices not found
    - forceQuitSimulator: Enabling this option will automatically killall Simulator processes before the run
@@ -8530,7 +8626,6 @@ public func rubyVersion() {
    - addressSanitizer: Should the address sanitizer be turned on?
    - threadSanitizer: Should the thread sanitizer be turned on?
    - openReport: Should the HTML report be opened when tests are completed?
-   - disableXcpretty: Disable xcpretty formatting of build, similar to `output_style='raw'` but this will also skip the test results table
    - outputDirectory: The directory in which all reports will be stored
    - outputStyle: Define how the output should look like. Valid values are: standard, basic, rspec, or raw (disables xcpretty during xcodebuild)
    - outputTypes: Comma separated list of the output types (e.g. html, junit, json-compilation-database)
@@ -8538,13 +8633,18 @@ public func rubyVersion() {
    - buildlogPath: The directory where to store the raw log
    - includeSimulatorLogs: If the logs generated by the app (e.g. using NSLog, perror, etc.) in the Simulator should be written to the output_directory
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
-   - formatter: A custom xcpretty formatter to use
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - outputRemoveRetryAttempts: Remove retry attempts from test results table and the JUnit report (if not using xcpretty)
+   - disableXcpretty: **DEPRECATED!** Use `output_style: 'raw'` instead - Disable xcpretty formatting of build, similar to `output_style='raw'` but this will also skip the test results table
+   - formatter: **DEPRECATED!** Use 'xcpretty_formatter' instead - A custom xcpretty formatter to use
+   - xcprettyFormatter: A custom xcpretty formatter to use
    - xcprettyArgs: Pass in xcpretty additional command line arguments (e.g. '--test --no-color' or '--tap --no-utf')
    - derivedDataPath: The directory where build products and other derived data will go
    - shouldZipBuildProducts: Should zip the derived data build products and place in output path?
    - outputXctestrun: Should provide additional copy of .xctestrun file (settings.xctestrun) and place in output path?
    - resultBundle: Should an Xcode result bundle be generated in the output directory
    - useClangReportName: Generate the json compilation database with clang naming convention (compile_commands.json)
+   - parallelTesting: Optionally override the per-target setting in the scheme for running tests in parallel. Equivalent to -parallel-testing-enabled
    - concurrentWorkers: Specify the exact number of test runners that will be spawned during parallel testing. Equivalent to -parallel-testing-worker-count
    - maxConcurrentSimulators: Constrain the number of simulator devices on which to test concurrently. Equivalent to -maximum-concurrent-test-simulator-destinations
    - disableConcurrentTesting: Do not run test bundles in parallel on the specified destinations. Testing will occur on each destination serially. Equivalent to -disable-concurrent-testing
@@ -8574,83 +8674,89 @@ public func rubyVersion() {
    - skipPackageDependenciesResolution: Skips resolution of Swift Package Manager dependencies
    - disablePackageAutomaticUpdates: Prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
    - useSystemScm: Lets xcodebuild use system's scm configuration
-   - numberOfRetries: The number of times a test can fail before scan should stop retrying
+   - numberOfRetries: The number of times a test can fail
    - failBuild: Should this step stop the build if the tests fail? Set this to false if you're using trainer
+
+ - returns: Outputs has of results with :number_of_tests, :number_of_failures, :number_of_retries, :number_of_tests_excluding_retries, :number_of_failures_excluding_retries
 
  More information: https://docs.fastlane.tools/actions/scan/
  */
-public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     project: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     packagePath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     scheme: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     device: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     devices: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
-                     skipDetectDevices: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     ensureDevicesFound: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     forceQuitSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     resetSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     disableSlideToType: OptionalConfigValue<Bool> = .fastlaneDefault(true),
-                     prelaunchSimulator: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     reinstallApp: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     appIdentifier: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     onlyTesting: Any? = nil,
-                     skipTesting: Any? = nil,
-                     testplan: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     onlyTestConfigurations: Any? = nil,
-                     skipTestConfigurations: Any? = nil,
-                     xctestrun: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     toolchain: Any? = nil,
-                     clean: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     codeCoverage: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     addressSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     threadSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     openReport: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     outputDirectory: String = "./test_output",
-                     outputStyle: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     outputTypes: String = "html,junit",
-                     outputFiles: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     buildlogPath: String = "~/Library/Logs/scan",
-                     includeSimulatorLogs: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     formatter: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     derivedDataPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     shouldZipBuildProducts: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     outputXctestrun: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     resultBundle: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     useClangReportName: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     concurrentWorkers: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
-                     maxConcurrentSimulators: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
-                     disableConcurrentTesting: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     skipBuild: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     buildForTesting: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
-                     sdk: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     configuration: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     xcargs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     appName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     deploymentTargetVersion: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     slackUrl: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     slackChannel: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     slackMessage: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     slackUseWebhookConfiguredUsernameAndIcon: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     slackUsername: String = "fastlane",
-                     slackIconUrl: String = "https://fastlane.tools/assets/img/fastlane_icon.png",
-                     skipSlack: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     slackOnlyOnFailure: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     slackDefaultPayloads: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
-                     destination: Any? = nil,
-                     catalystPlatform: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     customReportFileName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     xcodebuildCommand: String = "env NSUnbufferedIO=YES xcodebuild",
-                     clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                     skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                     numberOfRetries: Int = 0,
-                     failBuild: OptionalConfigValue<Bool> = .fastlaneDefault(true))
+@discardableResult public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        project: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        packagePath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        scheme: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        device: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        devices: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
+                                        skipDetectDevices: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        ensureDevicesFound: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        forceQuitSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        resetSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        disableSlideToType: OptionalConfigValue<Bool> = .fastlaneDefault(true),
+                                        prelaunchSimulator: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        reinstallApp: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        appIdentifier: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        onlyTesting: Any? = nil,
+                                        skipTesting: Any? = nil,
+                                        testplan: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        onlyTestConfigurations: Any? = nil,
+                                        skipTestConfigurations: Any? = nil,
+                                        xctestrun: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        toolchain: Any? = nil,
+                                        clean: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        codeCoverage: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        addressSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        threadSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        openReport: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        outputDirectory: String = "./test_output",
+                                        outputStyle: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        outputTypes: String = "html,junit",
+                                        outputFiles: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        buildlogPath: String = "~/Library/Logs/scan",
+                                        includeSimulatorLogs: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        xcodebuildFormatter: String = "xcbeautify",
+                                        outputRemoveRetryAttempts: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        formatter: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        xcprettyFormatter: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        derivedDataPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        shouldZipBuildProducts: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        outputXctestrun: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        resultBundle: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        useClangReportName: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        parallelTesting: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        concurrentWorkers: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
+                                        maxConcurrentSimulators: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
+                                        disableConcurrentTesting: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        skipBuild: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        buildForTesting: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
+                                        sdk: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        configuration: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        xcargs: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        appName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        deploymentTargetVersion: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        slackUrl: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        slackChannel: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        slackMessage: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        slackUseWebhookConfiguredUsernameAndIcon: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        slackUsername: String = "fastlane",
+                                        slackIconUrl: String = "https://fastlane.tools/assets/img/fastlane_icon.png",
+                                        skipSlack: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        slackOnlyOnFailure: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        slackDefaultPayloads: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
+                                        destination: Any? = nil,
+                                        catalystPlatform: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        customReportFileName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        xcodebuildCommand: String = "env NSUnbufferedIO=YES xcodebuild",
+                                        clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                        skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                        numberOfRetries: Int = 0,
+                                        failBuild: OptionalConfigValue<Bool> = .fastlaneDefault(true)) -> [String: Any]
 {
     let workspaceArg = workspace.asRubyArgument(name: "workspace", type: nil)
     let projectArg = project.asRubyArgument(name: "project", type: nil)
@@ -8678,7 +8784,6 @@ public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
     let addressSanitizerArg = addressSanitizer.asRubyArgument(name: "address_sanitizer", type: nil)
     let threadSanitizerArg = threadSanitizer.asRubyArgument(name: "thread_sanitizer", type: nil)
     let openReportArg = openReport.asRubyArgument(name: "open_report", type: nil)
-    let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let outputDirectoryArg = RubyCommand.Argument(name: "output_directory", value: outputDirectory, type: nil)
     let outputStyleArg = outputStyle.asRubyArgument(name: "output_style", type: nil)
     let outputTypesArg = RubyCommand.Argument(name: "output_types", value: outputTypes, type: nil)
@@ -8686,13 +8791,18 @@ public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
     let buildlogPathArg = RubyCommand.Argument(name: "buildlog_path", value: buildlogPath, type: nil)
     let includeSimulatorLogsArg = includeSimulatorLogs.asRubyArgument(name: "include_simulator_logs", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
+    let outputRemoveRetryAttemptsArg = outputRemoveRetryAttempts.asRubyArgument(name: "output_remove_retry_attempts", type: nil)
+    let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let formatterArg = formatter.asRubyArgument(name: "formatter", type: nil)
+    let xcprettyFormatterArg = xcprettyFormatter.asRubyArgument(name: "xcpretty_formatter", type: nil)
     let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let derivedDataPathArg = derivedDataPath.asRubyArgument(name: "derived_data_path", type: nil)
     let shouldZipBuildProductsArg = shouldZipBuildProducts.asRubyArgument(name: "should_zip_build_products", type: nil)
     let outputXctestrunArg = outputXctestrun.asRubyArgument(name: "output_xctestrun", type: nil)
     let resultBundleArg = resultBundle.asRubyArgument(name: "result_bundle", type: nil)
     let useClangReportNameArg = useClangReportName.asRubyArgument(name: "use_clang_report_name", type: nil)
+    let parallelTestingArg = parallelTesting.asRubyArgument(name: "parallel_testing", type: nil)
     let concurrentWorkersArg = concurrentWorkers.asRubyArgument(name: "concurrent_workers", type: nil)
     let maxConcurrentSimulatorsArg = maxConcurrentSimulators.asRubyArgument(name: "max_concurrent_simulators", type: nil)
     let disableConcurrentTestingArg = disableConcurrentTesting.asRubyArgument(name: "disable_concurrent_testing", type: nil)
@@ -8750,7 +8860,6 @@ public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
                                           addressSanitizerArg,
                                           threadSanitizerArg,
                                           openReportArg,
-                                          disableXcprettyArg,
                                           outputDirectoryArg,
                                           outputStyleArg,
                                           outputTypesArg,
@@ -8758,13 +8867,18 @@ public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
                                           buildlogPathArg,
                                           includeSimulatorLogsArg,
                                           suppressXcodeOutputArg,
+                                          xcodebuildFormatterArg,
+                                          outputRemoveRetryAttemptsArg,
+                                          disableXcprettyArg,
                                           formatterArg,
+                                          xcprettyFormatterArg,
                                           xcprettyArgsArg,
                                           derivedDataPathArg,
                                           shouldZipBuildProductsArg,
                                           outputXctestrunArg,
                                           resultBundleArg,
                                           useClangReportNameArg,
+                                          parallelTestingArg,
                                           concurrentWorkersArg,
                                           maxConcurrentSimulatorsArg,
                                           disableConcurrentTestingArg,
@@ -8800,7 +8914,7 @@ public func runTests(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
         .filter { $0?.value != nil }
         .compactMap { $0 }
     let command = RubyCommand(commandID: "", methodName: "run_tests", className: nil, args: args)
-    _ = runner.executeCommand(command)
+    return parseDictionary(fromString: runner.executeCommand(command))
 }
 
 /**
@@ -8913,8 +9027,8 @@ public func say(text: [String],
    - project: Path to the project file
    - packagePath: Path to the Swift Package
    - scheme: The project's scheme. Make sure it's marked as `Shared`
-   - device: The name of the simulator type you want to run tests on (e.g. 'iPhone 6')
-   - devices: Array of devices to run the tests on (e.g. ['iPhone 6', 'iPad Air'])
+   - device: The name of the simulator type you want to run tests on (e.g. 'iPhone 6' or 'iPhone SE (2nd generation) (14.5)')
+   - devices: Array of devices to run the tests on (e.g. ['iPhone 6', 'iPad Air', 'iPhone SE (2nd generation) (14.5)'])
    - skipDetectDevices: Should skip auto detecting of devices if none were specified
    - ensureDevicesFound: Should fail if devices not found
    - forceQuitSimulator: Enabling this option will automatically killall Simulator processes before the run
@@ -8935,7 +9049,6 @@ public func say(text: [String],
    - addressSanitizer: Should the address sanitizer be turned on?
    - threadSanitizer: Should the thread sanitizer be turned on?
    - openReport: Should the HTML report be opened when tests are completed?
-   - disableXcpretty: Disable xcpretty formatting of build, similar to `output_style='raw'` but this will also skip the test results table
    - outputDirectory: The directory in which all reports will be stored
    - outputStyle: Define how the output should look like. Valid values are: standard, basic, rspec, or raw (disables xcpretty during xcodebuild)
    - outputTypes: Comma separated list of the output types (e.g. html, junit, json-compilation-database)
@@ -8943,13 +9056,18 @@ public func say(text: [String],
    - buildlogPath: The directory where to store the raw log
    - includeSimulatorLogs: If the logs generated by the app (e.g. using NSLog, perror, etc.) in the Simulator should be written to the output_directory
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
-   - formatter: A custom xcpretty formatter to use
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - outputRemoveRetryAttempts: Remove retry attempts from test results table and the JUnit report (if not using xcpretty)
+   - disableXcpretty: **DEPRECATED!** Use `output_style: 'raw'` instead - Disable xcpretty formatting of build, similar to `output_style='raw'` but this will also skip the test results table
+   - formatter: **DEPRECATED!** Use 'xcpretty_formatter' instead - A custom xcpretty formatter to use
+   - xcprettyFormatter: A custom xcpretty formatter to use
    - xcprettyArgs: Pass in xcpretty additional command line arguments (e.g. '--test --no-color' or '--tap --no-utf')
    - derivedDataPath: The directory where build products and other derived data will go
    - shouldZipBuildProducts: Should zip the derived data build products and place in output path?
    - outputXctestrun: Should provide additional copy of .xctestrun file (settings.xctestrun) and place in output path?
    - resultBundle: Should an Xcode result bundle be generated in the output directory
    - useClangReportName: Generate the json compilation database with clang naming convention (compile_commands.json)
+   - parallelTesting: Optionally override the per-target setting in the scheme for running tests in parallel. Equivalent to -parallel-testing-enabled
    - concurrentWorkers: Specify the exact number of test runners that will be spawned during parallel testing. Equivalent to -parallel-testing-worker-count
    - maxConcurrentSimulators: Constrain the number of simulator devices on which to test concurrently. Equivalent to -maximum-concurrent-test-simulator-destinations
    - disableConcurrentTesting: Do not run test bundles in parallel on the specified destinations. Testing will occur on each destination serially. Equivalent to -disable-concurrent-testing
@@ -8979,83 +9097,89 @@ public func say(text: [String],
    - skipPackageDependenciesResolution: Skips resolution of Swift Package Manager dependencies
    - disablePackageAutomaticUpdates: Prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
    - useSystemScm: Lets xcodebuild use system's scm configuration
-   - numberOfRetries: The number of times a test can fail before scan should stop retrying
+   - numberOfRetries: The number of times a test can fail
    - failBuild: Should this step stop the build if the tests fail? Set this to false if you're using trainer
+
+ - returns: Outputs has of results with :number_of_tests, :number_of_failures, :number_of_retries, :number_of_tests_excluding_retries, :number_of_failures_excluding_retries
 
  More information: https://docs.fastlane.tools/actions/scan/
  */
-public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.workspace),
-                 project: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.project),
-                 packagePath: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.packagePath),
-                 scheme: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.scheme),
-                 device: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.device),
-                 devices: OptionalConfigValue<[String]?> = .fastlaneDefault(scanfile.devices),
-                 skipDetectDevices: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipDetectDevices),
-                 ensureDevicesFound: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.ensureDevicesFound),
-                 forceQuitSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.forceQuitSimulator),
-                 resetSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.resetSimulator),
-                 disableSlideToType: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.disableSlideToType),
-                 prelaunchSimulator: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.prelaunchSimulator),
-                 reinstallApp: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.reinstallApp),
-                 appIdentifier: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.appIdentifier),
-                 onlyTesting: Any? = scanfile.onlyTesting,
-                 skipTesting: Any? = scanfile.skipTesting,
-                 testplan: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.testplan),
-                 onlyTestConfigurations: Any? = scanfile.onlyTestConfigurations,
-                 skipTestConfigurations: Any? = scanfile.skipTestConfigurations,
-                 xctestrun: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xctestrun),
-                 toolchain: Any? = scanfile.toolchain,
-                 clean: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.clean),
-                 codeCoverage: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.codeCoverage),
-                 addressSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.addressSanitizer),
-                 threadSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.threadSanitizer),
-                 openReport: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.openReport),
-                 disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.disableXcpretty),
-                 outputDirectory: String = scanfile.outputDirectory,
-                 outputStyle: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.outputStyle),
-                 outputTypes: String = scanfile.outputTypes,
-                 outputFiles: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.outputFiles),
-                 buildlogPath: String = scanfile.buildlogPath,
-                 includeSimulatorLogs: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.includeSimulatorLogs),
-                 suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.suppressXcodeOutput),
-                 formatter: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.formatter),
-                 xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcprettyArgs),
-                 derivedDataPath: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.derivedDataPath),
-                 shouldZipBuildProducts: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.shouldZipBuildProducts),
-                 outputXctestrun: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.outputXctestrun),
-                 resultBundle: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.resultBundle),
-                 useClangReportName: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.useClangReportName),
-                 concurrentWorkers: OptionalConfigValue<Int?> = .fastlaneDefault(scanfile.concurrentWorkers),
-                 maxConcurrentSimulators: OptionalConfigValue<Int?> = .fastlaneDefault(scanfile.maxConcurrentSimulators),
-                 disableConcurrentTesting: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.disableConcurrentTesting),
-                 skipBuild: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipBuild),
-                 testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.testWithoutBuilding),
-                 buildForTesting: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.buildForTesting),
-                 sdk: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.sdk),
-                 configuration: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.configuration),
-                 xcargs: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcargs),
-                 xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcconfig),
-                 appName: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.appName),
-                 deploymentTargetVersion: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.deploymentTargetVersion),
-                 slackUrl: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.slackUrl),
-                 slackChannel: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.slackChannel),
-                 slackMessage: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.slackMessage),
-                 slackUseWebhookConfiguredUsernameAndIcon: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.slackUseWebhookConfiguredUsernameAndIcon),
-                 slackUsername: String = scanfile.slackUsername,
-                 slackIconUrl: String = scanfile.slackIconUrl,
-                 skipSlack: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipSlack),
-                 slackOnlyOnFailure: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.slackOnlyOnFailure),
-                 slackDefaultPayloads: OptionalConfigValue<[String]?> = .fastlaneDefault(scanfile.slackDefaultPayloads),
-                 destination: Any? = scanfile.destination,
-                 catalystPlatform: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.catalystPlatform),
-                 customReportFileName: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.customReportFileName),
-                 xcodebuildCommand: String = scanfile.xcodebuildCommand,
-                 clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.clonedSourcePackagesPath),
-                 skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipPackageDependenciesResolution),
-                 disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.disablePackageAutomaticUpdates),
-                 useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.useSystemScm),
-                 numberOfRetries: Int = scanfile.numberOfRetries,
-                 failBuild: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.failBuild))
+@discardableResult public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.workspace),
+                                    project: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.project),
+                                    packagePath: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.packagePath),
+                                    scheme: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.scheme),
+                                    device: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.device),
+                                    devices: OptionalConfigValue<[String]?> = .fastlaneDefault(scanfile.devices),
+                                    skipDetectDevices: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipDetectDevices),
+                                    ensureDevicesFound: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.ensureDevicesFound),
+                                    forceQuitSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.forceQuitSimulator),
+                                    resetSimulator: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.resetSimulator),
+                                    disableSlideToType: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.disableSlideToType),
+                                    prelaunchSimulator: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.prelaunchSimulator),
+                                    reinstallApp: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.reinstallApp),
+                                    appIdentifier: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.appIdentifier),
+                                    onlyTesting: Any? = scanfile.onlyTesting,
+                                    skipTesting: Any? = scanfile.skipTesting,
+                                    testplan: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.testplan),
+                                    onlyTestConfigurations: Any? = scanfile.onlyTestConfigurations,
+                                    skipTestConfigurations: Any? = scanfile.skipTestConfigurations,
+                                    xctestrun: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xctestrun),
+                                    toolchain: Any? = scanfile.toolchain,
+                                    clean: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.clean),
+                                    codeCoverage: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.codeCoverage),
+                                    addressSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.addressSanitizer),
+                                    threadSanitizer: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.threadSanitizer),
+                                    openReport: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.openReport),
+                                    outputDirectory: String = scanfile.outputDirectory,
+                                    outputStyle: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.outputStyle),
+                                    outputTypes: String = scanfile.outputTypes,
+                                    outputFiles: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.outputFiles),
+                                    buildlogPath: String = scanfile.buildlogPath,
+                                    includeSimulatorLogs: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.includeSimulatorLogs),
+                                    suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.suppressXcodeOutput),
+                                    xcodebuildFormatter: String = scanfile.xcodebuildFormatter,
+                                    outputRemoveRetryAttempts: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.outputRemoveRetryAttempts),
+                                    disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.disableXcpretty),
+                                    formatter: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.formatter),
+                                    xcprettyFormatter: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcprettyFormatter),
+                                    xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcprettyArgs),
+                                    derivedDataPath: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.derivedDataPath),
+                                    shouldZipBuildProducts: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.shouldZipBuildProducts),
+                                    outputXctestrun: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.outputXctestrun),
+                                    resultBundle: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.resultBundle),
+                                    useClangReportName: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.useClangReportName),
+                                    parallelTesting: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.parallelTesting),
+                                    concurrentWorkers: OptionalConfigValue<Int?> = .fastlaneDefault(scanfile.concurrentWorkers),
+                                    maxConcurrentSimulators: OptionalConfigValue<Int?> = .fastlaneDefault(scanfile.maxConcurrentSimulators),
+                                    disableConcurrentTesting: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.disableConcurrentTesting),
+                                    skipBuild: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipBuild),
+                                    testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.testWithoutBuilding),
+                                    buildForTesting: OptionalConfigValue<Bool?> = .fastlaneDefault(scanfile.buildForTesting),
+                                    sdk: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.sdk),
+                                    configuration: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.configuration),
+                                    xcargs: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcargs),
+                                    xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.xcconfig),
+                                    appName: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.appName),
+                                    deploymentTargetVersion: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.deploymentTargetVersion),
+                                    slackUrl: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.slackUrl),
+                                    slackChannel: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.slackChannel),
+                                    slackMessage: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.slackMessage),
+                                    slackUseWebhookConfiguredUsernameAndIcon: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.slackUseWebhookConfiguredUsernameAndIcon),
+                                    slackUsername: String = scanfile.slackUsername,
+                                    slackIconUrl: String = scanfile.slackIconUrl,
+                                    skipSlack: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipSlack),
+                                    slackOnlyOnFailure: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.slackOnlyOnFailure),
+                                    slackDefaultPayloads: OptionalConfigValue<[String]?> = .fastlaneDefault(scanfile.slackDefaultPayloads),
+                                    destination: Any? = scanfile.destination,
+                                    catalystPlatform: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.catalystPlatform),
+                                    customReportFileName: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.customReportFileName),
+                                    xcodebuildCommand: String = scanfile.xcodebuildCommand,
+                                    clonedSourcePackagesPath: OptionalConfigValue<String?> = .fastlaneDefault(scanfile.clonedSourcePackagesPath),
+                                    skipPackageDependenciesResolution: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.skipPackageDependenciesResolution),
+                                    disablePackageAutomaticUpdates: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.disablePackageAutomaticUpdates),
+                                    useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.useSystemScm),
+                                    numberOfRetries: Int = scanfile.numberOfRetries,
+                                    failBuild: OptionalConfigValue<Bool> = .fastlaneDefault(scanfile.failBuild)) -> [String: Any]
 {
     let workspaceArg = workspace.asRubyArgument(name: "workspace", type: nil)
     let projectArg = project.asRubyArgument(name: "project", type: nil)
@@ -9083,7 +9207,6 @@ public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scan
     let addressSanitizerArg = addressSanitizer.asRubyArgument(name: "address_sanitizer", type: nil)
     let threadSanitizerArg = threadSanitizer.asRubyArgument(name: "thread_sanitizer", type: nil)
     let openReportArg = openReport.asRubyArgument(name: "open_report", type: nil)
-    let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let outputDirectoryArg = RubyCommand.Argument(name: "output_directory", value: outputDirectory, type: nil)
     let outputStyleArg = outputStyle.asRubyArgument(name: "output_style", type: nil)
     let outputTypesArg = RubyCommand.Argument(name: "output_types", value: outputTypes, type: nil)
@@ -9091,13 +9214,18 @@ public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scan
     let buildlogPathArg = RubyCommand.Argument(name: "buildlog_path", value: buildlogPath, type: nil)
     let includeSimulatorLogsArg = includeSimulatorLogs.asRubyArgument(name: "include_simulator_logs", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
+    let outputRemoveRetryAttemptsArg = outputRemoveRetryAttempts.asRubyArgument(name: "output_remove_retry_attempts", type: nil)
+    let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let formatterArg = formatter.asRubyArgument(name: "formatter", type: nil)
+    let xcprettyFormatterArg = xcprettyFormatter.asRubyArgument(name: "xcpretty_formatter", type: nil)
     let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let derivedDataPathArg = derivedDataPath.asRubyArgument(name: "derived_data_path", type: nil)
     let shouldZipBuildProductsArg = shouldZipBuildProducts.asRubyArgument(name: "should_zip_build_products", type: nil)
     let outputXctestrunArg = outputXctestrun.asRubyArgument(name: "output_xctestrun", type: nil)
     let resultBundleArg = resultBundle.asRubyArgument(name: "result_bundle", type: nil)
     let useClangReportNameArg = useClangReportName.asRubyArgument(name: "use_clang_report_name", type: nil)
+    let parallelTestingArg = parallelTesting.asRubyArgument(name: "parallel_testing", type: nil)
     let concurrentWorkersArg = concurrentWorkers.asRubyArgument(name: "concurrent_workers", type: nil)
     let maxConcurrentSimulatorsArg = maxConcurrentSimulators.asRubyArgument(name: "max_concurrent_simulators", type: nil)
     let disableConcurrentTestingArg = disableConcurrentTesting.asRubyArgument(name: "disable_concurrent_testing", type: nil)
@@ -9155,7 +9283,6 @@ public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scan
                                           addressSanitizerArg,
                                           threadSanitizerArg,
                                           openReportArg,
-                                          disableXcprettyArg,
                                           outputDirectoryArg,
                                           outputStyleArg,
                                           outputTypesArg,
@@ -9163,13 +9290,18 @@ public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scan
                                           buildlogPathArg,
                                           includeSimulatorLogsArg,
                                           suppressXcodeOutputArg,
+                                          xcodebuildFormatterArg,
+                                          outputRemoveRetryAttemptsArg,
+                                          disableXcprettyArg,
                                           formatterArg,
+                                          xcprettyFormatterArg,
                                           xcprettyArgsArg,
                                           derivedDataPathArg,
                                           shouldZipBuildProductsArg,
                                           outputXctestrunArg,
                                           resultBundleArg,
                                           useClangReportNameArg,
+                                          parallelTestingArg,
                                           concurrentWorkersArg,
                                           maxConcurrentSimulatorsArg,
                                           disableConcurrentTestingArg,
@@ -9205,7 +9337,7 @@ public func scan(workspace: OptionalConfigValue<String?> = .fastlaneDefault(scan
         .filter { $0?.value != nil }
         .compactMap { $0 }
     let command = RubyCommand(commandID: "", methodName: "scan", className: nil, args: args)
-    _ = runner.executeCommand(command)
+    return parseDictionary(fromString: runner.executeCommand(command))
 }
 
 /**
@@ -9438,6 +9570,7 @@ public func setChangelog(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDef
     - description: Description of this release
     - isDraft: Whether the release should be marked as draft
     - isPrerelease: Whether the release should be marked as prerelease
+    - isGenerateReleaseNotes: Whether the name and body of this release should be generated automatically
     - uploadAssets: Path to assets to be uploaded with the release
 
   - returns: A hash containing all relevant information of this release
@@ -9457,6 +9590,7 @@ public func setChangelog(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDef
                                                 description: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                                 isDraft: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                                 isPrerelease: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                                                isGenerateReleaseNotes: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                                                 uploadAssets: OptionalConfigValue<[String]?> = .fastlaneDefault(nil)) -> [String: Any]
 {
     let repositoryNameArg = RubyCommand.Argument(name: "repository_name", value: repositoryName, type: nil)
@@ -9469,6 +9603,7 @@ public func setChangelog(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDef
     let descriptionArg = description.asRubyArgument(name: "description", type: nil)
     let isDraftArg = isDraft.asRubyArgument(name: "is_draft", type: nil)
     let isPrereleaseArg = isPrerelease.asRubyArgument(name: "is_prerelease", type: nil)
+    let isGenerateReleaseNotesArg = isGenerateReleaseNotes.asRubyArgument(name: "is_generate_release_notes", type: nil)
     let uploadAssetsArg = uploadAssets.asRubyArgument(name: "upload_assets", type: nil)
     let array: [RubyCommand.Argument?] = [repositoryNameArg,
                                           serverUrlArg,
@@ -9480,6 +9615,7 @@ public func setChangelog(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDef
                                           descriptionArg,
                                           isDraftArg,
                                           isPrereleaseArg,
+                                          isGenerateReleaseNotesArg,
                                           uploadAssetsArg]
     let args: [RubyCommand.Argument] = array
         .filter { $0?.value != nil }
@@ -9558,6 +9694,7 @@ public func setPodKey(useBundleExec: OptionalConfigValue<Bool> = .fastlaneDefaul
  - parameters:
    - force: Force setup, even if not executed by CI
    - provider: CI provider. If none is set, the provider is detected automatically
+   - timeout: Set a custom timeout in seconds for keychain.  Set `0` if you want to specify 'no time-out'
 
  - Creates a new temporary keychain for use with match|
  - Switches match to `readonly` mode to not create new profiles/cert on CI|
@@ -9566,12 +9703,15 @@ public func setPodKey(useBundleExec: OptionalConfigValue<Bool> = .fastlaneDefaul
  This action helps with CI integration. Add this to the top of your Fastfile if you use CI.
  */
 public func setupCi(force: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                    provider: OptionalConfigValue<String?> = .fastlaneDefault(nil))
+                    provider: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                    timeout: Int = 3600)
 {
     let forceArg = force.asRubyArgument(name: "force", type: nil)
     let providerArg = provider.asRubyArgument(name: "provider", type: nil)
+    let timeoutArg = RubyCommand.Argument(name: "timeout", value: timeout, type: nil)
     let array: [RubyCommand.Argument?] = [forceArg,
-                                          providerArg]
+                                          providerArg,
+                                          timeoutArg]
     let args: [RubyCommand.Argument] = array
         .filter { $0?.value != nil }
         .compactMap { $0 }
@@ -10124,7 +10264,7 @@ public func slather(buildDirectory: OptionalConfigValue<String?> = .fastlaneDefa
    - eraseSimulator: Enabling this option will automatically erase the simulator before running the application
    - headless: Enabling this option will prevent displaying the simulator window
    - overrideStatusBar: Enabling this option will automatically override the status bar to show 9:41 AM, full battery, and full reception (Adjust 'SNAPSHOT_SIMULATOR_WAIT_FOR_BOOT_TIMEOUT' environment variable if override status bar is not working. Might be because simulator is not fully booted. Defaults to 10 seconds)
-   - overrideStatusBarArguments: Fully customize the status bar by setting each option here. See `xcrun simctl status_bar --help`
+   - overrideStatusBarArguments: Fully customize the status bar by setting each option here. Requires `override_status_bar` to be set to `true`. See `xcrun simctl status_bar --help`
    - localizeSimulator: Enabling this option will configure the Simulator's system language
    - darkMode: Enabling this option will configure the Simulator to be in dark mode (false for light, true for dark)
    - appIdentifier: The bundle identifier of the app to uninstall (only needed when enabling reinstall_app)
@@ -10135,7 +10275,6 @@ public func slather(buildDirectory: OptionalConfigValue<String?> = .fastlaneDefa
    - clean: Should the project be cleaned before building it?
    - testWithoutBuilding: Test without building, requires a derived data path
    - configuration: The configuration to use when building the app. Defaults to 'Release'
-   - xcprettyArgs: Additional xcpretty arguments
    - sdk: The SDK that should be used for building the application
    - scheme: The scheme you want to use, this must be the scheme for the UI Tests
    - numberOfRetries: The number of times a test can fail before snapshot should stop retrying
@@ -10152,6 +10291,8 @@ public func slather(buildDirectory: OptionalConfigValue<String?> = .fastlaneDefa
    - testplan: The testplan associated with the scheme that should be used for testing
    - onlyTesting: Array of strings matching Test Bundle/Test Suite/Test Cases to run
    - skipTesting: Array of strings matching Test Bundle/Test Suite/Test Cases to skip
+   - xcodebuildFormatter: xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+   - xcprettyArgs: **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Additional xcpretty arguments
    - disableXcpretty: Disable xcpretty formatting of build
    - suppressXcodeOutput: Suppress the output of xcodebuild to stdout. Output is still saved in buildlog_path
    - useSystemScm: Lets xcodebuild use system's scm configuration
@@ -10184,7 +10325,6 @@ public func snapshot(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
                      clean: OptionalConfigValue<Bool> = .fastlaneDefault(snapshotfile.clean),
                      testWithoutBuilding: OptionalConfigValue<Bool?> = .fastlaneDefault(snapshotfile.testWithoutBuilding),
                      configuration: OptionalConfigValue<String?> = .fastlaneDefault(snapshotfile.configuration),
-                     xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(snapshotfile.xcprettyArgs),
                      sdk: OptionalConfigValue<String?> = .fastlaneDefault(snapshotfile.sdk),
                      scheme: OptionalConfigValue<String?> = .fastlaneDefault(snapshotfile.scheme),
                      numberOfRetries: Int = snapshotfile.numberOfRetries,
@@ -10201,6 +10341,8 @@ public func snapshot(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
                      testplan: OptionalConfigValue<String?> = .fastlaneDefault(snapshotfile.testplan),
                      onlyTesting: Any? = snapshotfile.onlyTesting,
                      skipTesting: Any? = snapshotfile.skipTesting,
+                     xcodebuildFormatter: String = snapshotfile.xcodebuildFormatter,
+                     xcprettyArgs: OptionalConfigValue<String?> = .fastlaneDefault(snapshotfile.xcprettyArgs),
                      disableXcpretty: OptionalConfigValue<Bool?> = .fastlaneDefault(snapshotfile.disableXcpretty),
                      suppressXcodeOutput: OptionalConfigValue<Bool?> = .fastlaneDefault(snapshotfile.suppressXcodeOutput),
                      useSystemScm: OptionalConfigValue<Bool> = .fastlaneDefault(snapshotfile.useSystemScm))
@@ -10233,7 +10375,6 @@ public func snapshot(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
     let cleanArg = clean.asRubyArgument(name: "clean", type: nil)
     let testWithoutBuildingArg = testWithoutBuilding.asRubyArgument(name: "test_without_building", type: nil)
     let configurationArg = configuration.asRubyArgument(name: "configuration", type: nil)
-    let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let sdkArg = sdk.asRubyArgument(name: "sdk", type: nil)
     let schemeArg = scheme.asRubyArgument(name: "scheme", type: nil)
     let numberOfRetriesArg = RubyCommand.Argument(name: "number_of_retries", value: numberOfRetries, type: nil)
@@ -10250,6 +10391,8 @@ public func snapshot(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
     let testplanArg = testplan.asRubyArgument(name: "testplan", type: nil)
     let onlyTestingArg = RubyCommand.Argument(name: "only_testing", value: onlyTesting, type: nil)
     let skipTestingArg = RubyCommand.Argument(name: "skip_testing", value: skipTesting, type: nil)
+    let xcodebuildFormatterArg = RubyCommand.Argument(name: "xcodebuild_formatter", value: xcodebuildFormatter, type: nil)
+    let xcprettyArgsArg = xcprettyArgs.asRubyArgument(name: "xcpretty_args", type: nil)
     let disableXcprettyArg = disableXcpretty.asRubyArgument(name: "disable_xcpretty", type: nil)
     let suppressXcodeOutputArg = suppressXcodeOutput.asRubyArgument(name: "suppress_xcode_output", type: nil)
     let useSystemScmArg = useSystemScm.asRubyArgument(name: "use_system_scm", type: nil)
@@ -10281,7 +10424,6 @@ public func snapshot(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
                                           cleanArg,
                                           testWithoutBuildingArg,
                                           configurationArg,
-                                          xcprettyArgsArg,
                                           sdkArg,
                                           schemeArg,
                                           numberOfRetriesArg,
@@ -10298,6 +10440,8 @@ public func snapshot(workspace: OptionalConfigValue<String?> = .fastlaneDefault(
                                           testplanArg,
                                           onlyTestingArg,
                                           skipTestingArg,
+                                          xcodebuildFormatterArg,
+                                          xcprettyArgsArg,
                                           disableXcprettyArg,
                                           suppressXcodeOutputArg,
                                           useSystemScmArg]
@@ -10676,6 +10820,7 @@ public func ssh(username: String,
    - skipUploadImages: Whether to skip uploading images, screenshots not included
    - skipUploadScreenshots: Whether to skip uploading SCREENSHOTS
    - trackPromoteTo: The track to promote to. The default available tracks are: production, beta, alpha, internal
+   - trackPromoteReleaseStatus: Promoted track release status (used when promoting a track) - valid values are completed, draft, halted, inProgress
    - validateOnly: Only validate changes with Google Play rather than actually publish
    - mapping: Path to the mapping file to upload (mapping.txt or native-debug-symbols.zip alike)
    - mappingPaths: An array of paths to mapping files to upload (mapping.txt or native-debug-symbols.zip alike)
@@ -10717,6 +10862,7 @@ public func supply(packageName: String,
                    skipUploadImages: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                    skipUploadScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                    trackPromoteTo: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                   trackPromoteReleaseStatus: String = "completed",
                    validateOnly: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                    mapping: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                    mappingPaths: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
@@ -10756,6 +10902,7 @@ public func supply(packageName: String,
     let skipUploadImagesArg = skipUploadImages.asRubyArgument(name: "skip_upload_images", type: nil)
     let skipUploadScreenshotsArg = skipUploadScreenshots.asRubyArgument(name: "skip_upload_screenshots", type: nil)
     let trackPromoteToArg = trackPromoteTo.asRubyArgument(name: "track_promote_to", type: nil)
+    let trackPromoteReleaseStatusArg = RubyCommand.Argument(name: "track_promote_release_status", value: trackPromoteReleaseStatus, type: nil)
     let validateOnlyArg = validateOnly.asRubyArgument(name: "validate_only", type: nil)
     let mappingArg = mapping.asRubyArgument(name: "mapping", type: nil)
     let mappingPathsArg = mappingPaths.asRubyArgument(name: "mapping_paths", type: nil)
@@ -10794,6 +10941,7 @@ public func supply(packageName: String,
                                           skipUploadImagesArg,
                                           skipUploadScreenshotsArg,
                                           trackPromoteToArg,
+                                          trackPromoteReleaseStatusArg,
                                           validateOnlyArg,
                                           mappingArg,
                                           mappingPathsArg,
@@ -10914,18 +11062,21 @@ public func swiftlint(mode: String = "lint",
    - googleCloudBucketName: Name of the Google Cloud Storage bucket to use
    - googleCloudKeysFile: Path to the gc_keys.json file
    - googleCloudProjectId: ID of the Google Cloud project to use for authentication
+   - skipGoogleCloudAccountConfirmation: Skips confirming to use the system google account
    - s3Region: Name of the S3 region
    - s3AccessKey: S3 access key
    - s3SecretAccessKey: S3 secret access key
    - s3Bucket: Name of the S3 bucket
    - s3ObjectPrefix: Prefix to be used on all objects uploaded to S3
+   - gitlabProject: GitLab Project Path (i.e. 'gitlab-org/gitlab')
    - keychainName: Keychain the items should be imported to
    - keychainPassword: This might be required the first time you access certificates on a new mac. For the login/default keychain this is your macOS account password
    - force: Renew the provisioning profiles every time you run match
    - forceForNewDevices: Renew the provisioning profiles if the device count on the developer portal has changed. Ignored for profile types 'appstore' and 'developer_id'
    - includeAllCertificates: Include all matching certificates in the provisioning profile. Works only for the 'development' provisioning profile type
-   - forceForNewCertificates: Renew the provisioning profiles if the device count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
+   - forceForNewCertificates: Renew the provisioning profiles if the certificate count on the developer portal has changed. Works only for the 'development' provisioning profile type. Requires 'include_all_certificates' option to be 'true'
    - skipConfirmation: Disables confirmation prompts during nuke, answering them with yes
+   - safeRemoveCerts: Remove certs from repository during nuke without revoking them on the developer portal
    - skipDocs: Skip generation of a README.md for the created git repository
    - platform: Set the provisioning profile's platform to work with (i.e. ios, tvos, macos, catalyst)
    - deriveCatalystAppIdentifier: Enable this if you have the Mac Catalyst capability enabled and your project was created with Xcode 11.3 or earlier. Prepends 'maccatalyst.' to the app identifier for the provisioning profile mapping
@@ -10963,11 +11114,13 @@ public func syncCodeSigning(type: String = "development",
                             googleCloudBucketName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             googleCloudKeysFile: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             googleCloudProjectId: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                            skipGoogleCloudAccountConfirmation: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                             s3Region: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             s3AccessKey: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             s3SecretAccessKey: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             s3Bucket: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             s3ObjectPrefix: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                            gitlabProject: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             keychainName: String = "login.keychain",
                             keychainPassword: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                             force: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -10975,6 +11128,7 @@ public func syncCodeSigning(type: String = "development",
                             includeAllCertificates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                             forceForNewCertificates: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                             skipConfirmation: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                            safeRemoveCerts: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                             skipDocs: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                             platform: String = "ios",
                             deriveCatalystAppIdentifier: OptionalConfigValue<Bool> = .fastlaneDefault(false),
@@ -11010,11 +11164,13 @@ public func syncCodeSigning(type: String = "development",
     let googleCloudBucketNameArg = googleCloudBucketName.asRubyArgument(name: "google_cloud_bucket_name", type: nil)
     let googleCloudKeysFileArg = googleCloudKeysFile.asRubyArgument(name: "google_cloud_keys_file", type: nil)
     let googleCloudProjectIdArg = googleCloudProjectId.asRubyArgument(name: "google_cloud_project_id", type: nil)
+    let skipGoogleCloudAccountConfirmationArg = skipGoogleCloudAccountConfirmation.asRubyArgument(name: "skip_google_cloud_account_confirmation", type: nil)
     let s3RegionArg = s3Region.asRubyArgument(name: "s3_region", type: nil)
     let s3AccessKeyArg = s3AccessKey.asRubyArgument(name: "s3_access_key", type: nil)
     let s3SecretAccessKeyArg = s3SecretAccessKey.asRubyArgument(name: "s3_secret_access_key", type: nil)
     let s3BucketArg = s3Bucket.asRubyArgument(name: "s3_bucket", type: nil)
     let s3ObjectPrefixArg = s3ObjectPrefix.asRubyArgument(name: "s3_object_prefix", type: nil)
+    let gitlabProjectArg = gitlabProject.asRubyArgument(name: "gitlab_project", type: nil)
     let keychainNameArg = RubyCommand.Argument(name: "keychain_name", value: keychainName, type: nil)
     let keychainPasswordArg = keychainPassword.asRubyArgument(name: "keychain_password", type: nil)
     let forceArg = force.asRubyArgument(name: "force", type: nil)
@@ -11022,6 +11178,7 @@ public func syncCodeSigning(type: String = "development",
     let includeAllCertificatesArg = includeAllCertificates.asRubyArgument(name: "include_all_certificates", type: nil)
     let forceForNewCertificatesArg = forceForNewCertificates.asRubyArgument(name: "force_for_new_certificates", type: nil)
     let skipConfirmationArg = skipConfirmation.asRubyArgument(name: "skip_confirmation", type: nil)
+    let safeRemoveCertsArg = safeRemoveCerts.asRubyArgument(name: "safe_remove_certs", type: nil)
     let skipDocsArg = skipDocs.asRubyArgument(name: "skip_docs", type: nil)
     let platformArg = RubyCommand.Argument(name: "platform", value: platform, type: nil)
     let deriveCatalystAppIdentifierArg = deriveCatalystAppIdentifier.asRubyArgument(name: "derive_catalyst_app_identifier", type: nil)
@@ -11056,11 +11213,13 @@ public func syncCodeSigning(type: String = "development",
                                           googleCloudBucketNameArg,
                                           googleCloudKeysFileArg,
                                           googleCloudProjectIdArg,
+                                          skipGoogleCloudAccountConfirmationArg,
                                           s3RegionArg,
                                           s3AccessKeyArg,
                                           s3SecretAccessKeyArg,
                                           s3BucketArg,
                                           s3ObjectPrefixArg,
+                                          gitlabProjectArg,
                                           keychainNameArg,
                                           keychainPasswordArg,
                                           forceArg,
@@ -11068,6 +11227,7 @@ public func syncCodeSigning(type: String = "development",
                                           includeAllCertificatesArg,
                                           forceForNewCertificatesArg,
                                           skipConfirmationArg,
+                                          safeRemoveCertsArg,
                                           skipDocsArg,
                                           platformArg,
                                           deriveCatalystAppIdentifierArg,
@@ -11212,6 +11372,7 @@ public func testfairy(apiKey: String,
    - waitProcessingTimeoutDuration: Timeout duration in seconds to wait for App Store Connect processing. If set, after exceeding timeout duration, this will `force stop` to wait for App Store Connect processing and exit with exception
    - waitForUploadedBuild: **DEPRECATED!** No longer needed with the transition over to the App Store Connect API - Use version info from uploaded ipa file to determine what build to use for distribution. If set to false, latest processing or any latest build will be used
    - rejectBuildWaitingForReview: Expire previous if it's 'waiting for review'
+   - submitBetaReview: Send the build for a beta review
 
  More details can be found on https://docs.fastlane.tools/actions/pilot/.
  This integration will only do the TestFlight upload.
@@ -11253,7 +11414,8 @@ public func testflight(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefau
                        waitProcessingInterval: Int = 30,
                        waitProcessingTimeoutDuration: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
                        waitForUploadedBuild: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                       rejectBuildWaitingForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false))
+                       rejectBuildWaitingForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                       submitBetaReview: OptionalConfigValue<Bool> = .fastlaneDefault(true))
 {
     let apiKeyPathArg = apiKeyPath.asRubyArgument(name: "api_key_path", type: nil)
     let apiKeyArg = apiKey.asRubyArgument(name: "api_key", type: nil)
@@ -11293,6 +11455,7 @@ public func testflight(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefau
     let waitProcessingTimeoutDurationArg = waitProcessingTimeoutDuration.asRubyArgument(name: "wait_processing_timeout_duration", type: nil)
     let waitForUploadedBuildArg = waitForUploadedBuild.asRubyArgument(name: "wait_for_uploaded_build", type: nil)
     let rejectBuildWaitingForReviewArg = rejectBuildWaitingForReview.asRubyArgument(name: "reject_build_waiting_for_review", type: nil)
+    let submitBetaReviewArg = submitBetaReview.asRubyArgument(name: "submit_beta_review", type: nil)
     let array: [RubyCommand.Argument?] = [apiKeyPathArg,
                                           apiKeyArg,
                                           usernameArg,
@@ -11330,11 +11493,59 @@ public func testflight(apiKeyPath: OptionalConfigValue<String?> = .fastlaneDefau
                                           waitProcessingIntervalArg,
                                           waitProcessingTimeoutDurationArg,
                                           waitForUploadedBuildArg,
-                                          rejectBuildWaitingForReviewArg]
+                                          rejectBuildWaitingForReviewArg,
+                                          submitBetaReviewArg]
     let args: [RubyCommand.Argument] = array
         .filter { $0?.value != nil }
         .compactMap { $0 }
     let command = RubyCommand(commandID: "", methodName: "testflight", className: nil, args: args)
+    _ = runner.executeCommand(command)
+}
+
+/**
+ Convert the Xcode plist log to a JUnit report
+
+ - parameters:
+   - path: Path to the directory that should be converted
+   - extension: The extension for the newly created file. Usually .xml or .junit
+   - outputDirectory: Directory in which the xml files should be written to. Same directory as source by default
+   - outputFilename: Filename the xml file should be written to. Defaults to name of input file. (Only works if one input file is used)
+   - failBuild: Should this step stop the build if the tests fail? Set this to false if you're handling this with a test reporter
+   - xcprettyNaming: Produces class name and test name identical to xcpretty naming in junit file
+   - silent: Silences all output
+   - outputRemoveRetryAttempts: Doesn't include retry attempts in the output
+
+ - returns: A hash with the key being the path of the generated file, the value being if the tests were successful
+ */
+public func trainer(path: String = ".",
+                    extension: String = ".xml",
+                    outputDirectory: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                    outputFilename: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                    failBuild: OptionalConfigValue<Bool> = .fastlaneDefault(true),
+                    xcprettyNaming: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                    silent: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                    outputRemoveRetryAttempts: OptionalConfigValue<Bool> = .fastlaneDefault(false))
+{
+    let pathArg = RubyCommand.Argument(name: "path", value: path, type: nil)
+    let extensionArg = RubyCommand.Argument(name: "extension", value: `extension`, type: nil)
+    let outputDirectoryArg = outputDirectory.asRubyArgument(name: "output_directory", type: nil)
+    let outputFilenameArg = outputFilename.asRubyArgument(name: "output_filename", type: nil)
+    let failBuildArg = failBuild.asRubyArgument(name: "fail_build", type: nil)
+    let xcprettyNamingArg = xcprettyNaming.asRubyArgument(name: "xcpretty_naming", type: nil)
+    let silentArg = silent.asRubyArgument(name: "silent", type: nil)
+    let outputRemoveRetryAttemptsArg = outputRemoveRetryAttempts.asRubyArgument(name: "output_remove_retry_attempts", type: nil)
+    let array: [RubyCommand.Argument?] = [pathArg,
+                                          extensionArg,
+                                          outputDirectoryArg,
+                                          outputFilenameArg,
+                                          failBuildArg,
+                                          xcprettyNamingArg,
+                                          silentArg,
+                                          outputRemoveRetryAttemptsArg]
+    let args: [RubyCommand.Argument] = array
+        .filter { $0?.value != nil }
+        .compactMap { $0 }
+    let command = RubyCommand(commandID: "", methodName: "trainer", className: nil, args: args)
     _ = runner.executeCommand(command)
 }
 
@@ -11517,6 +11728,7 @@ public func updateAppIdentifier(xcodeproj: String,
    - targets: Specify targets you want to toggle the signing mech. (default to all targets)
    - buildConfigurations: Specify build_configurations you want to toggle the signing mech. (default to all configurations)
    - codeSignIdentity: Code signing identity type (iPhone Developer, iPhone Distribution)
+   - entitlementsFilePath: Path to your entitlements file
    - profileName: Provisioning profile name to use for code signing
    - profileUuid: Provisioning profile UUID to use for code signing
    - bundleIdentifier: Application Product Bundle Identifier
@@ -11531,6 +11743,7 @@ public func updateCodeSigningSettings(path: String,
                                       targets: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
                                       buildConfigurations: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
                                       codeSignIdentity: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                                      entitlementsFilePath: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                       profileName: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                       profileUuid: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                                       bundleIdentifier: OptionalConfigValue<String?> = .fastlaneDefault(nil))
@@ -11541,6 +11754,7 @@ public func updateCodeSigningSettings(path: String,
     let targetsArg = targets.asRubyArgument(name: "targets", type: nil)
     let buildConfigurationsArg = buildConfigurations.asRubyArgument(name: "build_configurations", type: nil)
     let codeSignIdentityArg = codeSignIdentity.asRubyArgument(name: "code_sign_identity", type: nil)
+    let entitlementsFilePathArg = entitlementsFilePath.asRubyArgument(name: "entitlements_file_path", type: nil)
     let profileNameArg = profileName.asRubyArgument(name: "profile_name", type: nil)
     let profileUuidArg = profileUuid.asRubyArgument(name: "profile_uuid", type: nil)
     let bundleIdentifierArg = bundleIdentifier.asRubyArgument(name: "bundle_identifier", type: nil)
@@ -11550,6 +11764,7 @@ public func updateCodeSigningSettings(path: String,
                                           targetsArg,
                                           buildConfigurationsArg,
                                           codeSignIdentityArg,
+                                          entitlementsFilePathArg,
                                           profileNameArg,
                                           profileUuidArg,
                                           bundleIdentifierArg]
@@ -12043,6 +12258,7 @@ public func uploadSymbolsToSentry(apiHost: String = "https://app.getsentry.com/a
    - overwriteScreenshots: Clear all previously uploaded screenshots before uploading the new ones
    - syncScreenshots: Sync screenshots with local ones. This is currently beta optionso set true to 'FASTLANE_ENABLE_BETA_DELIVER_SYNC_SCREENSHOTS' environment variable as well
    - submitForReview: Submit the new version for Review after uploading everything
+   - verifyOnly: Verifies archive with App Store Connect without uploading
    - rejectIfPossible: Rejects the previously submitted build if it's in a state where it's possible
    - automaticRelease: Should the app be automatically released once it's approved? (Can not be used together with `auto_release_date`)
    - autoReleaseDate: Date in milliseconds for automatically releasing on pending approval (Can not be used together with `automatic_release`)
@@ -12114,6 +12330,7 @@ public func uploadToAppStore(apiKeyPath: OptionalConfigValue<String?> = .fastlan
                              overwriteScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                              syncScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                              submitForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                             verifyOnly: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                              rejectIfPossible: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                              automaticRelease: OptionalConfigValue<Bool?> = .fastlaneDefault(nil),
                              autoReleaseDate: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
@@ -12178,6 +12395,7 @@ public func uploadToAppStore(apiKeyPath: OptionalConfigValue<String?> = .fastlan
     let overwriteScreenshotsArg = overwriteScreenshots.asRubyArgument(name: "overwrite_screenshots", type: nil)
     let syncScreenshotsArg = syncScreenshots.asRubyArgument(name: "sync_screenshots", type: nil)
     let submitForReviewArg = submitForReview.asRubyArgument(name: "submit_for_review", type: nil)
+    let verifyOnlyArg = verifyOnly.asRubyArgument(name: "verify_only", type: nil)
     let rejectIfPossibleArg = rejectIfPossible.asRubyArgument(name: "reject_if_possible", type: nil)
     let automaticReleaseArg = automaticRelease.asRubyArgument(name: "automatic_release", type: nil)
     let autoReleaseDateArg = autoReleaseDate.asRubyArgument(name: "auto_release_date", type: nil)
@@ -12241,6 +12459,7 @@ public func uploadToAppStore(apiKeyPath: OptionalConfigValue<String?> = .fastlan
                                           overwriteScreenshotsArg,
                                           syncScreenshotsArg,
                                           submitForReviewArg,
+                                          verifyOnlyArg,
                                           rejectIfPossibleArg,
                                           automaticReleaseArg,
                                           autoReleaseDateArg,
@@ -12316,6 +12535,7 @@ public func uploadToAppStore(apiKeyPath: OptionalConfigValue<String?> = .fastlan
    - skipUploadImages: Whether to skip uploading images, screenshots not included
    - skipUploadScreenshots: Whether to skip uploading SCREENSHOTS
    - trackPromoteTo: The track to promote to. The default available tracks are: production, beta, alpha, internal
+   - trackPromoteReleaseStatus: Promoted track release status (used when promoting a track) - valid values are completed, draft, halted, inProgress
    - validateOnly: Only validate changes with Google Play rather than actually publish
    - mapping: Path to the mapping file to upload (mapping.txt or native-debug-symbols.zip alike)
    - mappingPaths: An array of paths to mapping files to upload (mapping.txt or native-debug-symbols.zip alike)
@@ -12357,6 +12577,7 @@ public func uploadToPlayStore(packageName: String,
                               skipUploadImages: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                               skipUploadScreenshots: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                               trackPromoteTo: OptionalConfigValue<String?> = .fastlaneDefault(nil),
+                              trackPromoteReleaseStatus: String = "completed",
                               validateOnly: OptionalConfigValue<Bool> = .fastlaneDefault(false),
                               mapping: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                               mappingPaths: OptionalConfigValue<[String]?> = .fastlaneDefault(nil),
@@ -12396,6 +12617,7 @@ public func uploadToPlayStore(packageName: String,
     let skipUploadImagesArg = skipUploadImages.asRubyArgument(name: "skip_upload_images", type: nil)
     let skipUploadScreenshotsArg = skipUploadScreenshots.asRubyArgument(name: "skip_upload_screenshots", type: nil)
     let trackPromoteToArg = trackPromoteTo.asRubyArgument(name: "track_promote_to", type: nil)
+    let trackPromoteReleaseStatusArg = RubyCommand.Argument(name: "track_promote_release_status", value: trackPromoteReleaseStatus, type: nil)
     let validateOnlyArg = validateOnly.asRubyArgument(name: "validate_only", type: nil)
     let mappingArg = mapping.asRubyArgument(name: "mapping", type: nil)
     let mappingPathsArg = mappingPaths.asRubyArgument(name: "mapping_paths", type: nil)
@@ -12434,6 +12656,7 @@ public func uploadToPlayStore(packageName: String,
                                           skipUploadImagesArg,
                                           skipUploadScreenshotsArg,
                                           trackPromoteToArg,
+                                          trackPromoteReleaseStatusArg,
                                           validateOnlyArg,
                                           mappingArg,
                                           mappingPathsArg,
@@ -12552,6 +12775,7 @@ public func uploadToPlayStoreInternalAppSharing(packageName: String,
    - waitProcessingTimeoutDuration: Timeout duration in seconds to wait for App Store Connect processing. If set, after exceeding timeout duration, this will `force stop` to wait for App Store Connect processing and exit with exception
    - waitForUploadedBuild: **DEPRECATED!** No longer needed with the transition over to the App Store Connect API - Use version info from uploaded ipa file to determine what build to use for distribution. If set to false, latest processing or any latest build will be used
    - rejectBuildWaitingForReview: Expire previous if it's 'waiting for review'
+   - submitBetaReview: Send the build for a beta review
 
  More details can be found on https://docs.fastlane.tools/actions/pilot/.
  This integration will only do the TestFlight upload.
@@ -12593,7 +12817,8 @@ public func uploadToTestflight(apiKeyPath: OptionalConfigValue<String?> = .fastl
                                waitProcessingInterval: Int = 30,
                                waitProcessingTimeoutDuration: OptionalConfigValue<Int?> = .fastlaneDefault(nil),
                                waitForUploadedBuild: OptionalConfigValue<Bool> = .fastlaneDefault(false),
-                               rejectBuildWaitingForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false))
+                               rejectBuildWaitingForReview: OptionalConfigValue<Bool> = .fastlaneDefault(false),
+                               submitBetaReview: OptionalConfigValue<Bool> = .fastlaneDefault(true))
 {
     let apiKeyPathArg = apiKeyPath.asRubyArgument(name: "api_key_path", type: nil)
     let apiKeyArg = apiKey.asRubyArgument(name: "api_key", type: nil)
@@ -12633,6 +12858,7 @@ public func uploadToTestflight(apiKeyPath: OptionalConfigValue<String?> = .fastl
     let waitProcessingTimeoutDurationArg = waitProcessingTimeoutDuration.asRubyArgument(name: "wait_processing_timeout_duration", type: nil)
     let waitForUploadedBuildArg = waitForUploadedBuild.asRubyArgument(name: "wait_for_uploaded_build", type: nil)
     let rejectBuildWaitingForReviewArg = rejectBuildWaitingForReview.asRubyArgument(name: "reject_build_waiting_for_review", type: nil)
+    let submitBetaReviewArg = submitBetaReview.asRubyArgument(name: "submit_beta_review", type: nil)
     let array: [RubyCommand.Argument?] = [apiKeyPathArg,
                                           apiKeyArg,
                                           usernameArg,
@@ -12670,7 +12896,8 @@ public func uploadToTestflight(apiKeyPath: OptionalConfigValue<String?> = .fastl
                                           waitProcessingIntervalArg,
                                           waitProcessingTimeoutDurationArg,
                                           waitForUploadedBuildArg,
-                                          rejectBuildWaitingForReviewArg]
+                                          rejectBuildWaitingForReviewArg,
+                                          submitBetaReviewArg]
     let args: [RubyCommand.Argument] = array
         .filter { $0?.value != nil }
         .compactMap { $0 }
@@ -13048,7 +13275,7 @@ public func xcov(workspace: OptionalConfigValue<String?> = .fastlaneDefault(nil)
                  coverallsServiceJobId: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                  coverallsRepoToken: OptionalConfigValue<String?> = .fastlaneDefault(nil),
                  xcconfig: OptionalConfigValue<String?> = .fastlaneDefault(nil),
-                 ideFoundationPath: String = "/Applications/Xcode.app/Contents/Developer/../Frameworks/IDEFoundation.framework/Versions/A/IDEFoundation",
+                 ideFoundationPath: String = "/Applications/Xcode-13.4.1.app/Contents/Developer/../Frameworks/IDEFoundation.framework/Versions/A/IDEFoundation",
                  legacySupport: OptionalConfigValue<Bool> = .fastlaneDefault(false))
 {
     let workspaceArg = workspace.asRubyArgument(name: "workspace", type: nil)
@@ -13142,6 +13369,7 @@ public func xctool() {
  - parameter version: The version of Xcode to select specified as a Gem::Version requirement string (e.g. '~> 7.1.0')
 
  Finds and selects a version of an installed Xcode that best matches the provided [`Gem::Version` requirement specifier](http://www.rubydoc.info/github/rubygems/rubygems/Gem/Version)
+ You can either manually provide a specific version using `version:` or you make use of the `.xcode-version` file.
  */
 public func xcversion(version: String) {
     let versionArg = RubyCommand.Argument(name: "version", value: version, type: nil)
@@ -13240,14 +13468,14 @@ func parseInt(fromString: String, function: String = #function) -> Int {
     return NSString(string: fromString.trimmingCharacters(in: .punctuationCharacters)).integerValue
 }
 
-public let deliverfile = Deliverfile()
-public let gymfile = Gymfile()
-public let matchfile = Matchfile()
-public let precheckfile = Precheckfile()
-public let scanfile = Scanfile()
-public let screengrabfile = Screengrabfile()
-public let snapshotfile = Snapshotfile()
+public let deliverfile: Deliverfile = .init()
+public let gymfile: Gymfile = .init()
+public let matchfile: Matchfile = .init()
+public let precheckfile: Precheckfile = .init()
+public let scanfile: Scanfile = .init()
+public let screengrabfile: Screengrabfile = .init()
+public let snapshotfile: Snapshotfile = .init()
 
 // Please don't remove the lines below
 // They are used to detect outdated files
-// FastlaneRunnerAPIVersion [0.9.139]
+// FastlaneRunnerAPIVersion [0.9.160]

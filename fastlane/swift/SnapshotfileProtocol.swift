@@ -1,7 +1,7 @@
 // SnapshotfileProtocol.swift
-// Copyright (c) 2021 FastlaneTools
+// Copyright (c) 2022 FastlaneTools
 
-public protocol SnapshotfileProtocol: class {
+public protocol SnapshotfileProtocol: AnyObject {
     /// Path the workspace file
     var workspace: String? { get }
 
@@ -53,7 +53,7 @@ public protocol SnapshotfileProtocol: class {
     /// Enabling this option will automatically override the status bar to show 9:41 AM, full battery, and full reception (Adjust 'SNAPSHOT_SIMULATOR_WAIT_FOR_BOOT_TIMEOUT' environment variable if override status bar is not working. Might be because simulator is not fully booted. Defaults to 10 seconds)
     var overrideStatusBar: Bool { get }
 
-    /// Fully customize the status bar by setting each option here. See `xcrun simctl status_bar --help`
+    /// Fully customize the status bar by setting each option here. Requires `override_status_bar` to be set to `true`. See `xcrun simctl status_bar --help`
     var overrideStatusBarArguments: String? { get }
 
     /// Enabling this option will configure the Simulator's system language
@@ -85,9 +85,6 @@ public protocol SnapshotfileProtocol: class {
 
     /// The configuration to use when building the app. Defaults to 'Release'
     var configuration: String? { get }
-
-    /// Additional xcpretty arguments
-    var xcprettyArgs: String? { get }
 
     /// The SDK that should be used for building the application
     var sdk: String? { get }
@@ -137,6 +134,12 @@ public protocol SnapshotfileProtocol: class {
     /// Array of strings matching Test Bundle/Test Suite/Test Cases to skip
     var skipTesting: String? { get }
 
+    /// xcodebuild formatter to use (ex: 'xcbeautify', 'xcbeautify --quieter', 'xcpretty', 'xcpretty -test'). Use empty string (ex: '') to disable any formatter (More information: https://docs.fastlane.tools/best-practices/xcodebuild-formatters/)
+    var xcodebuildFormatter: String { get }
+
+    /// **DEPRECATED!** Use `xcodebuild_formatter: ''` instead - Additional xcpretty arguments
+    var xcprettyArgs: String? { get }
+
     /// Disable xcpretty formatting of build
     var disableXcpretty: Bool? { get }
 
@@ -176,7 +179,6 @@ public extension SnapshotfileProtocol {
     var clean: Bool { return false }
     var testWithoutBuilding: Bool? { return nil }
     var configuration: String? { return nil }
-    var xcprettyArgs: String? { return nil }
     var sdk: String? { return nil }
     var scheme: String? { return nil }
     var numberOfRetries: Int { return 1 }
@@ -193,6 +195,8 @@ public extension SnapshotfileProtocol {
     var testplan: String? { return nil }
     var onlyTesting: String? { return nil }
     var skipTesting: String? { return nil }
+    var xcodebuildFormatter: String { return "xcbeautify" }
+    var xcprettyArgs: String? { return nil }
     var disableXcpretty: Bool? { return nil }
     var suppressXcodeOutput: Bool? { return nil }
     var useSystemScm: Bool { return false }
@@ -200,4 +204,4 @@ public extension SnapshotfileProtocol {
 
 // Please don't remove the lines below
 // They are used to detect outdated files
-// FastlaneRunnerAPIVersion [0.9.78]
+// FastlaneRunnerAPIVersion [0.9.99]
